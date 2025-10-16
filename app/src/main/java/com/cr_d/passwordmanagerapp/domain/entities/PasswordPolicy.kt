@@ -13,4 +13,10 @@ object PasswordPolicy {
         '_', '-', '+', '=', '{', '}', '[', ']', '|', '\\',
         ';', ':', '"', '\'', '<', '>', '.', ',', '/', '?'
     )
+    val COMMON_PATTERNS = listOf(
+        "1234", "abcd", "qwerty", "asdf", "zxcv", "ñlkj", "poiu", "mnbv",
+        "password", "admin", "letmein", "welcome", "login", "pass", "user", "root",
+        "1111", "0000", "iloveyou", "dragon", "monkey", "test", "guest"
+    )
+    val REGEX_COMMON_PATTERNS = "(?i)(${COMMON_PATTERNS.joinToString("|")})"
 }
