@@ -57,7 +57,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     }
 
     val debugJavaClasses = fileTree("${buildDir}/intermediates/javac/debug/classes") {
-        include("**/passwordmanagerapp/domain/**")
+        include("**/passwordmanagerapp/domain/**", "**/passwordmanagerapp/application/**")
         exclude(
             "**/R.class",
             "**/R\$*.class",
@@ -68,7 +68,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     }
 
     val debugKotlinClasses = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
-        include("**/passwordmanagerapp/domain/**")
+        include("**/passwordmanagerapp/domain/**","**/passwordmanagerapp/application/**")
         exclude(
             "**/R.class",
             "**/R\$*.class",
