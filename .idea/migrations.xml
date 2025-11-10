@@ -3,7 +3,6 @@
   <component name="ProjectMigrations">
     <option name="MigrateToGradleLocalJavaHome">
       <set>
-        <option value="/data/clase/DAM_2025/Multiprocesos/PasswordManagerApp" />
         <option value="$PROJECT_DIR$" />
       </set>
     </option>

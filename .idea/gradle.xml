@@ -5,23 +5,12 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="testRunner" value="CHOOSE_PER_TEST" />
-        <option name="externalProjectPath" value="/data/clase/DAM_2025/Multiprocesos/PasswordManagerApp" />
-        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
-        <option name="modules">
-          <set>
-            <option value="/data/clase/DAM_2025/Multiprocesos/PasswordManagerApp" />
-            <option value="/data/clase/DAM_2025/Multiprocesos/PasswordManagerApp/app" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
-            <option value="/data/clase/DAM_2025/Multiprocesos/PasswordManagerApp" />
-            <option value="/data/clase/DAM_2025/Multiprocesos/PasswordManagerApp/app" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
       </GradleProjectSettings>
