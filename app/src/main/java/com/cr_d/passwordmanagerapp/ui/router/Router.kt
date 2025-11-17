@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.cr_d.passwordmanagerapp.ui.screens.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.MainScreen
+import com.cr_d.passwordmanagerapp.ui.screens.ManagePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.ShowPasswordsScreen
 
 @Composable
@@ -22,6 +23,8 @@ fun Router(innerPadding: PaddingValues, navController: NavHostController){
         composable("ShowPasswordScreen") {
             ShowPasswordsScreen(innerPadding)
         }
-
+        composable("ManagePasswordScreen") {
+            ManagePasswordScreen(innerPadding)
+        }
     }
 }
