@@ -42,7 +42,10 @@ fun PasswordCard(password: PasswordData){
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
                 Text("Account: ${password.account}")
                 if (isPasswordShown) Text("Password: ${password.password}")
-                else Text("Password: ********}")
+                else Text("Password: ********")
+                Text("Fecha de creación: ${password.creationDate}")
+                Text("Última actualización: ${password.lastUpdate}")
+                Text("Puntuación de seguridad ${password.securityScore}")
             }
             CopyToClipboardButton()
         }
