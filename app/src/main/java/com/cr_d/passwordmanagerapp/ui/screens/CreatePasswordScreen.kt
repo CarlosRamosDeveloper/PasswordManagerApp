@@ -30,6 +30,7 @@ fun CreatePasswordScreen(innerPadding: PaddingValues){
     var hasNumbers by remember { mutableStateOf(false) }
     var hasSpecials by remember { mutableStateOf(false) }
     var passwordLength by remember { mutableStateOf(0) }
+    var passwordError by remember { mutableStateOf("")}
 
     Column(Modifier
         .fillMaxSize()
@@ -41,7 +42,8 @@ fun CreatePasswordScreen(innerPadding: PaddingValues){
         CustomCheckbox("Carácteres especiales", hasSpecials, { hasSpecials=it })
         CampoDecimal(passwordLength) { passwordLength=it }
 
-        CreatePasswordButton(hasLowerCase, hasUpperCase, hasNumbers, hasSpecials, passwordLength)
+        CreatePasswordButton(hasLowerCase, hasUpperCase, hasNumbers, hasSpecials, passwordLength, { passwordError=it})
+        if(passwordError!= "") Text(passwordError)
     }
 }
 
@@ -83,15 +85,21 @@ fun CreatePasswordButton(
     hasUpperCase: Boolean,
     hasNumbers: Boolean,
     hasSpecials: Boolean,
-    passwordLength: Int
+    passwordLength: Int,
+    onErrorChange: (String) -> Unit
 ) {
     val passwordDataGeneration = PasswordDataGeneration(hasLowerCase, hasUpperCase, hasNumbers, hasSpecials, passwordLength)
     val generator = PasswordGenerator(passwordDataGeneration)
 
     Column {
         Button(onClick = {
-            val password = generator.generatePassword()
-            Log.d("Password", password)
+            try {
+                val password = generator.generatePassword()
+                Log.d("Password", password)
+            } catch (e: Exception) {
+                Log.d("Error", e.message.toString())
+                onErrorChange(e.message.toString())
+            }
         }) {
             Text("Generar contraseña")
         }
