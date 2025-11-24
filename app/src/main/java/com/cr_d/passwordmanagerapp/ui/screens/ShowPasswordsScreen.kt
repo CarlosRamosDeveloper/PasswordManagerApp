@@ -1,5 +1,11 @@
 package com.cr_d.passwordmanagerapp.ui.screens
 
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
+import android.content.Context
+import android.os.PersistableBundle
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,18 +26,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.getSystemService
 
 import com.cr_d.passwordmanagerapp.R
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.ui.PasswordRepository
 
 @Composable
-fun ShowPasswordsScreen(innerPadding: PaddingValues){
-    PasswordCardsList(innerPadding)
+fun ShowPasswordsScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit){
+
+    PasswordCardsList(innerPadding, context, snackFunction)
 }
 
 @Composable
-fun PasswordCard(password: PasswordData){
+fun PasswordCard(password: PasswordData, context: Context, snackFunction: (String)-> Unit){
     var isPasswordShown by remember { mutableStateOf(false) }
 
     Card(modifier = Modifier
@@ -47,16 +56,16 @@ fun PasswordCard(password: PasswordData){
                 Text("Última actualización: ${password.lastUpdate}")
                 Text("Puntuación de seguridad ${password.securityScore}")
             }
-            CopyToClipboardButton()
+            CopyToClipboardButton(password, context, snackFunction)
         }
     }
 }
 
 @Composable
-fun PasswordCardsList(innerPadding: PaddingValues){
+fun PasswordCardsList(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit){
     LazyColumn (Modifier.padding(innerPadding)){
         items(PasswordRepository.passwords) { pwd ->
-            PasswordCard(pwd)
+            PasswordCard(pwd, context, snackFunction)
         }
     }
 }
@@ -82,13 +91,27 @@ fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, onVisionToggle: (Bo
 }
 
 @Composable
-fun CopyToClipboardButton(){
+fun CopyToClipboardButton(password: PasswordData, context: Context, snackFunction: (String)-> Unit){
     Button(
-        onClick = {}
+        onClick = {
+            copyToClipboard(password.password, context, snackFunction)
+        }
     ) {
         Image(
             painterResource(R.drawable.outline_content_copy_24),
             contentDescription = "",
         )
     }
+}
+
+fun copyToClipboard(text: String, context: Context, snackFunction: (String)-> Unit) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("Copied_Text", text).apply {
+        description.extras = PersistableBundle().apply {
+            putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
+        }
+    }
+    clipboard.setPrimaryClip(clip)
+
+    snackFunction("Contraseña copiada en el portapapeles")
 }
