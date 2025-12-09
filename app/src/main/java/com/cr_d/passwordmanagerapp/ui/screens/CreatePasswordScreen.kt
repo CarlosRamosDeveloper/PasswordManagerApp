@@ -1,6 +1,8 @@
 package com.cr_d.passwordmanagerapp.ui.screens
 
 import android.util.Log
+import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,10 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
+import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 
 @Composable
@@ -51,10 +57,11 @@ fun CreatePasswordScreen(innerPadding: PaddingValues){
 
         CampoDecimal(passwordLength) { passwordLength=it }
 
-        CreatePasswordButton(hasLowerCase, hasUpperCase, hasNumbers, hasSpecials, passwordLength, { passwordError=it}, { isPasswordGenerated=it}, {generatedPassword=it})
-        ClearPasswordButton({ passwordError=it}, { isPasswordGenerated=it}, {generatedPassword=it})
-        if(passwordError!= "") Text(passwordError)
-        if(isPasswordGenerated) Text(generatedPassword)
+        PasswordButtonsSection(hasLowerCase, hasUpperCase, hasNumbers, hasSpecials, passwordLength, { passwordError=it}, { isPasswordGenerated=it}, {generatedPassword=it})
+
+        if(passwordError!= "") Text(passwordError, color= Color.Red, fontSize = 30.sp)
+
+        if(generatedPassword!="") PasswordSection(generatedPassword)
     }
 }
 
@@ -92,6 +99,23 @@ fun CampoDecimal(value: Int, onValueChange: (Int) -> Unit) {
 }
 
 @Composable
+fun PasswordButtonsSection(
+    hasLowerCase: Boolean,
+    hasUpperCase: Boolean,
+    hasNumbers: Boolean,
+    hasSpecials: Boolean,
+    passwordLength: Int,
+    onErrorChange: (String) -> Unit,
+    isPasswordGenerated: (Boolean) -> Unit,
+    generatedPassword: (String) -> Unit,
+){
+    Row(Modifier.fillMaxWidth()){
+        CreatePasswordButton(hasLowerCase, hasUpperCase, hasNumbers, hasSpecials, passwordLength, onErrorChange, isPasswordGenerated, generatedPassword, Modifier.weight(1f))
+        ClearPasswordButton(onErrorChange, isPasswordGenerated, generatedPassword, Modifier.weight(1f))
+    }
+}
+
+@Composable
 fun CreatePasswordButton(
     hasLowerCase: Boolean,
     hasUpperCase: Boolean,
@@ -100,12 +124,13 @@ fun CreatePasswordButton(
     passwordLength: Int,
     onErrorChange: (String) -> Unit,
     isPasswordGenerated: (Boolean) -> Unit,
-    generatedPassword: (String) -> Unit
+    generatedPassword: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val passwordDataGeneration = PasswordDataGeneration(hasLowerCase, hasUpperCase, hasNumbers, hasSpecials, passwordLength)
     val generator = PasswordGenerator(passwordDataGeneration)
 
-    Column (modifier = Modifier.padding(top = 30.dp)) {
+    Column (modifier = modifier.padding(top = 30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Button(onClick = {
             try {
                 val password = generator.generatePassword()
@@ -125,9 +150,10 @@ fun CreatePasswordButton(
 fun ClearPasswordButton(
     onErrorChange: (String) -> Unit,
     isPasswordGenerated: (Boolean) -> Unit,
-    generatedPassword: (String) -> Unit
+    generatedPassword: (String) -> Unit,
+    modifier: Modifier = Modifier
 ){
-    Column (modifier = Modifier.padding(top = 30.dp)) {
+    Column (modifier = modifier.padding(top = 30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Button(onClick = {
             try {
                 generatedPassword("")
@@ -140,5 +166,40 @@ fun ClearPasswordButton(
         }) {
             Text("Resetear contraseña")
         }
+    }
+}
+
+@Composable
+fun PasswordSection(password: String){
+    val score = SecurityScoreCalculator(password)
+    val formatedScore = String.format("%.2f",score.calculate())
+
+    Column (Modifier.padding(20.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
+        PasswordSectionText("Contraseña generada de forma satisfactoria")
+        PasswordSectionText("Puntuación de la contraseña: $formatedScore")
+        Box(Modifier.padding(20.dp)){
+            Text(password)
+        }
+        AddPasswordButton(password)
+    }
+}
+
+@Composable
+fun ErrorMessage(error: String){
+
+}
+
+@Composable
+fun PasswordSectionText(text: String){
+    Text(text, modifier= Modifier.padding(vertical = 5.dp))
+}
+
+@Composable
+fun AddPasswordButton(password: String){
+    Button(
+        onClick = {},
+        modifier = Modifier.fillMaxWidth().padding(20.dp)
+    ){
+        Text("Almacenar contraseña")
     }
 }
