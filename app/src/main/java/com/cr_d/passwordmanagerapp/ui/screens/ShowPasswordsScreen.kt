@@ -5,7 +5,8 @@ import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.PersistableBundle
-import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,14 +26,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.getSystemService
 
 import com.cr_d.passwordmanagerapp.R
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.ui.PasswordRepository
+import kotlin.math.max
 
 @Composable
 fun ShowPasswordsScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit){
@@ -75,18 +78,32 @@ fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, onVisionToggle: (Bo
     Button(
         onClick = { if(isPasswordShown) onVisionToggle(false) else onVisionToggle(true) }
     ) {
+
+        val progress by animateFloatAsState(
+            targetValue = if (isPasswordShown) 1f else 0f,
+            animationSpec = tween(300)
+        )
+
         if(isPasswordShown){
-            Image(
-                painterResource(R.drawable.outline_visibility_24),
-                contentDescription = "",
+            Icon(
+                painter = painterResource(R.drawable.outline_visibility_24),
+                contentDescription = null,
+                modifier = Modifier.graphicsLayer {
+                    scaleY = progress          // se aplasta al cerrarse
+                    alpha = max(progress, 0.2f)
+                    transformOrigin = TransformOrigin(0.5f, 0.5f)
+                }
             )
         } else {
-            Image(
-                painterResource(R.drawable.outline_visibility_off_24),
-                contentDescription = "",
+            Icon(
+                painter = painterResource(R.drawable.outline_visibility_off_24),
+                contentDescription = null,
+                modifier = Modifier.graphicsLayer {
+                    alpha = 1f - progress      // aparece al cerrar
+                    scaleX = 1f - progress
+                }
             )
         }
-
     }
 }
 
