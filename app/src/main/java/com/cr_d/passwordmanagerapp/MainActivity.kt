@@ -33,11 +33,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.cr_d.passwordmanagerapp.ui.models.CustomNavigationItem
+import kotlinx.coroutines.launch
 
+import com.cr_d.passwordmanagerapp.ui.models.CustomNavigationItem
 import com.cr_d.passwordmanagerapp.ui.router.Router
 import com.cr_d.passwordmanagerapp.ui.theme.PasswordManagerAppTheme
-import kotlinx.coroutines.launch
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
