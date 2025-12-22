@@ -10,5 +10,4 @@ interface IPasswordRepository {
     fun save(passwordData: PasswordData)
     fun update(passwordData: PasswordData)
     fun delete(id: Int)
-
 }

@@ -1,9 +1,10 @@
-package com.cr_d.passwordmanagerapp.ui
+package com.cr_d.passwordmanagerapp.application.repositories
 
+import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
-object PasswordRepository {
-    val passwords = listOf(
+class InMemoryPasswordRepository : IPasswordRepository {
+    private val passwords = mutableListOf(
         PasswordData(
             id = 1,
             account = "juan.perez@gmail.com",
@@ -285,4 +286,31 @@ object PasswordRepository {
             securityScore = 5.5
         )
     )
+
+    override fun findAll(): List<PasswordData> = passwords.toList()
+
+    override fun findByApplication(app: String): List<PasswordData> {
+        return passwords.filter { it.application == app }
+    }
+
+    override fun findByAccount(account: String): List<PasswordData> {
+        return passwords.filter { it.application == account }
+    }
+
+    override fun getPasswordDetails(id: Int): PasswordData? {
+        return passwords.find { it.id == id }
+    }
+
+    override fun save(passwordData: PasswordData) {
+        passwords.add(passwordData)
+    }
+
+    override fun update(passwordData: PasswordData) {
+        val index = passwords.indexOfFirst { it.id == passwordData.id }
+        if (index != -1) passwords[index] = passwordData
+    }
+
+    override fun delete(id: Int) {
+        passwords.removeIf { it.id==id }
+    }
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.cr_d.passwordmanagerapp.application.repositories.InMemoryPasswordRepository
 import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.ui.models.CustomNavigationItem
@@ -48,6 +49,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val snackbarHostState = remember { SnackbarHostState() }
             val coroutine = rememberCoroutineScope()
+            val repo = InMemoryPasswordRepository()
 
             PasswordManagerAppTheme {
                 Scaffold(
@@ -59,7 +61,8 @@ class MainActivity : ComponentActivity() {
                     Router(
                         innerPadding,
                         navController,
-                        { coroutine.launch { snackbarHostState.showSnackbar(it) } }
+                        { coroutine.launch { snackbarHostState.showSnackbar(it) } },
+                        repo
                     )
                 }
             }

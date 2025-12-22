@@ -49,13 +49,13 @@ import androidx.compose.ui.unit.sp
 import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
+import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
-import com.cr_d.passwordmanagerapp.ui.PasswordRepository
 
 @Composable
-fun ShowPasswordsScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit){
+fun ShowPasswordsScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit, repository: IPasswordRepository){
 
-    PasswordCardsList(innerPadding, context, snackFunction)
+    PasswordCardsList(innerPadding, context, snackFunction, repository)
 }
 
 @Composable
@@ -104,9 +104,9 @@ fun PasswordCard(password: PasswordData, context: Context, snackFunction: (Strin
 }
 
 @Composable
-fun PasswordCardsList(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit){
+fun PasswordCardsList(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit, repository: IPasswordRepository){
     LazyColumn (Modifier.padding(innerPadding)){
-        items(PasswordRepository.passwords) { pwd ->
+        items(repository.findAll()) { pwd ->
             PasswordCard(pwd, context, snackFunction)
         }
     }

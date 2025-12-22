@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -25,18 +27,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 
 @Composable
-fun CreatePasswordScreen(innerPadding: PaddingValues){
+fun CreatePasswordScreen(innerPadding: PaddingValues, repo: IPasswordRepository){
     var hasLowerCase by remember { mutableStateOf(false) }
     var hasUpperCase by remember { mutableStateOf(false) }
     var hasNumbers by remember { mutableStateOf(false) }
     var hasSpecials by remember { mutableStateOf(false) }
-    var passwordLength by remember { mutableStateOf(PasswordPolicy.MIN_GENERATED_LENGTH) }
+    var passwordLength by remember { mutableIntStateOf(PasswordPolicy.MIN_GENERATED_LENGTH) }
     var passwordError by remember { mutableStateOf("") }
     var generatedPassword by remember { mutableStateOf("") }
 
@@ -59,7 +63,7 @@ fun CreatePasswordScreen(innerPadding: PaddingValues){
 
         if(passwordError != "") ErrorMessage(passwordError)
 
-        if(generatedPassword != "") PasswordSection(generatedPassword)
+        if(generatedPassword != "") PasswordSection(generatedPassword, {generatedPassword=it}, repo)
     }
 }
 
@@ -166,8 +170,9 @@ fun ClearPasswordButton(
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
-fun PasswordSection(password: String){
+fun PasswordSection(password: String, generatedPassword:(String) -> Unit, repo: IPasswordRepository){
     val score = SecurityScoreCalculator(password)
     val formatedScore = String.format("%.2f",score.calculate())
 
@@ -177,7 +182,7 @@ fun PasswordSection(password: String){
         Box(Modifier.padding(20.dp)){
             Text(password)
         }
-        AddPasswordButton(password)
+        AddPasswordButton(password, generatedPassword, repo)
     }
 }
 
@@ -192,9 +197,27 @@ fun PasswordSectionText(text: String){
 }
 
 @Composable
-fun AddPasswordButton(password: String){
+fun AddPasswordButton(password: String, generatedPassword:(String) -> Unit, repo: IPasswordRepository){
     Button(
-        onClick = {},
+        onClick = {
+            val newPassword =
+                PasswordData(
+                    0,
+                    "test",
+                    password,
+                    false,
+                    false,
+                    false,
+                    false,
+                    "test",
+                    "test",
+                    "Ahora",
+                    "Despues",
+                    9.1
+                    )
+            repo.save(newPassword)
+            generatedPassword("")
+        },
         modifier = Modifier.fillMaxWidth().padding(20.dp)
     ){
         Text("Almacenar contraseña")
