@@ -69,7 +69,7 @@ fun PasswordCard(password: PasswordData, context: Context, snackFunction: (Strin
         Image(
             painter = painterResource(R.drawable.outline_visibility_24),
             contentDescription = "",
-            Modifier.size(75.dp)
+            Modifier.size(75.dp).align(Alignment.CenterVertically)
         )
         Column (Modifier.weight(1f)){
             Text(
@@ -88,8 +88,7 @@ fun PasswordCard(password: PasswordData, context: Context, snackFunction: (Strin
                 )
             )
         }
-        Column (Modifier.weight(0.1f)){
-            Spacer(modifier = Modifier.weight(1f))
+        Column (Modifier.align(Alignment.CenterVertically)){
             Icon(
                 Icons.AutoMirrored.Filled.ArrowRight,
                 contentDescription = "",
@@ -99,7 +98,6 @@ fun PasswordCard(password: PasswordData, context: Context, snackFunction: (Strin
                     )
                     .size(50.dp)
             )
-            Spacer(modifier = Modifier.weight(1f))
         }
     }
     HorizontalDivider(thickness = 2.dp, modifier = Modifier.fillMaxWidth())
