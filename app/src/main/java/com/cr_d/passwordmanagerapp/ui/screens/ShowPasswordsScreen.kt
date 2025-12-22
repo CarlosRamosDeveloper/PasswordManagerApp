@@ -8,16 +8,27 @@ import android.os.PersistableBundle
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,10 +37,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
@@ -44,24 +60,49 @@ fun ShowPasswordsScreen(innerPadding: PaddingValues, context: Context, snackFunc
 
 @Composable
 fun PasswordCard(password: PasswordData, context: Context, snackFunction: (String)-> Unit){
-    var isPasswordShown by remember { mutableStateOf(false) }
+    val verticalPadding = 10.dp
+    val horizontalPadding = 20.dp
 
-    Card(modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 20.dp, vertical = 10.dp)) {
-        Row (Modifier.fillMaxSize()){
-            TogglePasswordVisibilityButton(isPasswordShown, { isPasswordShown = it })
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
-                Text("Account: ${password.account}")
-                if (isPasswordShown) Text("Password: ${password.password}")
-                else Text("Password: ********")
-                Text("Fecha de creación: ${password.creationDate}")
-                Text("Última actualización: ${password.lastUpdate}")
-                Text("Puntuación de seguridad ${password.securityScore}")
-            }
-            CopyToClipboardButton(password, context, snackFunction)
+    Row (modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 20.dp, vertical = 10.dp)){
+        Image(
+            painter = painterResource(R.drawable.outline_visibility_24),
+            contentDescription = "",
+            Modifier.size(75.dp)
+        )
+        Column (Modifier.weight(1f)){
+            Text(
+                password.application, fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(
+                    vertical = verticalPadding,
+                    horizontal = horizontalPadding
+                )
+            )
+            Spacer(Modifier.weight(1f))
+            Text(
+                password.account,
+                modifier = Modifier.padding(
+                    vertical = verticalPadding,
+                    horizontal = horizontalPadding
+                )
+            )
+        }
+        Column (Modifier.weight(0.1f)){
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowRight,
+                contentDescription = "",
+                modifier = Modifier
+                    .clickable(
+                        onClick = {}
+                    )
+                    .size(50.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
+    HorizontalDivider(thickness = 2.dp, modifier = Modifier.fillMaxWidth())
 }
 
 @Composable
@@ -71,64 +112,4 @@ fun PasswordCardsList(innerPadding: PaddingValues, context: Context, snackFuncti
             PasswordCard(pwd, context, snackFunction)
         }
     }
-}
-
-@Composable
-fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, onVisionToggle: (Boolean) -> Unit){
-    Button(
-        onClick = { if(isPasswordShown) onVisionToggle(false) else onVisionToggle(true) }
-    ) {
-
-        val progress by animateFloatAsState(
-            targetValue = if (isPasswordShown) 1f else 0f,
-            animationSpec = tween(300)
-        )
-
-        if(isPasswordShown){
-            Icon(
-                painter = painterResource(R.drawable.outline_visibility_24),
-                contentDescription = null,
-                modifier = Modifier.graphicsLayer {
-                    scaleY = progress          // se aplasta al cerrarse
-                    alpha = max(progress, 0.2f)
-                    transformOrigin = TransformOrigin(0.5f, 0.5f)
-                }
-            )
-        } else {
-            Icon(
-                painter = painterResource(R.drawable.outline_visibility_off_24),
-                contentDescription = null,
-                modifier = Modifier.graphicsLayer {
-                    alpha = 1f - progress      // aparece al cerrar
-                    scaleX = 1f - progress
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun CopyToClipboardButton(password: PasswordData, context: Context, snackFunction: (String)-> Unit){
-    Button(
-        onClick = {
-            copyToClipboard(password.password, context, snackFunction)
-        }
-    ) {
-        Image(
-            painterResource(R.drawable.outline_content_copy_24),
-            contentDescription = "",
-        )
-    }
-}
-
-fun copyToClipboard(text: String, context: Context, snackFunction: (String)-> Unit) {
-    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText("Copied_Text", text).apply {
-        description.extras = PersistableBundle().apply {
-            putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
-        }
-    }
-    clipboard.setPrimaryClip(clip)
-
-    snackFunction("Contraseña copiada en el portapapeles")
 }

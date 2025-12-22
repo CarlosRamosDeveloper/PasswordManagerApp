@@ -6,9 +6,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+
+import com.cr_d.passwordmanagerapp.ui.PasswordRepository
 import com.cr_d.passwordmanagerapp.ui.screens.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.ManagePasswordScreen
+import com.cr_d.passwordmanagerapp.ui.screens.PasswordDataScreen
 import com.cr_d.passwordmanagerapp.ui.screens.ShowPasswordsScreen
 
 @Composable
@@ -18,7 +21,7 @@ fun Router(
     snackFunction: (String)-> Unit
 ){
     val context = LocalContext.current
-    NavHost(navController = navController, startDestination = "MainScreen") {
+    NavHost(navController = navController, startDestination = "PasswordDataScreen") {
         composable("MainScreen") {
             MainScreen(innerPadding, navController)
         }
@@ -30,6 +33,9 @@ fun Router(
         }
         composable("ManagePasswordScreen") {
             ManagePasswordScreen(innerPadding)
+        }
+        composable("PasswordDataScreen") {
+            PasswordDataScreen(innerPadding, context, snackFunction, PasswordRepository.passwords[0])
         }
     }
 }

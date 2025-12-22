@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.animation.core.lint)
+    implementation("androidx.compose.material:material-icons-extended")
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(kotlin("test"))
