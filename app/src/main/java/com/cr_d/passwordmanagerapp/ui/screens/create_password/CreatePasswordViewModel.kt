@@ -1,6 +1,5 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
