@@ -16,10 +16,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,27 +31,28 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 
 @Composable
 fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordViewModel){
+    val state = viewModel.uiState.collectAsState().value
 
     Column(Modifier
         .fillMaxSize()
         .padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Crear contraseña")
         Row (modifier= Modifier.fillMaxWidth()){
-            CustomCheckbox("Minúsculas", viewModel.uiState.collectAsState().value.hasLowerCase, viewModel::onLowerCaseChanged, Modifier.weight(1f) )
-            CustomCheckbox("Mayúsculas", viewModel.uiState.collectAsState().value.hasUpperCase, viewModel::onLUpperCaseChanged, Modifier.weight(1f) )
+            CustomCheckbox("Minúsculas", state.hasLowerCase, viewModel::onLowerCaseChanged, Modifier.weight(1f) )
+            CustomCheckbox("Mayúsculas", state.hasUpperCase, viewModel::onLUpperCaseChanged, Modifier.weight(1f) )
         }
         Row{
-            CustomCheckbox("Números", viewModel.uiState.collectAsState().value.hasNumbers, viewModel::onNumbersChanged, Modifier.weight(1f) )
-            CustomCheckbox("Carácteres especiales", viewModel.uiState.collectAsState().value.hasSpecials, viewModel::onSpecialsChanged, Modifier.weight(1f) )
+            CustomCheckbox("Números", state.hasNumbers, viewModel::onNumbersChanged, Modifier.weight(1f) )
+            CustomCheckbox("Carácteres especiales", state.hasSpecials, viewModel::onSpecialsChanged, Modifier.weight(1f) )
         }
 
-        CampoDecimal(viewModel.uiState.collectAsState().value.passwordLength, viewModel::onPasswordLengthChanged)
+        CampoDecimal(state.passwordLength, viewModel::onPasswordLengthChanged)
 
-        PasswordButtonsSection(viewModel, viewModel::onErrorChange, viewModel::onGeneratedPassword)
+        PasswordButtonsSection(viewModel)
 
-        if(viewModel.uiState.collectAsState().value.passwordError != "") ErrorMessage(viewModel.uiState.collectAsState().value.passwordError)
+        if(state.passwordError.isNotBlank()) ErrorMessage(state.passwordError)
 
-        if(viewModel.uiState.collectAsState().value.generatedPassword != "") PasswordSection(viewModel.uiState.collectAsState().value.generatedPassword, viewModel::onGeneratedPassword, viewModel)
+        if(state.generatedPassword.isNotBlank()) PasswordSection(state.generatedPassword, viewModel::onGeneratedPassword, viewModel)
     }
 }
 
@@ -95,44 +92,21 @@ fun CampoDecimal(value: Int, onValueChange: (Int) -> Unit) {
 @Composable
 fun PasswordButtonsSection(
     viewModel: CreatePasswordViewModel,
-    onErrorChange: (String) -> Unit,
-    generatedPassword: (String) -> Unit,
 ){
     Row(Modifier.fillMaxWidth()){
-        CreatePasswordButton(viewModel, onErrorChange, generatedPassword, Modifier.weight(1f))
-        ClearPasswordButton(onErrorChange, generatedPassword, Modifier.weight(1f))
+        CreatePasswordButton(viewModel, Modifier.weight(1f))
+        ClearPasswordButton(viewModel, Modifier.weight(1f))
     }
 }
 
 @Composable
 fun CreatePasswordButton(
     viewModel: CreatePasswordViewModel,
-    onErrorChange: (String) -> Unit,
-    generatedPassword: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val passwordDataGeneration = PasswordDataGeneration(
-        viewModel.uiState.collectAsState().value.hasLowerCase,
-        viewModel.uiState.collectAsState().value.hasUpperCase,
-        viewModel.uiState.collectAsState().value.hasNumbers,
-        viewModel.uiState.collectAsState().value.hasSpecials,
-        viewModel.uiState.collectAsState().value.passwordLength
-    )
-    val generator = PasswordGenerator(passwordDataGeneration)
-    val passwordGeneratorUseCase = GeneratePasswordUseCase(generator)
-
     Column (modifier = modifier.padding(top = 30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(onClick = {
-            try {
-                val password = passwordGeneratorUseCase.invoke()
-                generatedPassword(password)
-                onErrorChange("")
-            } catch (e: Exception) {
-                Log.d("Error", e.message.toString())
-                onErrorChange(e.message.toString())
-                generatedPassword("")
-            }
-        }) {
+        Button(onClick = viewModel::generatePassword
+        ) {
             Text("Generar contraseña")
         }
     }
@@ -140,19 +114,18 @@ fun CreatePasswordButton(
 
 @Composable
 fun ClearPasswordButton(
-    onErrorChange: (String) -> Unit,
-    generatedPassword: (String) -> Unit,
+    viewModel: CreatePasswordViewModel,
     modifier: Modifier = Modifier
 ){
     Column (modifier = modifier.padding(top = 30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Button(onClick = {
             try {
-                generatedPassword("")
-                onErrorChange("")
+                viewModel.onGeneratedPassword("")
+                viewModel.onErrorChange("")
 
             } catch (e: Exception) {
                 Log.d("Error", e.message.toString())
-                onErrorChange(e.message.toString())
+                viewModel.onErrorChange(e.message.toString())
             }
         }) {
             Text("Resetear contraseña")

@@ -1,9 +1,12 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,4 +71,26 @@ class CreatePasswordViewModel(
         }
     }
 
+    fun generatePassword() {
+        val passwordDataGeneration = PasswordDataGeneration(
+            _uiState.value.hasLowerCase,
+            _uiState.value.hasUpperCase,
+            _uiState.value.hasNumbers,
+            _uiState.value.hasSpecials,
+            _uiState.value.passwordLength
+        )
+        try {
+            val generator = PasswordGenerator(passwordDataGeneration)
+            val passwordGeneratorUseCase = GeneratePasswordUseCase(generator)
+            val password = passwordGeneratorUseCase()
+
+            _uiState.update {
+                it.copy(generatedPassword = password, passwordError = "")
+            }
+        } catch (e: Exception){
+            _uiState.update {
+                it.copy(generatedPassword = "", passwordError = e.message ?: "Error al generar contraseña")
+            }
+        }
+    }
 }
