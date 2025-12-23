@@ -55,7 +55,7 @@ fun PasswordDetailedCard(context: Context, snackFunction: (String)-> Unit, viewM
                     else Text("Password: ********")
                     Text("Fecha de creación: ${password.metadata.creationDate}")
                     Text("Última actualización: ${password.metadata.lastUpdate}")
-                    Text("Puntuación de seguridad ${password.securityScore}")
+                    Text("Puntuación de seguridad ${String.format("%.2f",password.securityScore)}")
                 }
 
                 CopyToClipboardButton(password.plainPassword.value, context, snackFunction)

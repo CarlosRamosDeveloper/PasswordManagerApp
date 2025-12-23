@@ -42,7 +42,7 @@ fun Router(
             val generator = PasswordGenerator()
             val generatePasswordUseCase = GeneratePasswordUseCase(generator)
             val scoreCalculator = SecurityScoreCalculator()
-            val createPasswordUseCase = SavePasswordUseCase(repo, scoreCalculator)
+            val createPasswordUseCase = SavePasswordUseCase(repo)
             CreatePasswordScreen(
                 innerPadding,
                 CreatePasswordViewModel(

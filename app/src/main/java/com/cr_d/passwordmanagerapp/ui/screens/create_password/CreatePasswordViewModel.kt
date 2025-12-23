@@ -108,7 +108,7 @@ class CreatePasswordViewModel(
     fun savePassword(password: String){
         val appInfo = ApplicationInfo(_uiState.value.appName, _uiState.value.appUrl, _uiState.value.account)
         try {
-            savePasswordUseCase.invoke(password, appInfo)
+            savePasswordUseCase.invoke(password, appInfo, _uiState.value.passwordScore)
             resetStatus()
         } catch (e: Exception){
             _uiState.update {

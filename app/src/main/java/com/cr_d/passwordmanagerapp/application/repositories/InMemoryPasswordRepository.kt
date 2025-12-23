@@ -368,6 +368,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
             securityScore = 5.5
         )
     )
+    private var lastId = 20
 
     override fun findAll(): List<PasswordData> = passwords.toList()
 
@@ -384,7 +385,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
     }
 
     override fun save(passwordData: PasswordData) {
-        passwords.add(passwordData)
+        val passwordWithId = passwordData.copy(id = ++lastId)
+        passwords.add(passwordWithId)
     }
 
     override fun update(passwordData: PasswordData) {

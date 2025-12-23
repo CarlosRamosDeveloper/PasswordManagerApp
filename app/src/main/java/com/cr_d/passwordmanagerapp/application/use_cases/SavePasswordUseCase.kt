@@ -2,7 +2,6 @@ package com.cr_d.passwordmanagerapp.application.use_cases
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
-import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
@@ -10,11 +9,9 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
 class SavePasswordUseCase (
     private val repository: IPasswordRepository,
-    private val scoreCalculator: SecurityScoreCalculator
 ){
-    operator fun invoke(password: String, appInfo: ApplicationInfo ): PasswordData {
+    operator fun invoke(password: String, appInfo: ApplicationInfo, score: Double ): PasswordData {
         val analyzedData = PasswordAnalyzer.analyze(password)
-        val score = scoreCalculator.calculate(password)
         val newPassword = PlainPassword(password)
 
         val metadata = PasswordMetadata(
