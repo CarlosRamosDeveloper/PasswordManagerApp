@@ -297,7 +297,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         return passwords.filter { it.application == account }
     }
 
-    override fun getPasswordDetails(id: Int): PasswordData? {
+    override fun findById(id: Int): PasswordData? {
         return passwords.find { it.id == id }
     }
 
