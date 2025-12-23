@@ -30,7 +30,10 @@ class CreatePasswordViewModel(
         val passwordLength: Int = PasswordPolicy.MIN_GENERATED_LENGTH,
         val passwordError: String = "",
         val generatedPassword: String = "",
-        val passwordScore: Double = 0.0
+        val passwordScore: Double = 0.0,
+        val appName: String = "",
+        val appUrl: String = "",
+        val account: String = ""
     )
 
     fun onOptionChanged(option: PasswordOption, value: Boolean) {
@@ -47,6 +50,24 @@ class CreatePasswordViewModel(
     fun onPasswordLengthChanged(value: Int) {
         _uiState.update {
             it.copy(passwordLength = value)
+        }
+    }
+
+    fun onAppNameChanged(value: String){
+        _uiState.update {
+            it.copy(appName = value)
+        }
+    }
+
+    fun onAppUrlChanged(value: String){
+        _uiState.update {
+            it.copy(appUrl = value)
+        }
+    }
+
+    fun onAccountChanged(value: String){
+        _uiState.update {
+            it.copy(account = value)
         }
     }
 
@@ -80,36 +101,37 @@ class CreatePasswordViewModel(
     }
 
     fun clearPassword(){
-        _uiState.update {
-            it.copy(
-                generatedPassword = "",
-                passwordError = "",
-                passwordScore = 0.0
-            )
-        }
+        resetStatus()
     }
 
     fun savePassword(password: String){
         try {
             savePasswordUseCase.invoke(password)
-            _uiState.update {
-                it.copy(
-                    hasLowerCase = false,
-                    hasUpperCase = false,
-                    hasNumbers = false,
-                    hasSpecials = false,
-                    passwordLength = PasswordPolicy.MIN_GENERATED_LENGTH,
-                    generatedPassword = "",
-                    passwordError = "",
-                    passwordScore = 0.0
-                )
-            }
+            resetStatus()
         } catch (e: Exception){
             _uiState.update {
                 it.copy(
                     passwordError = e.message.toString()
                 )
             }
+        }
+    }
+
+    fun resetStatus(){
+        _uiState.update {
+            it.copy(
+                hasLowerCase = false,
+                hasUpperCase = false,
+                hasNumbers = false,
+                hasSpecials = false,
+                passwordLength = PasswordPolicy.MIN_GENERATED_LENGTH,
+                generatedPassword = "",
+                passwordError = "",
+                passwordScore = 0.0,
+                appName = "",
+                appUrl = "",
+                account = ""
+            )
         }
     }
 }

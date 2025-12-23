@@ -49,7 +49,8 @@ fun Router(
                     generatePasswordUseCase,
                     scoreCalculator,
                     createPasswordUseCase
-                )
+                ), context,
+                snackFunction
             )
         }
         composable("ShowPasswordScreen") {

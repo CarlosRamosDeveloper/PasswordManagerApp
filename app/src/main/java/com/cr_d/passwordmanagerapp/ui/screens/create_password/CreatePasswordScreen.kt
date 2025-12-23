@@ -1,6 +1,12 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
+import android.content.Context
+import android.os.PersistableBundle
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -18,14 +25,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cr_d.passwordmanagerapp.R
 
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 @Composable
-fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordViewModel){
+fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordViewModel, context: Context, snackFunction: (String)-> Unit){
     val state = viewModel.uiState.collectAsState().value
 
     Column(Modifier
@@ -67,7 +77,14 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
 
         if(state.passwordError.isNotBlank()) ErrorMessage(state.passwordError)
 
-        if(state.generatedPassword.isNotBlank()) PasswordSection(state.generatedPassword, viewModel)
+        if(state.generatedPassword.isNotBlank()) PasswordSection(state.generatedPassword, viewModel, context, snackFunction)
+
+        if(state.generatedPassword.isNotBlank()) ApplicationSection(viewModel)
+
+        if(state.generatedPassword.isNotBlank() &&
+            state.appUrl.isNotBlank() &&
+            state.account.isNotBlank() &&
+            state.appName.isNotBlank()) AddPasswordButton(state.generatedPassword, viewModel)
     }
 }
 
@@ -99,7 +116,8 @@ fun CampoDecimal(value: Int, onValueChange: (Int) -> Unit) {
         },
         label = { Text("Valor decimal") },
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Number
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
         )
     )
 }
@@ -142,7 +160,7 @@ fun ClearPasswordButton(
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun PasswordSection(password: String, viewModel: CreatePasswordViewModel){
+fun PasswordSection(password: String, viewModel: CreatePasswordViewModel, context: Context, snackFunction: (String)-> Unit){
     val passwordScore = viewModel.uiState.collectAsState().value.passwordScore
 
     Column (Modifier
@@ -153,7 +171,7 @@ fun PasswordSection(password: String, viewModel: CreatePasswordViewModel){
         Box(Modifier.padding(20.dp)){
             Text(password)
         }
-        AddPasswordButton(password, viewModel)
+        CopyToClipboardButton(password, context, snackFunction)
     }
 }
 
@@ -176,5 +194,51 @@ fun AddPasswordButton(password: String, viewModel: CreatePasswordViewModel){
             .padding(20.dp)
     ){
         Text("Almacenar contraseña")
+    }
+}
+
+@Composable
+fun ApplicationSection(viewModel: CreatePasswordViewModel){
+    val state = viewModel.uiState.collectAsState().value
+    Column {
+        Text("Información de aplicación")
+        ApplicationOutlinedTextField("Nombre de aplicación", state.appName, viewModel::onAppNameChanged)
+        ApplicationOutlinedTextField("Url de la aplicación", state.appUrl, viewModel::onAppUrlChanged)
+        ApplicationOutlinedTextField("Cuenta", state.account, viewModel::onAccountChanged)
+    }
+
+}
+
+@Composable
+fun ApplicationOutlinedTextField(label: String, param: String, onValueChange: (String) -> Unit){
+    OutlinedTextField(
+        value = param,
+        onValueChange = {onValueChange(it)},
+        label = { Text(label) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+    )
+}
+
+@Composable
+fun CopyToClipboardButton(passwordText: String, context: Context, snackFunction: (String)-> Unit){
+    Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        Button(
+            onClick = {
+                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("Copied_Text", passwordText)
+                clipboard.setPrimaryClip(clip)
+
+                snackFunction("Contraseña copiada en el portapapeles")
+            }
+        ) {
+            Row {
+                Image(
+                    painterResource(R.drawable.outline_content_copy_24),
+                    contentDescription = "",
+                )
+                Text("Copiar al portapapeles")
+            }
+        }
     }
 }
