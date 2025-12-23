@@ -13,9 +13,9 @@ class GeneratePasswordUseCaseTest {
         val passwordData = PasswordDataGeneration(
             true, true, true, true, 16
         )
-        val useCase = GeneratePasswordUseCase(PasswordGenerator(passwordData))
+        val useCase = GeneratePasswordUseCase(PasswordGenerator())
 
-        val password = useCase()
+        val password = useCase(passwordData)
 
         Assertions.assertEquals(16, password.length)
     }
@@ -25,8 +25,8 @@ class GeneratePasswordUseCaseTest {
         val passwordData = PasswordDataGeneration(
             true, false, false, true, 16
         )
-        val useCase = GeneratePasswordUseCase(PasswordGenerator(passwordData))
-        val password = useCase()
+        val useCase = GeneratePasswordUseCase(PasswordGenerator())
+        val password = useCase(passwordData)
 
         val analyzedPassword = PasswordAnalyzer.analyze(password)
 

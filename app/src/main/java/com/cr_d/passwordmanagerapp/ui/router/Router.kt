@@ -43,7 +43,7 @@ fun Router(
                     false,
                     PasswordPolicy.MIN_GENERATED_LENGTH,
                 )
-            val generator = PasswordGenerator(newPassword)
+            val generator = PasswordGenerator()
             val generatePassword = GeneratePasswordUseCase(generator)
             CreatePasswordScreen(innerPadding, CreatePasswordViewModel(repo, generatePassword))
         }

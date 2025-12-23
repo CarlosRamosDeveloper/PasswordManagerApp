@@ -64,9 +64,9 @@ class CreatePasswordViewModel(
             _uiState.value.passwordLength
         )
         try {
-            val generator = PasswordGenerator(passwordDataGeneration)
+            val generator = PasswordGenerator()
             val passwordGeneratorUseCase = GeneratePasswordUseCase(generator)
-            val password = passwordGeneratorUseCase()
+            val password = passwordGeneratorUseCase(passwordDataGeneration)
 
             _uiState.update {
                 it.copy(generatedPassword = password, passwordError = "")

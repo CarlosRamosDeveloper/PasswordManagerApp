@@ -2,11 +2,8 @@ package com.cr_d.passwordmanagerapp.domain.entities
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 
-class PasswordGenerator (
-    var passwordData: PasswordDataGeneration
-    ){
-
-    fun generatePassword(): String {
+class PasswordGenerator (){
+    fun generatePassword(passwordData: PasswordDataGeneration): String {
 
         if (passwordData.passwordLength < PasswordPolicy.MIN_GENERATED_LENGTH) passwordData.passwordLength = PasswordPolicy.MIN_GENERATED_LENGTH
         if (passwordData.passwordLength > PasswordPolicy.MAX_LENGTH) passwordData.passwordLength = PasswordPolicy.MAX_LENGTH
