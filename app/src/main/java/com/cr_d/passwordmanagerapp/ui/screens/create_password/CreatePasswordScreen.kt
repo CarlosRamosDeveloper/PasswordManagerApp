@@ -136,16 +136,8 @@ fun ClearPasswordButton(
     modifier: Modifier = Modifier
 ){
     Column (modifier = modifier.padding(top = 30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(onClick = {
-            try {
-                viewModel.onGeneratedPassword("")
-                viewModel.onErrorChange("")
-
-            } catch (e: Exception) {
-                Log.d("Error", e.message.toString())
-                viewModel.onErrorChange(e.message.toString())
-            }
-        }) {
+        Button(onClick = viewModel::clearPassword
+        ) {
             Text("Resetear contraseña")
         }
     }

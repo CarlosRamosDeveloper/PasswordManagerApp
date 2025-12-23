@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
@@ -80,6 +81,24 @@ class CreatePasswordViewModel(
         } catch (e: Exception){
             _uiState.update {
                 it.copy(generatedPassword = "", passwordError = e.message ?: "Error al generar contraseña")
+            }
+        }
+    }
+
+    fun clearPassword(){
+        try {
+            _uiState.update {
+                it.copy(generatedPassword = "",
+                    passwordError = ""
+                )
+            }
+
+        } catch (e: Exception) {
+            _uiState.update {
+                it.copy(
+                    generatedPassword = "",
+                    passwordError = e.message.toString()
+                )
             }
         }
     }
