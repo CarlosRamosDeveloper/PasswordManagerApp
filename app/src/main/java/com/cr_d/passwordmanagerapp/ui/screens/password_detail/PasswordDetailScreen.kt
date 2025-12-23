@@ -138,6 +138,9 @@ fun CopyToClipboardButton(passwordText: String, context: Context, snackFunction:
         )
     }
 }
+// TODO: Hacer botón de modificar contraseña
+// TODO: Hacer el usecase de modificar contraseña
+// TODO: Adecentar la interfaz
 
 @Composable
 fun DeletePasswordButton(snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel, navController: NavController){
