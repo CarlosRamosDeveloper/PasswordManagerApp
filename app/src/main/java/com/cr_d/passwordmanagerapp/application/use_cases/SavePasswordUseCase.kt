@@ -12,13 +12,11 @@ class SavePasswordUseCase (
     private val repository: IPasswordRepository,
     private val scoreCalculator: SecurityScoreCalculator
 ){
-    operator fun invoke(password: String ): PasswordData {
+    operator fun invoke(password: String, appInfo: ApplicationInfo ): PasswordData {
         val analyzedData = PasswordAnalyzer.analyze(password)
         val score = scoreCalculator.calculate(password)
         val newPassword = PlainPassword(password)
-        val newAppInfo = ApplicationInfo(
-            "AppName", "www.random.com", "random@randommail.com"
-        )
+
         val metadata = PasswordMetadata(
             hasLowerCase = analyzedData.hasLowerCase,
             hasUpperCase = analyzedData.hasUpperCase,
@@ -29,7 +27,7 @@ class SavePasswordUseCase (
         )
         val passwordData = PasswordData(
             id= 0,
-            appInfo = newAppInfo,
+            appInfo = appInfo,
             plainPassword = newPassword,
             metadata = metadata,
             securityScore = score

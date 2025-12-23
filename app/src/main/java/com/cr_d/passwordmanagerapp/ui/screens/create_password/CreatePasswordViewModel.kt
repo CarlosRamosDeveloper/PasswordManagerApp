@@ -10,6 +10,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
+import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
@@ -105,8 +106,9 @@ class CreatePasswordViewModel(
     }
 
     fun savePassword(password: String){
+        val appInfo = ApplicationInfo(_uiState.value.appName, _uiState.value.appUrl, _uiState.value.account)
         try {
-            savePasswordUseCase.invoke(password)
+            savePasswordUseCase.invoke(password, appInfo)
             resetStatus()
         } catch (e: Exception){
             _uiState.update {
