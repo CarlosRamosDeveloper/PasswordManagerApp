@@ -11,6 +11,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -99,7 +100,7 @@ fun CustomNavBar(navController: NavHostController){
     val destinations = listOf(
         CustomNavigationItem(Icons.Filled.Done, "Ver Contraseñas", "ShowPasswordScreen"),
         CustomNavigationItem(Icons.Filled.Info, "Crear contraseña", "CreatePasswordScreen"),
-        CustomNavigationItem(Icons.Filled.Favorite, "Gestionar contraseñas", "ManagePasswordScreen"),
+        CustomNavigationItem(Icons.Filled.Settings, "Opciones", "SettingsScreen"),
     )
 
     Column {
