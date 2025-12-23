@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.update
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
@@ -16,7 +15,7 @@ import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 class CreatePasswordViewModel(
     val repository: IPasswordRepository,
-    val generatePassword: GeneratePasswordUseCase
+    val generatePasswordUseCase: GeneratePasswordUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -49,12 +48,6 @@ class CreatePasswordViewModel(
         }
     }
 
-    fun onGeneratedPassword(password: String) {
-        _uiState.update {
-            it.copy(generatedPassword = password)
-        }
-    }
-
     fun generatePassword() {
         val passwordDataGeneration = PasswordDataGeneration(
             _uiState.value.hasLowerCase,
@@ -64,9 +57,7 @@ class CreatePasswordViewModel(
             _uiState.value.passwordLength
         )
         try {
-            val generator = PasswordGenerator()
-            val passwordGeneratorUseCase = GeneratePasswordUseCase(generator)
-            val password = passwordGeneratorUseCase(passwordDataGeneration)
+            val password = generatePasswordUseCase(passwordDataGeneration)
 
             _uiState.update {
                 it.copy(generatedPassword = password, passwordError = "")
@@ -79,20 +70,10 @@ class CreatePasswordViewModel(
     }
 
     fun clearPassword(){
-        try {
-            _uiState.update {
-                it.copy(generatedPassword = "",
-                    passwordError = ""
-                )
-            }
-
-        } catch (e: Exception) {
-            _uiState.update {
-                it.copy(
-                    generatedPassword = "",
-                    passwordError = e.message.toString()
-                )
-            }
+        _uiState.update {
+            it.copy(generatedPassword = "",
+                passwordError = ""
+            )
         }
     }
 
