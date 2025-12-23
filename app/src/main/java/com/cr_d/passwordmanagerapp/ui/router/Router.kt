@@ -36,7 +36,7 @@ fun Router(
     repo: IPasswordRepository
 ){
     val context = LocalContext.current
-    val settingsViewModel: SettingsViewModel = viewModel(LocalContext.current as ComponentActivity )
+    val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
 
     NavHost(navController = navController, startDestination = "SettingsScreen") {
         composable("MainScreen") {
