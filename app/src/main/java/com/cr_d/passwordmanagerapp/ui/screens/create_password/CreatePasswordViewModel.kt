@@ -1,19 +1,18 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
-import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-
+import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
+import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 class CreatePasswordViewModel(
     val repository: IPasswordRepository,
@@ -47,12 +46,6 @@ class CreatePasswordViewModel(
     fun onPasswordLengthChanged(value: Int) {
         _uiState.update {
             it.copy(passwordLength = value)
-        }
-    }
-
-    fun onErrorChange(error: String){
-        _uiState.update {
-            it.copy(passwordError = error)
         }
     }
 
@@ -97,6 +90,44 @@ class CreatePasswordViewModel(
             _uiState.update {
                 it.copy(
                     generatedPassword = "",
+                    passwordError = e.message.toString()
+                )
+            }
+        }
+    }
+
+    fun savePassword(password: String){
+        try {
+            val newPassword =
+                PasswordData(
+                    0,
+                    "test",
+                    password,
+                    false,
+                    false,
+                    false,
+                    false,
+                    "test",
+                    "test",
+                    "Ahora",
+                    "Despues",
+                    9.1
+                )
+            repository.save(newPassword)
+            _uiState.update {
+                it.copy(
+                    hasLowerCase = false,
+                    hasUpperCase = false,
+                    hasNumbers = false,
+                    hasSpecials = false,
+                    passwordLength = PasswordPolicy.MIN_GENERATED_LENGTH,
+                    generatedPassword = "",
+                    passwordError = "",
+                )
+            }
+        } catch (e: Exception){
+            _uiState.update {
+                it.copy(
                     passwordError = e.message.toString()
                 )
             }

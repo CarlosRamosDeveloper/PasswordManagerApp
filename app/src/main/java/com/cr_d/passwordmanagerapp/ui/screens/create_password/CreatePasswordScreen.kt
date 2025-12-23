@@ -1,7 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 @Composable
@@ -70,7 +68,7 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
 
         if(state.passwordError.isNotBlank()) ErrorMessage(state.passwordError)
 
-        if(state.generatedPassword.isNotBlank()) PasswordSection(state.generatedPassword, viewModel::onGeneratedPassword, viewModel)
+        if(state.generatedPassword.isNotBlank()) PasswordSection(state.generatedPassword, viewModel)
     }
 }
 
@@ -145,7 +143,7 @@ fun ClearPasswordButton(
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun PasswordSection(password: String, generatedPassword:(String) -> Unit, viewModel: CreatePasswordViewModel){
+fun PasswordSection(password: String, viewModel: CreatePasswordViewModel){
     val score = SecurityScoreCalculator(password)
     val formatedScore = String.format("%.2f",score.calculate())
 
@@ -157,7 +155,7 @@ fun PasswordSection(password: String, generatedPassword:(String) -> Unit, viewMo
         Box(Modifier.padding(20.dp)){
             Text(password)
         }
-        AddPasswordButton(password, generatedPassword, viewModel)
+        AddPasswordButton(password, viewModel)
     }
 }
 
@@ -172,27 +170,9 @@ fun PasswordSectionText(text: String){
 }
 
 @Composable
-fun AddPasswordButton(password: String, generatedPassword:(String) -> Unit, viewModel: CreatePasswordViewModel){
+fun AddPasswordButton(password: String, viewModel: CreatePasswordViewModel){
     Button(
-        onClick = {
-            val newPassword =
-                PasswordData(
-                    0,
-                    "test",
-                    password,
-                    false,
-                    false,
-                    false,
-                    false,
-                    "test",
-                    "test",
-                    "Ahora",
-                    "Despues",
-                    9.1
-                    )
-            viewModel.repository.save(newPassword)
-            generatedPassword("")
-        },
+        onClick = {viewModel.savePassword(password)},
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
