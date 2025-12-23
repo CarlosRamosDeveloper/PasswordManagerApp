@@ -15,6 +15,7 @@ import androidx.navigation.navArgument
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordScreen
@@ -58,14 +59,27 @@ fun Router(
             )
         }
         composable("ShowPasswordScreen") {
-            PasswordsListScreen(innerPadding, navController, PasswordListViewModel(repo))
+            PasswordsListScreen(
+                innerPadding,
+                navController,
+                PasswordListViewModel(
+                    GetAllPasswordsUseCase(repo)
+                )
+            )
         }
         composable("PasswordDataScreen/{passwordId}", arguments = listOf(navArgument("passwordId") {
             type = NavType.IntType
         })) { backstackEntry ->
             val passwordId = backstackEntry.arguments?.getInt("passwordId") ?: 1
-            PasswordDetailScreen(innerPadding, context, snackFunction,
-                PasswordDetailViewModel(repo, passwordId), settingsViewModel)
+            PasswordDetailScreen(
+                innerPadding,
+                context,
+                snackFunction,
+                PasswordDetailViewModel(
+                    repo,
+                    passwordId),
+                settingsViewModel
+            )
         }
         composable("SettingsScreen"){
             SettingsScreen(innerPadding, settingsViewModel)
