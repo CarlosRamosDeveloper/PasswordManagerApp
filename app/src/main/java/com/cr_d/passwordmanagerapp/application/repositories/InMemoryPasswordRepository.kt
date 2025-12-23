@@ -1,289 +1,370 @@
 package com.cr_d.passwordmanagerapp.application.repositories
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
 class InMemoryPasswordRepository : IPasswordRepository {
     private val passwords = mutableListOf(
         PasswordData(
             id = 1,
-            account = "juan.perez@gmail.com",
             plainPassword = PlainPassword("Abcdef123!"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = true,
-            application = "Gmail",
-            url = "https://mail.google.com",
-            creationDate = "2023-01-10",
-            lastUpdate = "2024-05-02",
+            appInfo = ApplicationInfo(
+                applicationName = "Gmail",
+                url = "https://mail.google.com",
+                account = "juan.perez@gmail.com"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = true,
+                creationDate = "2023-01-10",
+                lastUpdate = "2024-05-02"
+            ),
             securityScore = 8.50
         ),
         PasswordData(
             id = 2,
-            account = "ana@empresa.com",
             plainPassword = PlainPassword("contraseñaSegura"),
-            hasLowerCase = true,
-            hasUpperCase = true, // hay 'S' mayúscula en "Segura"
-            hasNumbers = false,
-            hasSpecials = false,
-            application = "Work Mail",
-            url = "https://mail.empresa.com",
-            creationDate = "2022-06-15",
-            lastUpdate = "2023-12-01",
+            appInfo = ApplicationInfo(
+                applicationName = "Work Mail",
+                url = "https://mail.empresa.com",
+                account = "ana@empresa.com"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = false,
+                hasSpecials = false,
+                creationDate = "2022-06-15",
+                lastUpdate = "2023-12-01"
+            ),
             securityScore = 4.82
         ),
         PasswordData(
             id = 3,
-            account = "usuario123",
             plainPassword = PlainPassword("onlylowercase"),
-            hasLowerCase = true,
-            hasUpperCase = false,
-            hasNumbers = false,
-            hasSpecials = false,
-            application = "LocalApp",
-            url = "http://localhost:8080",
-            creationDate = "2021-11-01",
-            lastUpdate = "2021-11-01",
+            appInfo = ApplicationInfo(
+                applicationName = "LocalApp",
+                url = "http://localhost:8080",
+                account = "usuario123"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = false,
+                hasNumbers = false,
+                hasSpecials = false,
+                creationDate = "2021-11-01",
+                lastUpdate = "2021-11-01"
+            ),
             securityScore = 2.94
         ),
         PasswordData(
             id = 4,
-            account = "maria98",
             plainPassword = PlainPassword("MARIA2020"),
-            hasLowerCase = false,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = false,
-            application = "BankPortal",
-            url = "https://bank.example.com",
-            creationDate = "2020-02-20",
-            lastUpdate = "2022-02-20",
+            appInfo = ApplicationInfo(
+                applicationName = "BankPortal",
+                url = "https://bank.example.com",
+                account = "maria98"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = false,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = false,
+                creationDate = "2020-02-20",
+                lastUpdate = "2022-02-20"
+            ),
             securityScore = 4.42
         ),
         PasswordData(
             id = 5,
-            account = "pedro@chat.com",
             plainPassword = PlainPassword("Ch@t_User2021"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = true,
-            application = "ChatApp",
-            url = "https://chat.example.com",
-            creationDate = "2021-08-08",
-            lastUpdate = "2024-01-10",
+            appInfo = ApplicationInfo(
+                applicationName = "ChatApp",
+                url = "https://chat.example.com",
+                account = "pedro@chat.com"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = true,
+                creationDate = "2021-08-08",
+                lastUpdate = "2024-01-10"
+            ),
             securityScore = 7.85
         ),
         PasswordData(
             id = 6,
-            account = "soporte@tienda.es",
             plainPassword = PlainPassword("Tienda#1"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = true,
-            application = "ShopAdmin",
-            url = "https://admin.tienda.es",
-            creationDate = "2023-03-30",
-            lastUpdate = "2023-09-05",
+            appInfo = ApplicationInfo(
+                applicationName = "ShopAdmin",
+                url = "https://admin.tienda.es",
+                account = "soporte@tienda.es"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = true,
+                creationDate = "2023-03-30",
+                lastUpdate = "2023-09-05"
+            ),
             securityScore = 7.21
         ),
         PasswordData(
             id = 7,
-            account = "cliente77",
             plainPassword = PlainPassword("pass1234"),
-            hasLowerCase = true,
-            hasUpperCase = false,
-            hasNumbers = true,
-            hasSpecials = false,
-            application = "Ecommerce",
-            url = "https://shop.example.com",
-            creationDate = "2022-10-10",
-            lastUpdate = "2022-10-10",
+            appInfo = ApplicationInfo(
+                applicationName = "Ecommerce",
+                url = "https://shop.example.com",
+                account = "cliente77"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = false,
+                hasNumbers = true,
+                hasSpecials = false,
+                creationDate = "2022-10-10",
+                lastUpdate = "2022-10-10"
+            ),
             securityScore = 3.0
         ),
         PasswordData(
             id = 8,
-            account = "devteam",
             plainPassword = PlainPassword("DevTeam!"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = false,
-            hasSpecials = true,
-            application = "CI Server",
-            url = "https://ci.example.com",
-            creationDate = "2019-05-01",
-            lastUpdate = "2024-04-01",
+            appInfo = ApplicationInfo(
+                applicationName = "CI Server",
+                url = "https://ci.example.com",
+                account = "devteam"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = false,
+                hasSpecials = true,
+                creationDate = "2019-05-01",
+                lastUpdate = "2024-04-01"
+            ),
             securityScore = 6.29
         ),
         PasswordData(
             id = 9,
-            account = "alicia",
             plainPassword = PlainPassword("A1b2c3d4"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = false,
-            application = "Notes",
-            url = "https://notes.example.com",
-            creationDate = "2024-02-14",
-            lastUpdate = "2024-02-14",
+            appInfo = ApplicationInfo(
+                applicationName = "Notes",
+                url = "https://notes.example.com",
+                account = "alicia"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = false,
+                creationDate = "2024-02-14",
+                lastUpdate = "2024-02-14"
+            ),
             securityScore = 6.5
         ),
         PasswordData(
             id = 10,
-            account = "sofia@red.com",
             plainPassword = PlainPassword("S0f!a#2022"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = true,
-            application = "SocialNetwork",
-            url = "https://social.example.com",
-            creationDate = "2022-07-07",
-            lastUpdate = "2024-06-20",
+            appInfo = ApplicationInfo(
+                applicationName = "SocialNetwork",
+                url = "https://social.example.com",
+                account = "sofia@red.com"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = true,
+                creationDate = "2022-07-07",
+                lastUpdate = "2024-06-20"
+            ),
             securityScore = 8.82
         ),
         PasswordData(
             id = 11,
-            account = "backup@server",
             plainPassword = PlainPassword("backup_server"),
-            hasLowerCase = true,
-            hasUpperCase = false,
-            hasNumbers = false,
-            hasSpecials = true, // underscore considered special
-            application = "Backup",
-            url = "https://backup.example.com",
-            creationDate = "2018-12-12",
-            lastUpdate = "2020-12-12",
+            appInfo = ApplicationInfo(
+                applicationName = "Backup",
+                url = "https://backup.example.com",
+                account = "backup@server"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = false,
+                hasNumbers = false,
+                hasSpecials = true,
+                creationDate = "2018-12-12",
+                lastUpdate = "2020-12-12"
+            ),
             securityScore = 3.52
         ),
         PasswordData(
             id = 12,
-            account = "luis-app",
             plainPassword = PlainPassword("Lu1s-Acc"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = true, // dash is special
-            application = "MobileApp",
-            url = "https://app.example.com",
-            creationDate = "2020-09-09",
-            lastUpdate = "2023-11-11",
+            appInfo = ApplicationInfo(
+                applicationName = "MobileApp",
+                url = "https://app.example.com",
+                account = "luis-app"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = true,
+                creationDate = "2020-09-09",
+                lastUpdate = "2023-11-11"
+            ),
             securityScore = 7.0
         ),
         PasswordData(
             id = 13,
-            account = "info@universidad.edu",
             plainPassword = PlainPassword("uni2024"),
-            hasLowerCase = true,
-            hasUpperCase = false,
-            hasNumbers = true,
-            hasSpecials = false,
-            application = "UniversityPortal",
-            url = "https://universidad.edu",
-            creationDate = "2024-01-01",
-            lastUpdate = "2024-01-01",
+            appInfo = ApplicationInfo(
+                applicationName = "UniversityPortal",
+                url = "https://universidad.edu",
+                account = "info@universidad.edu"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = false,
+                hasNumbers = true,
+                hasSpecials = false,
+                creationDate = "2024-01-01",
+                lastUpdate = "2024-01-01"
+            ),
             securityScore = 3.50
-        ),
-        PasswordData(
+        ),PasswordData(
             id = 14,
-            account = "manager",
             plainPassword = PlainPassword("M@nager2023!"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = true,
-            application = "HR System",
-            url = "https://hr.example.com",
-            creationDate = "2023-04-04",
-            lastUpdate = "2024-03-03",
+            appInfo = ApplicationInfo(
+                applicationName = "HR System",
+                url = "https://hr.example.com",
+                account = "manager"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = true,
+                creationDate = "2023-04-04",
+                lastUpdate = "2024-03-03"
+            ),
             securityScore = 9.79
         ),
         PasswordData(
             id = 15,
-            account = "operaciones",
             plainPassword = PlainPassword("OPER-ops"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = false,
-            hasSpecials = true,
-            application = "Ops Dashboard",
-            url = "https://ops.example.com",
-            creationDate = "2021-01-15",
-            lastUpdate = "2022-01-15",
+            appInfo = ApplicationInfo(
+                applicationName = "Ops Dashboard",
+                url = "https://ops.example.com",
+                account = "operaciones"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = false,
+                hasSpecials = true,
+                creationDate = "2021-01-15",
+                lastUpdate = "2022-01-15"
+            ),
             securityScore = 50.84
         ),
         PasswordData(
             id = 16,
-            account = "test.user",
             plainPassword = PlainPassword("12345678"),
-            hasLowerCase = false,
-            hasUpperCase = false,
-            hasNumbers = true,
-            hasSpecials = false,
-            application = "Demo",
-            url = "https://demo.example.com",
-            creationDate = "2017-07-07",
-            lastUpdate = "2018-07-07",
+            appInfo = ApplicationInfo(
+                applicationName = "Demo",
+                url = "https://demo.example.com",
+                account = "test.user"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = false,
+                hasUpperCase = false,
+                hasNumbers = true,
+                hasSpecials = false,
+                creationDate = "2017-07-07",
+                lastUpdate = "2018-07-07"
+            ),
             securityScore = 10.0
         ),
         PasswordData(
             id = 17,
-            account = "fernando",
             plainPassword = PlainPassword("Ferno_99"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = true, // underscore
-            application = "Gaming",
-            url = "https://gaming.example.com",
-            creationDate = "2022-12-12",
-            lastUpdate = "2023-12-12",
+            appInfo = ApplicationInfo(
+                applicationName = "Gaming",
+                url = "https://gaming.example.com",
+                account = "fernando"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = true,
+                creationDate = "2022-12-12",
+                lastUpdate = "2023-12-12"
+            ),
             securityScore = 7.55
         ),
         PasswordData(
             id = 18,
-            account = "newsletter@media.com",
             plainPassword = PlainPassword("newsLETTER"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = false,
-            hasSpecials = false,
-            application = "MediaCMS",
-            url = "https://cms.media.com",
-            creationDate = "2019-03-03",
-            lastUpdate = "2021-03-03",
+            appInfo = ApplicationInfo(
+                applicationName = "MediaCMS",
+                url = "https://cms.media.com",
+                account = "newsletter@media.com"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = false,
+                hasSpecials = false,
+                creationDate = "2019-03-03",
+                lastUpdate = "2021-03-03"
+            ),
             securityScore = 4.2
         ),
         PasswordData(
             id = 19,
-            account = "root",
             plainPassword = PlainPassword("R00t!#Secure"),
-            hasLowerCase = true,
-            hasUpperCase = true,
-            hasNumbers = true,
-            hasSpecials = true,
-            application = "ServerRoot",
-            url = "ssh://192.168.0.1",
-            creationDate = "2016-06-06",
-            lastUpdate = "2024-07-07",
+            appInfo = ApplicationInfo(
+                applicationName = "ServerRoot",
+                url = "ssh://192.168.0.1",
+                account = "root"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = true,
+                hasNumbers = true,
+                hasSpecials = true,
+                creationDate = "2016-06-06",
+                lastUpdate = "2024-07-07"
+            ),
             securityScore = 9.20
         ),
         PasswordData(
             id = 20,
-            account = "alumno2025",
             plainPassword = PlainPassword("alumno.2025"),
-            hasLowerCase = true,
-            hasUpperCase = false,
-            hasNumbers = true,
-            hasSpecials = true, // dot considered special here
-            application = "Campus",
-            url = "https://campus.univ.edu",
-            creationDate = "2025-01-10",
-            lastUpdate = "2025-01-10",
+            appInfo = ApplicationInfo(
+                applicationName = "Campus",
+                url = "https://campus.univ.edu",
+                account = "alumno2025"
+            ),
+            metadata = PasswordMetadata(
+                hasLowerCase = true,
+                hasUpperCase = false,
+                hasNumbers = true,
+                hasSpecials = true,
+                creationDate = "2025-01-10",
+                lastUpdate = "2025-01-10"
+            ),
             securityScore = 5.5
         )
     )
@@ -291,11 +372,11 @@ class InMemoryPasswordRepository : IPasswordRepository {
     override fun findAll(): List<PasswordData> = passwords.toList()
 
     override fun findByApplication(app: String): List<PasswordData> {
-        return passwords.filter { it.application == app }
+        return passwords.filter { it.appInfo.applicationName == app }
     }
 
     override fun findByAccount(account: String): List<PasswordData> {
-        return passwords.filter { it.application == account }
+        return passwords.filter { it.appInfo.account == account }
     }
 
     override fun findById(id: Int): PasswordData? {

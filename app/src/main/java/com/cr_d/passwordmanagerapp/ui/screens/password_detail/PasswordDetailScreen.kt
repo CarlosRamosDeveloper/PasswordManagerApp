@@ -50,11 +50,11 @@ fun PasswordDetailedCard(context: Context, snackFunction: (String)-> Unit, viewM
                 TogglePasswordVisibilityButton(viewModel)
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
-                    Text("Account: ${password.account}")
+                    Text("Account: ${password.appInfo.account}")
                     if (state.isPasswordShown) Text("Password: ${password.plainPassword.value}")
                     else Text("Password: ********")
-                    Text("Fecha de creación: ${password.creationDate}")
-                    Text("Última actualización: ${password.lastUpdate}")
+                    Text("Fecha de creación: ${password.metadata.creationDate}")
+                    Text("Última actualización: ${password.metadata.lastUpdate}")
                     Text("Puntuación de seguridad ${password.securityScore}")
                 }
 
@@ -62,7 +62,6 @@ fun PasswordDetailedCard(context: Context, snackFunction: (String)-> Unit, viewM
             }
         }
     }
-
 }
 
 @Composable

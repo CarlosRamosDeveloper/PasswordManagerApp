@@ -53,7 +53,7 @@ fun PasswordCard(password: PasswordData, navController: NavController,){
             contentAlignment = Alignment.Center
             ) {
             Text(
-                password.application.first().uppercaseChar().toString(),
+                password.appInfo.applicationName.first().uppercaseChar().toString(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 45.sp,
                 color = Color.Black,
@@ -61,7 +61,7 @@ fun PasswordCard(password: PasswordData, navController: NavController,){
         }
         Column (Modifier.weight(1f)){
             Text(
-                password.application, fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                password.appInfo.applicationName, fontSize = 20.sp, fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(
                     vertical = verticalPadding,
                     horizontal = horizontalPadding
@@ -69,7 +69,7 @@ fun PasswordCard(password: PasswordData, navController: NavController,){
             )
             Spacer(Modifier.weight(1f))
             Text(
-                password.account,
+                password.appInfo.account,
                 modifier = Modifier.padding(
                     vertical = verticalPadding,
                     horizontal = horizontalPadding
