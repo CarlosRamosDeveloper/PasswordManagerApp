@@ -5,6 +5,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
+import java.time.LocalDate
 
 class InMemoryPasswordRepository : IPasswordRepository {
     private val passwords = mutableListOf(
@@ -21,8 +22,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = true,
-                creationDate = "2023-01-10",
-                lastUpdate = "2024-05-02"
+                creationDate = LocalDate.of(2023,1,10),
+                lastUpdate = LocalDate.of(2023, 12, 1)
             ),
             securityScore = 8.50
         ),
@@ -39,8 +40,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = false,
                 hasSpecials = false,
-                creationDate = "2022-06-15",
-                lastUpdate = "2023-12-01"
+                creationDate = LocalDate.of(2021, 11, 1),
+                lastUpdate = LocalDate.of(2021, 11, 1)
             ),
             securityScore = 4.82
         ),
@@ -57,8 +58,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = false,
                 hasNumbers = false,
                 hasSpecials = false,
-                creationDate = "2021-11-01",
-                lastUpdate = "2021-11-01"
+                creationDate = LocalDate.of(2020, 2, 20),
+                lastUpdate = LocalDate.of(2022, 2, 20)
             ),
             securityScore = 2.94
         ),
@@ -75,8 +76,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = false,
-                creationDate = "2020-02-20",
-                lastUpdate = "2022-02-20"
+                creationDate = LocalDate.of(2021, 8, 8),
+                lastUpdate = LocalDate.of(2024, 1, 10)
             ),
             securityScore = 4.42
         ),
@@ -93,8 +94,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = true,
-                creationDate = "2021-08-08",
-                lastUpdate = "2024-01-10"
+                creationDate = LocalDate.of(2023, 3, 30),
+                lastUpdate = LocalDate.of(2023, 9, 5)
             ),
             securityScore = 7.85
         ),
@@ -111,8 +112,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = true,
-                creationDate = "2023-03-30",
-                lastUpdate = "2023-09-05"
+                creationDate = LocalDate.of(2022, 10, 10),
+                lastUpdate = LocalDate.of(2022, 10, 10)
             ),
             securityScore = 7.21
         ),
@@ -129,8 +130,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = false,
                 hasNumbers = true,
                 hasSpecials = false,
-                creationDate = "2022-10-10",
-                lastUpdate = "2022-10-10"
+                creationDate = LocalDate.of(2019, 5, 1),
+                lastUpdate = LocalDate.of(2024, 4, 1)
             ),
             securityScore = 3.0
         ),
@@ -147,8 +148,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = false,
                 hasSpecials = true,
-                creationDate = "2019-05-01",
-                lastUpdate = "2024-04-01"
+                creationDate = LocalDate.of(2024, 2, 14),
+                lastUpdate = LocalDate.of(2024, 2, 14)
             ),
             securityScore = 6.29
         ),
@@ -165,8 +166,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = false,
-                creationDate = "2024-02-14",
-                lastUpdate = "2024-02-14"
+                creationDate = LocalDate.of(2018, 12, 12),
+                lastUpdate = LocalDate.of(2020, 12, 12)
             ),
             securityScore = 6.5
         ),
@@ -183,8 +184,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = true,
-                creationDate = "2022-07-07",
-                lastUpdate = "2024-06-20"
+                creationDate = LocalDate.of(2022, 7, 7),
+                lastUpdate = LocalDate.of(2024, 6, 20)
             ),
             securityScore = 8.82
         ),
@@ -201,8 +202,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = false,
                 hasNumbers = false,
                 hasSpecials = true,
-                creationDate = "2018-12-12",
-                lastUpdate = "2020-12-12"
+                creationDate = LocalDate.of(2018, 12, 12),
+                lastUpdate = LocalDate.of(2020, 12, 12)
             ),
             securityScore = 3.52
         ),
@@ -219,8 +220,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = true,
-                creationDate = "2020-09-09",
-                lastUpdate = "2023-11-11"
+                creationDate = LocalDate.of(2020, 9, 9),
+                lastUpdate = LocalDate.of(2023, 11, 11)
             ),
             securityScore = 7.0
         ),
@@ -237,8 +238,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = false,
                 hasNumbers = true,
                 hasSpecials = false,
-                creationDate = "2024-01-01",
-                lastUpdate = "2024-01-01"
+                creationDate = LocalDate.of(2024, 1, 1),
+                lastUpdate = LocalDate.of(2024, 1, 1)
             ),
             securityScore = 3.50
         ),PasswordData(
@@ -254,8 +255,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = true,
-                creationDate = "2023-04-04",
-                lastUpdate = "2024-03-03"
+                creationDate = LocalDate.of(2023, 4, 4),
+                lastUpdate = LocalDate.of(2024, 3, 3)
             ),
             securityScore = 9.79
         ),
@@ -272,8 +273,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = false,
                 hasSpecials = true,
-                creationDate = "2021-01-15",
-                lastUpdate = "2022-01-15"
+                creationDate = LocalDate.of(2021, 1, 15),
+                lastUpdate = LocalDate.of(2022, 1, 15)
             ),
             securityScore = 50.84
         ),
@@ -290,8 +291,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = false,
                 hasNumbers = true,
                 hasSpecials = false,
-                creationDate = "2017-07-07",
-                lastUpdate = "2018-07-07"
+                creationDate = LocalDate.of(2017, 7, 7),
+                lastUpdate = LocalDate.of(2018, 7, 7)
             ),
             securityScore = 10.0
         ),
@@ -308,8 +309,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = true,
-                creationDate = "2022-12-12",
-                lastUpdate = "2023-12-12"
+                creationDate = LocalDate.of(2022, 12, 12),
+                lastUpdate = LocalDate.of(2023, 12, 12)
             ),
             securityScore = 7.55
         ),
@@ -326,8 +327,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = false,
                 hasSpecials = false,
-                creationDate = "2019-03-03",
-                lastUpdate = "2021-03-03"
+                creationDate = LocalDate.of(2019, 3, 3),
+                lastUpdate = LocalDate.of(2021, 3, 3)
             ),
             securityScore = 4.2
         ),
@@ -344,8 +345,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = true,
                 hasNumbers = true,
                 hasSpecials = true,
-                creationDate = "2016-06-06",
-                lastUpdate = "2024-07-07"
+                creationDate = LocalDate.of(2016, 6, 6),
+                lastUpdate = LocalDate.of(2024, 7, 7)
             ),
             securityScore = 9.20
         ),
@@ -362,8 +363,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
                 hasUpperCase = false,
                 hasNumbers = true,
                 hasSpecials = true,
-                creationDate = "2025-01-10",
-                lastUpdate = "2025-01-10"
+                creationDate = LocalDate.of(2025, 1, 10),
+                lastUpdate = LocalDate.of(2025, 1, 10)
             ),
             securityScore = 5.5
         )
