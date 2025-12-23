@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 @Composable
 fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordViewModel){
@@ -35,12 +36,32 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
         .padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Crear contraseña")
         Row (modifier= Modifier.fillMaxWidth()){
-            CustomCheckbox("Minúsculas", state.hasLowerCase, viewModel::onLowerCaseChanged, Modifier.weight(1f) )
-            CustomCheckbox("Mayúsculas", state.hasUpperCase, viewModel::onLUpperCaseChanged, Modifier.weight(1f) )
+            CustomCheckbox(
+                "Minúsculas",
+                state.hasLowerCase,
+                { viewModel.onOptionChanged(PasswordOption.LOWERCASE, it) },
+                Modifier.weight(1f)
+            )
+            CustomCheckbox(
+                "Mayúsculas",
+                state.hasUpperCase,
+                { viewModel.onOptionChanged(PasswordOption.UPPERCASE, it) },
+                Modifier.weight(1f)
+            )
         }
         Row{
-            CustomCheckbox("Números", state.hasNumbers, viewModel::onNumbersChanged, Modifier.weight(1f) )
-            CustomCheckbox("Carácteres especiales", state.hasSpecials, viewModel::onSpecialsChanged, Modifier.weight(1f) )
+            CustomCheckbox(
+                "Números",
+                state.hasNumbers,
+                { viewModel.onOptionChanged(PasswordOption.NUMBERS, it) },
+                Modifier.weight(1f)
+            )
+            CustomCheckbox(
+                "Carácteres especiales",
+                state.hasSpecials,
+                { viewModel.onOptionChanged(PasswordOption.SPECIALS, it) },
+                Modifier.weight(1f)
+            )
         }
 
         CampoDecimal(state.passwordLength, viewModel::onPasswordLengthChanged)

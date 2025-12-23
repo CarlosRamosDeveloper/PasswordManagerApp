@@ -6,10 +6,13 @@ import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
+import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+
+
 
 class CreatePasswordViewModel(
     val repository: IPasswordRepository,
@@ -29,26 +32,14 @@ class CreatePasswordViewModel(
         val generatedPassword: String = ""
     )
 
-    fun onLowerCaseChanged(value: Boolean) {
+    fun onOptionChanged(option: PasswordOption, value: Boolean) {
         _uiState.update {
-            it.copy(hasLowerCase = value)
-        }
-    }
-
-    fun onLUpperCaseChanged(value: Boolean) {
-        _uiState.update {
-            it.copy(hasUpperCase = value)
-        }
-    }
-    fun onNumbersChanged(value: Boolean) {
-        _uiState.update {
-            it.copy(hasNumbers = value)
-        }
-    }
-
-    fun onSpecialsChanged(value: Boolean) {
-        _uiState.update {
-            it.copy(hasSpecials = value)
+            when (option) {
+                PasswordOption.LOWERCASE -> it.copy(hasLowerCase = value)
+                PasswordOption.UPPERCASE -> it.copy(hasUpperCase = value)
+                PasswordOption.NUMBERS -> it.copy(hasNumbers = value)
+                PasswordOption.SPECIALS -> it.copy(hasSpecials = value)
+            }
         }
     }
 
