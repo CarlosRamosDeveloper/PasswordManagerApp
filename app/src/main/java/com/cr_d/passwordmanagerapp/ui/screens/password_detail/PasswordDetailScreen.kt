@@ -51,14 +51,14 @@ fun PasswordDetailedCard(context: Context, snackFunction: (String)-> Unit, viewM
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
                     Text("Account: ${password.account}")
-                    if (state.isPasswordShown) Text("Password: ${password.password}")
+                    if (state.isPasswordShown) Text("Password: ${password.plainPassword.value}")
                     else Text("Password: ********")
                     Text("Fecha de creación: ${password.creationDate}")
                     Text("Última actualización: ${password.lastUpdate}")
                     Text("Puntuación de seguridad ${password.securityScore}")
                 }
 
-                CopyToClipboardButton(password.password, context, snackFunction)
+                CopyToClipboardButton(password.plainPassword.value, context, snackFunction)
             }
         }
     }

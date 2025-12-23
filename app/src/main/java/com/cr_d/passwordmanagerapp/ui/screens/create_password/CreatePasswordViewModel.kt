@@ -6,16 +6,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 class CreatePasswordViewModel(
-    val repository: IPasswordRepository,
-    val generatePasswordUseCase: GeneratePasswordUseCase
+    val generatePasswordUseCase: GeneratePasswordUseCase,
+    val scoreCalculator: SecurityScoreCalculator,
+    val savePasswordUseCase: SavePasswordUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -28,7 +29,8 @@ class CreatePasswordViewModel(
         val hasSpecials: Boolean = false,
         val passwordLength: Int = PasswordPolicy.MIN_GENERATED_LENGTH,
         val passwordError: String = "",
-        val generatedPassword: String = ""
+        val generatedPassword: String = "",
+        val passwordScore: Double = 0.0
     )
 
     fun onOptionChanged(option: PasswordOption, value: Boolean) {
@@ -60,41 +62,36 @@ class CreatePasswordViewModel(
             val password = generatePasswordUseCase(passwordDataGeneration)
 
             _uiState.update {
-                it.copy(generatedPassword = password, passwordError = "")
+                it.copy(
+                    generatedPassword = password,
+                    passwordError = "",
+                    passwordScore = scoreCalculator.calculate(password)
+                )
             }
         } catch (e: Exception){
             _uiState.update {
-                it.copy(generatedPassword = "", passwordError = e.message ?: "Error al generar contraseña")
+                it.copy(
+                    generatedPassword = "",
+                    passwordError = e.message ?: "Error al generar contraseña",
+                    passwordScore = 0.0
+                )
             }
         }
     }
 
     fun clearPassword(){
         _uiState.update {
-            it.copy(generatedPassword = "",
-                passwordError = ""
+            it.copy(
+                generatedPassword = "",
+                passwordError = "",
+                passwordScore = 0.0
             )
         }
     }
 
     fun savePassword(password: String){
         try {
-            val newPassword =
-                PasswordData(
-                    0,
-                    "test",
-                    password,
-                    false,
-                    false,
-                    false,
-                    false,
-                    "test",
-                    "test",
-                    "Ahora",
-                    "Despues",
-                    9.1
-                )
-            repository.save(newPassword)
+            savePasswordUseCase.invoke(password)
             _uiState.update {
                 it.copy(
                     hasLowerCase = false,
@@ -104,6 +101,7 @@ class CreatePasswordViewModel(
                     passwordLength = PasswordPolicy.MIN_GENERATED_LENGTH,
                     generatedPassword = "",
                     passwordError = "",
+                    passwordScore = 0.0
                 )
             }
         } catch (e: Exception){

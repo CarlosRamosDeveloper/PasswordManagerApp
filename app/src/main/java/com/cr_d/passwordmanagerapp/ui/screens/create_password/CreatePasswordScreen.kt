@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 @Composable
@@ -144,14 +143,13 @@ fun ClearPasswordButton(
 @SuppressLint("DefaultLocale")
 @Composable
 fun PasswordSection(password: String, viewModel: CreatePasswordViewModel){
-    val score = SecurityScoreCalculator(password)
-    val formatedScore = String.format("%.2f",score.calculate())
+    val passwordScore = viewModel.uiState.collectAsState().value.passwordScore
 
     Column (Modifier
         .padding(20.dp)
         .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
         PasswordSectionText("Contraseña generada de forma satisfactoria")
-        PasswordSectionText("Puntuación de la contraseña: $formatedScore")
+        PasswordSectionText("Puntuación de la contraseña: ${String.format("%.2f", passwordScore)}")
         Box(Modifier.padding(20.dp)){
             Text(password)
         }

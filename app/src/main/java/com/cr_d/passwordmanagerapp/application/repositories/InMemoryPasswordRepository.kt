@@ -2,13 +2,14 @@ package com.cr_d.passwordmanagerapp.application.repositories
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
 class InMemoryPasswordRepository : IPasswordRepository {
     private val passwords = mutableListOf(
         PasswordData(
             id = 1,
             account = "juan.perez@gmail.com",
-            password = "Abcdef123!",
+            plainPassword = PlainPassword("Abcdef123!"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = true,
@@ -22,7 +23,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 2,
             account = "ana@empresa.com",
-            password = "contraseñaSegura",
+            plainPassword = PlainPassword("contraseñaSegura"),
             hasLowerCase = true,
             hasUpperCase = true, // hay 'S' mayúscula en "Segura"
             hasNumbers = false,
@@ -36,7 +37,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 3,
             account = "usuario123",
-            password = "onlylowercase",
+            plainPassword = PlainPassword("onlylowercase"),
             hasLowerCase = true,
             hasUpperCase = false,
             hasNumbers = false,
@@ -50,7 +51,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 4,
             account = "maria98",
-            password = "MARIA2020",
+            plainPassword = PlainPassword("MARIA2020"),
             hasLowerCase = false,
             hasUpperCase = true,
             hasNumbers = true,
@@ -64,7 +65,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 5,
             account = "pedro@chat.com",
-            password = "Ch@t_User2021",
+            plainPassword = PlainPassword("Ch@t_User2021"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = true,
@@ -78,7 +79,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 6,
             account = "soporte@tienda.es",
-            password = "Tienda#1",
+            plainPassword = PlainPassword("Tienda#1"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = true,
@@ -92,7 +93,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 7,
             account = "cliente77",
-            password = "pass1234",
+            plainPassword = PlainPassword("pass1234"),
             hasLowerCase = true,
             hasUpperCase = false,
             hasNumbers = true,
@@ -106,7 +107,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 8,
             account = "devteam",
-            password = "DevTeam!",
+            plainPassword = PlainPassword("DevTeam!"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = false,
@@ -120,7 +121,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 9,
             account = "alicia",
-            password = "A1b2c3d4",
+            plainPassword = PlainPassword("A1b2c3d4"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = true,
@@ -134,7 +135,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 10,
             account = "sofia@red.com",
-            password = "S0f!a#2022",
+            plainPassword = PlainPassword("S0f!a#2022"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = true,
@@ -148,7 +149,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 11,
             account = "backup@server",
-            password = "backup_server",
+            plainPassword = PlainPassword("backup_server"),
             hasLowerCase = true,
             hasUpperCase = false,
             hasNumbers = false,
@@ -162,7 +163,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 12,
             account = "luis-app",
-            password = "Lu1s-Acc",
+            plainPassword = PlainPassword("Lu1s-Acc"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = true,
@@ -176,7 +177,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 13,
             account = "info@universidad.edu",
-            password = "uni2024",
+            plainPassword = PlainPassword("uni2024"),
             hasLowerCase = true,
             hasUpperCase = false,
             hasNumbers = true,
@@ -190,7 +191,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 14,
             account = "manager",
-            password = "M@nager2023!",
+            plainPassword = PlainPassword("M@nager2023!"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = true,
@@ -204,7 +205,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 15,
             account = "operaciones",
-            password = "OPER-ops",
+            plainPassword = PlainPassword("OPER-ops"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = false,
@@ -218,7 +219,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 16,
             account = "test.user",
-            password = "12345678",
+            plainPassword = PlainPassword("12345678"),
             hasLowerCase = false,
             hasUpperCase = false,
             hasNumbers = true,
@@ -232,7 +233,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 17,
             account = "fernando",
-            password = "Ferno_99",
+            plainPassword = PlainPassword("Ferno_99"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = true,
@@ -246,7 +247,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 18,
             account = "newsletter@media.com",
-            password = "newsLETTER",
+            plainPassword = PlainPassword("newsLETTER"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = false,
@@ -260,7 +261,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 19,
             account = "root",
-            password = "R00t!#Secure",
+            plainPassword = PlainPassword("R00t!#Secure"),
             hasLowerCase = true,
             hasUpperCase = true,
             hasNumbers = true,
@@ -274,7 +275,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         PasswordData(
             id = 20,
             account = "alumno2025",
-            password = "alumno.2025",
+            plainPassword = PlainPassword("alumno.2025"),
             hasLowerCase = true,
             hasUpperCase = false,
             hasNumbers = true,

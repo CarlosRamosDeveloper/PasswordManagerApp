@@ -1,6 +1,7 @@
 package com.cr_d.passwordmanagerapp.domain.entities
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataAnalysis
+import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
 object PasswordAnalyzer {
     fun analyze(password: String): PasswordDataAnalysis {
@@ -10,7 +11,6 @@ object PasswordAnalyzer {
         val hasSpecial = password.any { it in PasswordPolicy.SYMBOL_CHARS }
 
         return PasswordDataAnalysis(
-            password = password,
             hasLowerCase = hasLower,
             hasUpperCase = hasUpper,
             hasNumbers = hasNumber,

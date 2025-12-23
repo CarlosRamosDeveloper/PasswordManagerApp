@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.domain.value_objects
 data class PasswordData (
     val id : Int,
     val account : String,
-    val password : String,
+    val plainPassword : PlainPassword,
     val hasLowerCase : Boolean,
     val hasUpperCase : Boolean,
     val hasNumbers : Boolean,

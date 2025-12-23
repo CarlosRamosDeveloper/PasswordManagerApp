@@ -11,8 +11,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
+import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.ManagePasswordScreen
@@ -38,8 +40,17 @@ fun Router(
         }
         composable("CreatePasswordScreen") {
             val generator = PasswordGenerator()
-            val generatePassword = GeneratePasswordUseCase(generator)
-            CreatePasswordScreen(innerPadding, CreatePasswordViewModel(repo, generatePassword))
+            val generatePasswordUseCase = GeneratePasswordUseCase(generator)
+            val scoreCalculator = SecurityScoreCalculator()
+            val createPasswordUseCase = SavePasswordUseCase(repo, scoreCalculator)
+            CreatePasswordScreen(
+                innerPadding,
+                CreatePasswordViewModel(
+                    generatePasswordUseCase,
+                    scoreCalculator,
+                    createPasswordUseCase
+                )
+            )
         }
         composable("ShowPasswordScreen") {
             PasswordsListScreen(innerPadding, navController, PasswordListViewModel(repo))
