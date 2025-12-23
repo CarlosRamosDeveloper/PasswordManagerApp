@@ -46,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
@@ -53,13 +54,12 @@ import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 @Composable
-fun ShowPasswordsScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit, repository: IPasswordRepository){
-
-    PasswordCardsList(innerPadding, context, snackFunction, repository)
+fun ShowPasswordsScreen(innerPadding: PaddingValues, navController: NavController, repository: IPasswordRepository){
+    PasswordCardsList(innerPadding, repository, navController)
 }
 
 @Composable
-fun PasswordCard(password: PasswordData, context: Context, snackFunction: (String)-> Unit){
+fun PasswordCard(password: PasswordData, navController: NavController,){
     val verticalPadding = 10.dp
     val horizontalPadding = 20.dp
 
@@ -94,7 +94,7 @@ fun PasswordCard(password: PasswordData, context: Context, snackFunction: (Strin
                 contentDescription = "",
                 modifier = Modifier
                     .clickable(
-                        onClick = {}
+                        onClick = { navController.navigate("PasswordDataScreen/${password.id}")}
                     )
                     .size(50.dp)
             )
@@ -104,10 +104,10 @@ fun PasswordCard(password: PasswordData, context: Context, snackFunction: (Strin
 }
 
 @Composable
-fun PasswordCardsList(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit, repository: IPasswordRepository){
+fun PasswordCardsList(innerPadding: PaddingValues, repository: IPasswordRepository, navController: NavController,){
     LazyColumn (Modifier.padding(innerPadding)){
         items(repository.findAll()) { pwd ->
-            PasswordCard(pwd, context, snackFunction)
+            PasswordCard(pwd, navController)
         }
     }
 }

@@ -30,13 +30,16 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.cr_d.passwordmanagerapp.R
+import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import kotlin.math.max
 
 @Composable
-fun PasswordDataScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit, password: PasswordData){
+fun PasswordDataScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit, passwordId: Int, repository: IPasswordRepository){
+    val password = repository.findById(passwordId)
+
     Column (modifier = Modifier.padding(innerPadding)){
-        PasswordDetailedCard(password, context, snackFunction)
+        PasswordDetailedCard(password!!, context, snackFunction)
     }
 }
 

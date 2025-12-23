@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
@@ -26,9 +28,9 @@ fun Router(
     snackFunction: (String)-> Unit,
     repo: IPasswordRepository
 ){
-
     val context = LocalContext.current
-    NavHost(navController = navController, startDestination = "PasswordDataScreen") {
+
+    NavHost(navController = navController, startDestination = "ShowPasswordScreen") {
         composable("MainScreen") {
             MainScreen(innerPadding, navController)
         }
@@ -38,13 +40,16 @@ fun Router(
             CreatePasswordScreen(innerPadding, CreatePasswordViewModel(repo, generatePassword))
         }
         composable("ShowPasswordScreen") {
-            ShowPasswordsScreen(innerPadding, context, snackFunction, repo)
+            ShowPasswordsScreen(innerPadding, navController, repo)
         }
         composable("ManagePasswordScreen") {
             ManagePasswordScreen(innerPadding)
         }
-        composable("PasswordDataScreen") {
-            PasswordDataScreen(innerPadding, context, snackFunction, repo.findAll().last())
+        composable("PasswordDataScreen/{passwordId}", arguments = listOf(navArgument("passwordId") {
+            type = NavType.IntType
+        })) { backstackEntry ->
+            val passwordId = backstackEntry.arguments?.getInt("passwordId") ?: 1
+            PasswordDataScreen(innerPadding, context, snackFunction, passwordId, repo)
         }
     }
 }
