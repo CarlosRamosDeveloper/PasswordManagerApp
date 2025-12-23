@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
@@ -49,20 +50,21 @@ fun Router(
             val scoreCalculator = SecurityScoreCalculator()
             val createPasswordUseCase = SavePasswordUseCase(repo)
             CreatePasswordScreen(
-                innerPadding,
-                CreatePasswordViewModel(
+                innerPadding = innerPadding,
+                viewModel = CreatePasswordViewModel(
                     generatePasswordUseCase,
                     scoreCalculator,
                     createPasswordUseCase
-                ), context,
-                snackFunction
+                ),
+                context = context,
+                snackFunction = snackFunction
             )
         }
         composable("ShowPasswordScreen") {
             PasswordsListScreen(
-                innerPadding,
-                navController,
-                PasswordListViewModel(
+                innerPadding = innerPadding,
+                navController = navController,
+                viewModel = PasswordListViewModel(
                     GetAllPasswordsUseCase(repo)
                 )
             )
@@ -72,13 +74,16 @@ fun Router(
         })) { backstackEntry ->
             val passwordId = backstackEntry.arguments?.getInt("passwordId") ?: 1
             PasswordDetailScreen(
-                innerPadding,
-                context,
-                snackFunction,
-                PasswordDetailViewModel(
+                innerPadding = innerPadding,
+                context = context,
+                snackFunction = snackFunction,
+                viewModel = PasswordDetailViewModel(
                     repo,
-                    passwordId),
-                settingsViewModel
+                    passwordId,
+                    DeletePasswordUseCase(repo)
+                ),
+                settings = settingsViewModel,
+                navController = navController
             )
         }
         composable("SettingsScreen"){

@@ -7,11 +7,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
-    val passwordId: Int
+    val passwordId: Int,
+    val deletePasswordUseCase: DeletePasswordUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -35,5 +37,9 @@ class PasswordDetailViewModel(
                 isPasswordShown = !uiState.value.isPasswordShown
             )
         }
+    }
+
+    fun onDeletePassword (){
+        deletePasswordUseCase.invoke(passwordId)
     }
 }

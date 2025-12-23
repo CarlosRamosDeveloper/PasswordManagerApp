@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
@@ -34,14 +35,27 @@ import com.cr_d.passwordmanagerapp.ui.models.formatAs
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
 @Composable
-fun PasswordDetailScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel, settings: SettingsViewModel){
+fun PasswordDetailScreen(
+    innerPadding: PaddingValues,
+    context: Context,
+    snackFunction: (String)-> Unit,
+    viewModel: PasswordDetailViewModel,
+    settings: SettingsViewModel,
+    navController: NavController
+){
     Column (modifier = Modifier.padding(innerPadding)){
-        PasswordDetailedCard(context, snackFunction, viewModel, settings)
+        PasswordDetailedCard(context, snackFunction, viewModel, settings, navController)
     }
 }
 
 @Composable
-fun PasswordDetailedCard(context: Context, snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel, settings: SettingsViewModel){
+fun PasswordDetailedCard(
+    context: Context,
+    snackFunction: (String)-> Unit,
+    viewModel: PasswordDetailViewModel,
+    settings: SettingsViewModel,
+    navController: NavController
+){
     val state = viewModel.uiState.collectAsState().value
     val settings = settings.settings.collectAsState().value
     state.password?.let { password ->
@@ -61,6 +75,7 @@ fun PasswordDetailedCard(context: Context, snackFunction: (String)-> Unit, viewM
                 }
 
                 CopyToClipboardButton(password.plainPassword.value, context, snackFunction)
+                DeletePasswordButton(snackFunction, viewModel, navController)
             }
         }
     }
@@ -121,6 +136,19 @@ fun CopyToClipboardButton(passwordText: String, context: Context, snackFunction:
             painterResource(R.drawable.outline_content_copy_24),
             contentDescription = "",
         )
+    }
+}
+
+@Composable
+fun DeletePasswordButton(snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel, navController: NavController){
+    Button(
+        onClick = {
+            viewModel.onDeletePassword()
+            snackFunction("Contraseña eliminada")
+            navController.navigate("ShowPasswordScreen")
+        }
+    ) {
+        Text("Eliminar contraseña")
     }
 }
 
