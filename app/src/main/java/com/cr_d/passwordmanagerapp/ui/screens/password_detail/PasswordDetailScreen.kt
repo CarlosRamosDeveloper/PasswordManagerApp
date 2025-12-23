@@ -30,18 +30,20 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
+import com.cr_d.passwordmanagerapp.ui.models.formatAs
+import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
 @Composable
-fun PasswordDetailScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel){
+fun PasswordDetailScreen(innerPadding: PaddingValues, context: Context, snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel, settings: SettingsViewModel){
     Column (modifier = Modifier.padding(innerPadding)){
-        PasswordDetailedCard(context, snackFunction, viewModel)
+        PasswordDetailedCard(context, snackFunction, viewModel, settings)
     }
 }
 
 @Composable
-fun PasswordDetailedCard(context: Context, snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel){
+fun PasswordDetailedCard(context: Context, snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel, settings: SettingsViewModel){
     val state = viewModel.uiState.collectAsState().value
-
+    val settings = settings.settings.collectAsState().value
     state.password?.let { password ->
         Card(modifier = Modifier
             .fillMaxWidth()
@@ -53,8 +55,8 @@ fun PasswordDetailedCard(context: Context, snackFunction: (String)-> Unit, viewM
                     Text("Account: ${password.appInfo.account}")
                     if (state.isPasswordShown) Text("Password: ${password.plainPassword.value}")
                     else Text("Password: ********")
-                    Text("Fecha de creación: ${password.metadata.creationDate}")
-                    Text("Última actualización: ${password.metadata.lastUpdate}")
+                    Text("Fecha de creación: ${password.metadata.creationDate.formatAs(settings.dateFormat)}")
+                    Text("Última actualización: ${password.metadata.lastUpdate.formatAs(settings.dateFormat)}")
                     Text("Puntuación de seguridad ${String.format("%.2f",password.securityScore)}")
                 }
 

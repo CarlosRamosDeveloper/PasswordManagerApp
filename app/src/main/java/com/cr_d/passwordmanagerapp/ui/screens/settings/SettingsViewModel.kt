@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 import com.cr_d.passwordmanagerapp.ui.models.DateFormatOption
-import kotlinx.coroutines.flow.update
 
 class SettingsViewModel : ViewModel(){
     private val _settings = MutableStateFlow(AppSettings())

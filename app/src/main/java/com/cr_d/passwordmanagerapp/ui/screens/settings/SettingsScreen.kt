@@ -13,7 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.LocalDate
+
 import com.cr_d.passwordmanagerapp.ui.models.DateFormatOption
+import com.cr_d.passwordmanagerapp.ui.models.formatAs
 
 @Composable
 fun SettingsScreen(innerPadding: PaddingValues, viewModel: SettingsViewModel){
@@ -29,6 +32,7 @@ fun SettingsScreen(innerPadding: PaddingValues, viewModel: SettingsViewModel){
 @Composable
 fun dateOptions(viewModel: SettingsViewModel){
     val state = viewModel.settings.collectAsState().value
+    val today = LocalDate.now()
 
     Text("Formato de fecha")
     Row {
@@ -47,4 +51,5 @@ fun dateOptions(viewModel: SettingsViewModel){
             Text("Día / Mes / Año")
         }
     }
+    Text(today.formatAs(state.dateFormat))
 }

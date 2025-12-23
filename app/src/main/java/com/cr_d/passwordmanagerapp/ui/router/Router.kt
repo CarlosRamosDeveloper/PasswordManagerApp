@@ -65,7 +65,7 @@ fun Router(
         })) { backstackEntry ->
             val passwordId = backstackEntry.arguments?.getInt("passwordId") ?: 1
             PasswordDetailScreen(innerPadding, context, snackFunction,
-                PasswordDetailViewModel(repo, passwordId))
+                PasswordDetailViewModel(repo, passwordId), settingsViewModel)
         }
         composable("SettingsScreen"){
             SettingsScreen(innerPadding, settingsViewModel)
