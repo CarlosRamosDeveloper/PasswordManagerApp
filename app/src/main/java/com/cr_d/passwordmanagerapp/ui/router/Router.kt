@@ -17,9 +17,10 @@ import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordScre
 import com.cr_d.passwordmanagerapp.ui.screens.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.ManagePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailScreen
-import com.cr_d.passwordmanagerapp.ui.screens.ShowPasswordsScreen
+import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordsListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModel
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
@@ -41,7 +42,7 @@ fun Router(
             CreatePasswordScreen(innerPadding, CreatePasswordViewModel(repo, generatePassword))
         }
         composable("ShowPasswordScreen") {
-            ShowPasswordsScreen(innerPadding, navController, repo)
+            PasswordsListScreen(innerPadding, navController, PasswordListViewModel(repo))
         }
         composable("ManagePasswordScreen") {
             ManagePasswordScreen(innerPadding)

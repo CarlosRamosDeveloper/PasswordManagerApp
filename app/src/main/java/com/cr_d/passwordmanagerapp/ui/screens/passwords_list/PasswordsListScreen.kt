@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens
+package com.cr_d.passwordmanagerapp.ui.screens.passwords_list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -23,15 +23,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.R
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 @Composable
-fun ShowPasswordsScreen(innerPadding: PaddingValues, navController: NavController, repository: IPasswordRepository){
-    PasswordCardsList(innerPadding, repository, navController)
+fun PasswordsListScreen(innerPadding: PaddingValues, navController: NavController, viewModel: PasswordListViewModel){
+    PasswordCardsList(innerPadding, navController, viewModel)
 }
 
 @Composable
@@ -80,9 +80,11 @@ fun PasswordCard(password: PasswordData, navController: NavController,){
 }
 
 @Composable
-fun PasswordCardsList(innerPadding: PaddingValues, repository: IPasswordRepository, navController: NavController,){
+fun PasswordCardsList(innerPadding: PaddingValues, navController: NavController, viewModel: PasswordListViewModel){
+    val passwords = viewModel.uiState.collectAsStateWithLifecycle().value.passwords
+
     LazyColumn (Modifier.padding(innerPadding)){
-        items(repository.findAll()) { pwd ->
+        items(passwords) { pwd ->
             PasswordCard(pwd, navController)
         }
     }
