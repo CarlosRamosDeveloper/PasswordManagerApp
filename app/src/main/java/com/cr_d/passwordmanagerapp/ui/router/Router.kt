@@ -16,9 +16,10 @@ import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.ManagePasswordScreen
-import com.cr_d.passwordmanagerapp.ui.screens.PasswordDataScreen
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailScreen
 import com.cr_d.passwordmanagerapp.ui.screens.ShowPasswordsScreen
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
@@ -49,7 +50,8 @@ fun Router(
             type = NavType.IntType
         })) { backstackEntry ->
             val passwordId = backstackEntry.arguments?.getInt("passwordId") ?: 1
-            PasswordDataScreen(innerPadding, context, snackFunction, passwordId, repo)
+            PasswordDetailScreen(innerPadding, context, snackFunction,
+                PasswordDetailViewModel(repo, passwordId))
         }
     }
 }
