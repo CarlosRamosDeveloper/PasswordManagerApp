@@ -8,7 +8,8 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import java.time.LocalDate
 
 class UpdatePasswordUseCase (
-    private val repository: IPasswordRepository
+    private val repository: IPasswordRepository,
+    private val securityScoreUseCase: CalculateSecurityScoreUseCase
 ){
     operator fun invoke(
         id: Int,
@@ -19,7 +20,7 @@ class UpdatePasswordUseCase (
             ?: throw IllegalArgumentException("Password not found")
 
         val analyzedData = PasswordAnalyzer.analyze(newPassword)
-
+        val updateScore = securityScoreUseCase(newPassword)
         val updatedMetadata = existing.metadata.copy(
             hasLowerCase = analyzedData.hasLowerCase,
             hasUpperCase = analyzedData.hasUpperCase,
@@ -32,7 +33,7 @@ class UpdatePasswordUseCase (
             plainPassword = PlainPassword(newPassword),
             appInfo = appInfo,
             metadata = updatedMetadata,
-            securityScore = 5.0
+            securityScore = updateScore
         )
 
         repository.update(updated)

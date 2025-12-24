@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
@@ -81,7 +82,8 @@ fun Router(
                 viewModel = PasswordDetailViewModel(
                     repository = repo,
                     passwordId = passwordId,
-                    updatePasswordUseCase = UpdatePasswordUseCase(repo),
+                    updatePasswordUseCase = UpdatePasswordUseCase(repo,
+                        CalculateSecurityScoreUseCase(SecurityScoreCalculator())),
                     deletePasswordUseCase = DeletePasswordUseCase(repo)
                 ),
                 settings = settingsViewModel,
