@@ -10,7 +10,6 @@ object PasswordAnalyzer {
         val hasSpecial = password.any { it in PasswordPolicy.SYMBOL_CHARS }
 
         return PasswordDataAnalysis(
-            password = password,
             hasLowerCase = hasLower,
             hasUpperCase = hasUpper,
             hasNumbers = hasNumber,

@@ -2,14 +2,12 @@ package com.cr_d.passwordmanagerapp.domain.entities
 
 import kotlin.math.log2
 
-class SecurityScoreCalculator(
-    val password: String
-) {
+class SecurityScoreCalculator() {
 
-    fun calculate(): Double {
+    fun calculate(password: String): Double {
         val info = PasswordAnalyzer.analyze(password)
         var score = 0.0
-        val length = info.password.length
+        val length = password.length
 
         if (length < 8) return 0.0
 
@@ -23,7 +21,7 @@ class SecurityScoreCalculator(
             if (info.hasSpecials) addAll(PasswordPolicy.SYMBOL_CHARS)
         }.size
 
-        val entropy = info.password.length * log2(charsetSize.toDouble())
+        val entropy = password.length * log2(charsetSize.toDouble())
         val entropyScore = (entropy / 80).coerceAtMost(1.0) * 3.0
 
         score += entropyScore
@@ -44,8 +42,8 @@ class SecurityScoreCalculator(
 
         if (length < 12) score -= 2.5
 
-        if (Regex("(.)\\1{2,}").containsMatchIn(info.password)) score -= 1.0
-        if (Regex(PasswordPolicy.REGEX_COMMON_PATTERNS, RegexOption.IGNORE_CASE).containsMatchIn(info.password)) score -= 3.0
+        if (Regex("(.)\\1{2,}").containsMatchIn(password)) score -= 1.0
+        if (Regex(PasswordPolicy.REGEX_COMMON_PATTERNS, RegexOption.IGNORE_CASE).containsMatchIn(password)) score -= 3.0
 
         val final = score.coerceIn(0.0, 10.0)
 
