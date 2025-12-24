@@ -1,0 +1,42 @@
+package com.cr_d.passwordmanagerapp.application.use_cases
+
+import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
+import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
+import java.time.LocalDate
+
+class UpdatePasswordUseCase (
+    private val repository: IPasswordRepository
+){
+    operator fun invoke(
+        id: Int,
+        newPassword: String,
+        appInfo: ApplicationInfo,
+    ): PasswordData {
+        val existing = repository.findById(id)
+            ?: throw IllegalArgumentException("Password not found")
+
+        val analyzedData = PasswordAnalyzer.analyze(newPassword)
+
+        val updatedMetadata = existing.metadata.copy(
+            hasLowerCase = analyzedData.hasLowerCase,
+            hasUpperCase = analyzedData.hasUpperCase,
+            hasNumbers = analyzedData.hasNumbers,
+            hasSpecials = analyzedData.hasSpecials,
+            lastUpdate = LocalDate.now()
+        )
+
+        val updated = existing.copy(
+            plainPassword = PlainPassword(newPassword),
+            appInfo = appInfo,
+            metadata = updatedMetadata,
+            securityScore = 5.0
+        )
+
+        repository.update(updated)
+
+        return updated
+    }
+}

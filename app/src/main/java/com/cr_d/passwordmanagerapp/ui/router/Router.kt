@@ -17,6 +17,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordScreen
@@ -78,9 +79,10 @@ fun Router(
                 context = context,
                 snackFunction = snackFunction,
                 viewModel = PasswordDetailViewModel(
-                    repo,
-                    passwordId,
-                    DeletePasswordUseCase(repo)
+                    repository = repo,
+                    passwordId = passwordId,
+                    updatePasswordUseCase = UpdatePasswordUseCase(repo),
+                    deletePasswordUseCase = DeletePasswordUseCase(repo)
                 ),
                 settings = settingsViewModel,
                 navController = navController

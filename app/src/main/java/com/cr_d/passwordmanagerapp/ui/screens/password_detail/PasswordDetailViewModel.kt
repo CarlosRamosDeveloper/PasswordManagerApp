@@ -8,11 +8,15 @@ import kotlinx.coroutines.flow.update
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
     val passwordId: Int,
+    val updatePasswordUseCase: UpdatePasswordUseCase,
     val deletePasswordUseCase: DeletePasswordUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
@@ -20,13 +24,48 @@ class PasswordDetailViewModel(
 
     data class UiState(
         val isPasswordShown: Boolean = false,
-        val password: PasswordData? = null
+        val password: PasswordData? = null,
+        val isUpdateSectionEnabled: Boolean = false,
+        val newAppName: String = "",
+        val newUrl: String = "",
+        val newAccount: String = "",
+        val newPlainPassword: PlainPassword = PlainPassword(""),
+        val newSecurityScore: Double = 0.0
     )
 
     init {
+        val password = repository.findById(passwordId)
         _uiState.update {
             it.copy(
-                password = repository.findById(passwordId)
+                password = password,
+                newAppName = password?.appInfo?.applicationName ?: "",
+                newUrl = password?.appInfo?.url ?: "",
+                newAccount = password?.appInfo?.account ?: "",
+                newPlainPassword = password?.plainPassword ?: PlainPassword("")
+            )
+        }
+    }
+
+    fun onAppNameChanged(value: String){
+        _uiState.update {
+            it.copy(
+                newAppName = value
+            )
+        }
+    }
+
+    fun onUrlChanged(value: String){
+        _uiState.update {
+            it.copy(
+                newUrl = value
+            )
+        }
+    }
+
+    fun onAccountChanged(value: String){
+        _uiState.update {
+            it.copy(
+                newAccount = value
             )
         }
     }
@@ -39,7 +78,43 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun onPlainPasswordChange (plainPassword: String){
+        _uiState.update {
+            it.copy(
+                newPlainPassword = PlainPassword(plainPassword)
+            )
+        }
+    }
+
+    fun onUpdateSectionVisibilityToggle(){
+        _uiState.update {
+            it.copy(
+                isUpdateSectionEnabled = !uiState.value.isUpdateSectionEnabled
+            )
+        }
+    }
+
     fun onDeletePassword (){
         deletePasswordUseCase.invoke(passwordId)
+    }
+
+    fun onUpdatePassword (){
+        val newAppInfo = ApplicationInfo(
+            applicationName = _uiState.value.newAppName,
+            url = _uiState.value.newUrl,
+            account = _uiState.value.newAccount
+        )
+
+        val updatedPassword = updatePasswordUseCase.invoke(
+            id = _uiState.value.password!!.id,
+            newPassword = _uiState.value.newPlainPassword.value,
+            appInfo = newAppInfo
+        )
+
+        _uiState.update {
+            it.copy(
+                password = updatedPassword
+            )
+        }
     }
 }
