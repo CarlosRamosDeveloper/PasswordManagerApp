@@ -1,6 +1,7 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
 import androidx.lifecycle.ViewModel
+import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,7 @@ import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 class CreatePasswordViewModel(
     val generatePasswordUseCase: GeneratePasswordUseCase,
-    val scoreCalculator: SecurityScoreCalculator,
+    val scoreCalculator: CalculateSecurityScoreUseCase,
     val savePasswordUseCase: SavePasswordUseCase
 ): ViewModel() {
 
@@ -87,7 +88,7 @@ class CreatePasswordViewModel(
                 it.copy(
                     generatedPassword = password,
                     passwordError = "",
-                    passwordScore = scoreCalculator.calculate(password)
+                    passwordScore = scoreCalculator(password)
                 )
             }
         } catch (e: Exception){

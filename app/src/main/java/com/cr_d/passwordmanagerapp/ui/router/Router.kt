@@ -55,7 +55,7 @@ fun Router(
                 innerPadding = innerPadding,
                 viewModel = CreatePasswordViewModel(
                     generatePasswordUseCase,
-                    scoreCalculator,
+                    CalculateSecurityScoreUseCase(scoreCalculator),
                     createPasswordUseCase
                 ),
                 context = context,
