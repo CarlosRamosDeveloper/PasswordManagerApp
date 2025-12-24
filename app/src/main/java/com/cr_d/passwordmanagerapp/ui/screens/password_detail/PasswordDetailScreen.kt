@@ -10,9 +10,11 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -23,6 +25,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,12 +38,15 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.models.formatAs
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.ApplicationOutlinedTextField
@@ -59,14 +65,15 @@ fun PasswordDetailScreen(
 ){
     Column (modifier = Modifier.padding(innerPadding)){
         HeaderButtons(viewModel, snackFunction, navController)
-        PasswordDetailedCard(context, snackFunction, viewModel, settings, navController)
+        PasswordDetailedCard(context, snackFunction, viewModel, settings)
     }
 }
 
 @Composable
 fun HeaderButtons(viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit, navController: NavController){
     Row(
-        Modifier.fillMaxWidth()
+        Modifier
+            .fillMaxWidth()
             .padding(horizontal = horizontalFramePadding, vertical = 5.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -96,7 +103,6 @@ fun PasswordDetailedCard(
     snackFunction: (String)-> Unit,
     viewModel: PasswordDetailViewModel,
     settings: SettingsViewModel,
-    navController: NavController
 ){
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -122,7 +128,6 @@ fun PasswordDetailedCard(
                                 password = state.password,
                                 context = context,
                                 snackFunction = snackFunction,
-                                navController = navController
                             )
                         }
                         PasswordDetailUiMode.EDIT_MODE -> {
@@ -133,7 +138,10 @@ fun PasswordDetailedCard(
                         }
 
                         PasswordDetailUiMode.BASIC_INFO_MODE -> {
-                            BasicMode()
+                            BasicMode(
+                                viewModel = viewModel,
+                                settings = settings,
+                            )
                         }
                         else -> {
 
@@ -141,6 +149,13 @@ fun PasswordDetailedCard(
                     }
                 }
             }
+            if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
+                password = state.password,
+                viewModel = viewModel,
+                isPasswordShown = state.isPasswordShown,
+                context = context,
+                snackFunction = snackFunction
+            )
         }
     }
 }
@@ -152,7 +167,6 @@ fun DetailedMode(
     password: PasswordData?,
     context: Context,
     snackFunction: (String)-> Unit,
-    navController: NavController
 ){
     ApplicationInfoSection(viewModel)
     PasswordInfoSection(viewModel)
@@ -163,13 +177,67 @@ fun DetailedMode(
         viewModel = viewModel,
         context = context,
         snackFunction = snackFunction,
-        navController = navController
     )
 }
 
 @Composable
-fun BasicMode(){
+fun BasicMode(
+    viewModel: PasswordDetailViewModel,
+    settings: SettingsViewModel,
+){
+    val password = viewModel.uiState.collectAsStateWithLifecycle().value.password ?: return
+    val settings = settings.settings.collectAsState().value
 
+    Column (modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        ApplicationTitle(password.appInfo.applicationName)
+        CustomRow("Nombre de usuario", password.appInfo.account)
+        CustomRow("Sitio Web", password.appInfo.url)
+        CustomRow("Última Modificación", password.metadata.lastUpdate.formatAs(settings.dateFormat))
+    }
+}
+
+@Composable
+fun ApplicationTitle(appTitle : String){
+    Text(appTitle, fontSize = 50.sp, modifier = Modifier.padding(bottom = 10.dp))
+}
+
+@Composable
+fun CustomRow(fieldName: String, value: String){
+    Row(Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 20.dp, vertical = 5.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(fieldName)
+        Spacer(modifier = Modifier.weight(1f))
+        Text(value)
+    }
+    HorizontalDivider(thickness = 2.dp)
+}
+
+@Composable
+fun PasswordCard(
+    password: PasswordData,
+    viewModel: PasswordDetailViewModel,
+    isPasswordShown: Boolean,
+    context: Context,
+    snackFunction: (String) -> Unit
+){
+    Card (modifier = Modifier.padding(vertical = 10.dp, horizontal = horizontalFramePadding)) {
+        Column (modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally){
+            Text("Contraseña", fontSize = 25.sp)
+            HorizontalDivider(thickness = 2.dp, modifier = Modifier.padding(vertical = 10.dp))
+            ButtonsSection(
+                password = password,
+                viewModel = viewModel,
+                context = context,
+                snackFunction = snackFunction
+            )
+            if (isPasswordShown) Text(password.plainPassword.value)
+            else Text("********")
+        }
+    }
 }
 
 @Composable
@@ -222,14 +290,12 @@ fun ButtonsSection(
     viewModel: PasswordDetailViewModel,
     context: Context,
     snackFunction: (String)-> Unit,
-    navController: NavController
 ){
     if (password == null) return
-
-    TogglePasswordVisibilityButton(viewModel)
-    CopyToClipboardButton(password.plainPassword.value, context, snackFunction)
-    //UpdateSectionEnableButton(viewModel)
-    //DeletePasswordButton(snackFunction, viewModel, navController)
+    Row (Modifier.fillMaxWidth().padding(bottom = 5.dp), horizontalArrangement = Arrangement.SpaceAround){
+        TogglePasswordVisibilityButton(viewModel)
+        CopyToClipboardButton(password.plainPassword.value, context, snackFunction)
+    }
 }
 
 @Composable
@@ -246,24 +312,30 @@ fun TogglePasswordVisibilityButton(viewModel: PasswordDetailViewModel){
         )
 
         if(passwordState){
-            Icon(
-                painter = painterResource(R.drawable.outline_visibility_24),
-                contentDescription = null,
-                modifier = Modifier.graphicsLayer {
-                    scaleY = progress
-                    alpha = max(progress, 0.2f)
-                    transformOrigin = TransformOrigin(0.5f, 0.5f)
-                }
-            )
+            Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(R.drawable.outline_visibility_off_24),
+                    contentDescription = null,
+                    modifier = Modifier.graphicsLayer {
+                        scaleY = progress
+                        alpha = max(progress, 0.2f)
+                        transformOrigin = TransformOrigin(0.5f, 0.5f)
+                    }
+                )
+                Text("Ocultar", modifier = Modifier.padding(horizontal = 15.dp))
+            }
         } else {
-            Icon(
-                painter = painterResource(R.drawable.outline_visibility_off_24),
-                contentDescription = null,
-                modifier = Modifier.graphicsLayer {
-                    alpha = 1f - progress
-                    scaleX = 1f - progress
-                }
-            )
+            Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(R.drawable.outline_visibility_24),
+                    contentDescription = null,
+                    modifier = Modifier.graphicsLayer {
+                        alpha = 1f - progress
+                        scaleX = 1f - progress
+                    }
+                )
+                Text("Mostrar", modifier = Modifier.padding(horizontal = 15.dp))
+            }
         }
     }
 }
@@ -283,10 +355,13 @@ fun CopyToClipboardButton(passwordText: String, context: Context, snackFunction:
             snackFunction("Contraseña copiada en el portapapeles")
         }
     ) {
-        Image(
-            painterResource(R.drawable.outline_content_copy_24),
-            contentDescription = "",
-        )
+        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+            Text("Copiar", modifier = Modifier.padding(horizontal = 15.dp))
+            Image(
+                painterResource(R.drawable.outline_content_copy_24),
+                contentDescription = "",
+            )
+        }
     }
 }
 
@@ -314,17 +389,6 @@ fun UpdateSection(viewModel: PasswordDetailViewModel, snackFunction: (String)-> 
         ApplicationOutlinedTextField("Cuenta", state.newAccount, viewModel::onAccountChanged)
         ApplicationOutlinedTextField("Contraseña", state.newPlainPassword.value, viewModel::onPlainPasswordChange)
         UpdatePasswordButton(viewModel, snackFunction)
-    }
-}
-
-@Composable
-fun UpdateSectionEnableButton(viewModel: PasswordDetailViewModel){
-    Button(
-        onClick = {
-            viewModel.onEnableEditMode()
-        }
-    ) {
-        Text("Modificar Contraseña")
     }
 }
 
@@ -360,7 +424,6 @@ fun MetadataBoolSection(viewModel: PasswordDetailViewModel){
 }
 
 @Composable
-
 fun MetadataCheck(label: String, value: Boolean){
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(5.dp)) {
         Text(label)
