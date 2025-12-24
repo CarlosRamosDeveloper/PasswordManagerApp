@@ -12,6 +12,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
+import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
@@ -24,6 +25,7 @@ class PasswordDetailViewModel(
 
     data class UiState(
         val isPasswordShown: Boolean = false,
+        val mode: PasswordDetailUiMode = PasswordDetailUiMode.BASIC_INFO_MODE,
         val password: PasswordData? = null,
         val isUpdateSectionEnabled: Boolean = false,
         val newAppName: String = "",
@@ -82,6 +84,30 @@ class PasswordDetailViewModel(
         _uiState.update {
             it.copy(
                 newPlainPassword = PlainPassword(plainPassword)
+            )
+        }
+    }
+
+    fun onEnableEditMode() {
+        _uiState.update {
+            it.copy(
+                mode = PasswordDetailUiMode.EDIT_MODE
+            )
+        }
+    }
+
+    fun onEnableBasicInfoMode(){
+        _uiState.update {
+            it.copy(
+                mode = PasswordDetailUiMode.BASIC_INFO_MODE
+            )
+        }
+    }
+
+    fun onEnableFullInfoMode(){
+        _uiState.update {
+            it.copy(
+                mode = PasswordDetailUiMode.FULL_INFO_MODE
             )
         }
     }

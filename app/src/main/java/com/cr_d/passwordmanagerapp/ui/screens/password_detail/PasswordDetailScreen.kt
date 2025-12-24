@@ -9,6 +9,7 @@ import android.os.PersistableBundle
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,8 +17,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,10 +34,13 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.models.formatAs
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.ApplicationOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
@@ -60,43 +68,103 @@ fun PasswordDetailedCard(
     settings: SettingsViewModel,
     navController: NavController
 ){
-    val state = viewModel.uiState.collectAsState().value
-    val settings = settings.settings.collectAsState().value
-    state.password?.let { password ->
-        Card(modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)) {
-            Column {
-                Row(Modifier.fillMaxWidth()) {
-                    TogglePasswordVisibilityButton(viewModel)
+    val state = viewModel.uiState.collectAsStateWithLifecycle().value
 
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Aplicación: ${password.appInfo.applicationName}")
-                        Text("Url: ${password.appInfo.url}")
-                        Text("Account: ${password.appInfo.account}")
-                        if (state.isPasswordShown) Text("Password: ${password.plainPassword.value}")
-                        else Text("Password: ********")
-                        Text("Fecha de creación: ${password.metadata.creationDate.formatAs(settings.dateFormat)}")
-                        Text("Última actualización: ${password.metadata.lastUpdate.formatAs(settings.dateFormat)}")
-                        Text(
-                            "Puntuación de seguridad ${String.format("%.2f", password.securityScore)}"
-                        )
+    when {
+        state.password == null -> {
+            CircularProgressIndicator()
+        }
+        else -> {
+            Card(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 10.dp)
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    when(state.mode) {
+                        PasswordDetailUiMode.BASIC_INFO_MODE -> {
+                            ApplicationInfoSection(viewModel)
+                            PasswordInfoSection(viewModel)
+                            DateInfoSection(viewModel, settings)
+                            SecurityInfoSection(viewModel)
+                            ButtonsSection(
+                                password = state.password,
+                                viewModel = viewModel,
+                                context = context,
+                                snackFunction = snackFunction,
+                                navController = navController
+                            )
+                        }
+                        PasswordDetailUiMode.EDIT_MODE -> {
+                            UpdateSection(viewModel, snackFunction)
+                        }
+                        else -> {
+
+                        }
                     }
-
-                    CopyToClipboardButton(password.plainPassword.value, context, snackFunction)
-
                 }
-                UpdateSectionToggleButton(viewModel)
-                DeletePasswordButton(snackFunction, viewModel, navController)
 
-                if(state.isUpdateSectionEnabled) UpdateSection(viewModel, snackFunction)
             }
         }
     }
+}
+
+@Composable
+fun ApplicationInfoSection(viewModel: PasswordDetailViewModel){
+    val state = viewModel.uiState.collectAsStateWithLifecycle().value.password ?: return
+    val appInfo = state.appInfo
+
+    Text("Información de la aplicación")
+    Text(appInfo.applicationName)
+    Text("Sitio web: ${appInfo.url}")
+    Text("Cuenta asociada: ${appInfo.account}")
+}
+
+@Composable
+fun PasswordInfoSection(viewModel: PasswordDetailViewModel){
+    val state = viewModel.uiState.collectAsState().value
+
+    Text("Información de la contraseña")
+    if (state.isPasswordShown) Text("Password: ${state.password!!.plainPassword.value}")
+    else Text("Password: ********")
+    MetadataBoolSection(viewModel)
+}
+
+@Composable
+fun DateInfoSection(viewModel: PasswordDetailViewModel, settings: SettingsViewModel){
+    val state = viewModel.uiState.collectAsStateWithLifecycle().value.password ?: return
+    val metadataInfo = state.metadata
+    val settings = settings.settings.collectAsState().value
+
+    Text("Fecha de creación: ${metadataInfo.creationDate.formatAs(settings.dateFormat)}")
+    Text("Última actualización: ${metadataInfo.lastUpdate.formatAs(settings.dateFormat)}")
+}
+
+@Composable
+fun SecurityInfoSection(viewModel: PasswordDetailViewModel){
+    val state = viewModel.uiState.collectAsStateWithLifecycle().value.password ?: return
+    val securityScore = state.securityScore
+
+    Text("Puntuación de seguridad ${String.format("%.2f", securityScore)}")
+}
+
+@Composable
+fun ButtonsSection(
+    password: PasswordData?,
+    viewModel: PasswordDetailViewModel,
+    context: Context,
+    snackFunction: (String)-> Unit,
+    navController: NavController
+){
+    if (password == null) return
+
+    TogglePasswordVisibilityButton(viewModel)
+    CopyToClipboardButton(password.plainPassword.value, context, snackFunction)
+    UpdateSectionEnableButton(viewModel)
+    DeletePasswordButton(snackFunction, viewModel, navController)
 }
 
 @Composable
@@ -166,7 +234,7 @@ fun DeletePasswordButton(snackFunction: (String)-> Unit, viewModel: PasswordDeta
         onClick = {
             viewModel.onDeletePassword()
             snackFunction("Contraseña eliminada")
-            navController.navigate("ShowPasswordScreen")
+            navController.popBackStack()
         }
     ) {
         Text("Eliminar contraseña")
@@ -176,6 +244,7 @@ fun DeletePasswordButton(snackFunction: (String)-> Unit, viewModel: PasswordDeta
 @Composable
 fun UpdateSection(viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     val state = viewModel.uiState.collectAsState().value
+
     Column() {
         ApplicationOutlinedTextField("Aplicacion", state.newAppName, viewModel::onAppNameChanged)
         ApplicationOutlinedTextField("Url", state.newUrl, viewModel::onUrlChanged)
@@ -186,14 +255,13 @@ fun UpdateSection(viewModel: PasswordDetailViewModel, snackFunction: (String)-> 
 }
 
 @Composable
-fun UpdateSectionToggleButton(viewModel: PasswordDetailViewModel){
-    val isUpdateSectionEnabled = viewModel.uiState.collectAsState().value.isUpdateSectionEnabled
-
+fun UpdateSectionEnableButton(viewModel: PasswordDetailViewModel){
     Button(
-        onClick = { viewModel.onUpdateSectionVisibilityToggle() }
+        onClick = {
+            viewModel.onEnableEditMode()
+        }
     ) {
-        if (!isUpdateSectionEnabled) Text("Modificar Contraseña")
-        else Text("Cerrar edición")
+        Text("Modificar Contraseña")
     }
 }
 
@@ -206,5 +274,37 @@ fun UpdatePasswordButton(viewModel: PasswordDetailViewModel, snackFunction: (Str
         }
     ) {
         Text("Actualizar contraseña")
+    }
+}
+
+@Composable
+fun MetadataBoolSection(viewModel: PasswordDetailViewModel){
+    val passwordData = viewModel.uiState.collectAsState().value.password ?: return
+    val metadata = passwordData.metadata
+
+    Row(
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+    ) {
+        Column {
+            MetadataCheck("Minúsculas", metadata.hasLowerCase)
+            MetadataCheck("Mayúsculas", metadata.hasUpperCase)
+        }
+        Column {
+            MetadataCheck("Números", metadata.hasNumbers)
+            MetadataCheck("Especiales", metadata.hasSpecials)
+        }
+    }
+}
+
+@Composable
+
+fun MetadataCheck(label: String, value: Boolean){
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(5.dp)) {
+        Text(label)
+        Icon(
+            if (value) Icons.Default.Check
+            else Icons.Default.Close,
+            contentDescription = ""
+        )
     }
 }
