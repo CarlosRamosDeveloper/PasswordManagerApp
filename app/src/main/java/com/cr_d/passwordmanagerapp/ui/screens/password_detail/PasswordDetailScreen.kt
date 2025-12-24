@@ -30,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
@@ -45,6 +46,8 @@ import com.cr_d.passwordmanagerapp.ui.models.formatAs
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.ApplicationOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
+val horizontalFramePadding = 20.dp
+
 @Composable
 fun PasswordDetailScreen(
     innerPadding: PaddingValues,
@@ -55,7 +58,34 @@ fun PasswordDetailScreen(
     navController: NavController
 ){
     Column (modifier = Modifier.padding(innerPadding)){
+        HeaderButtons(viewModel, snackFunction, navController)
         PasswordDetailedCard(context, snackFunction, viewModel, settings, navController)
+    }
+}
+
+@Composable
+fun HeaderButtons(viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit, navController: NavController){
+    Row(
+        Modifier.fillMaxWidth()
+            .padding(horizontal = horizontalFramePadding, vertical = 5.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    )
+    {
+        ModeButton("Info", viewModel::onEnableBasicInfoMode)
+        ModeButton("Detalle", viewModel::onEnableFullInfoMode)
+        ModeButton("Editar", viewModel::onEnableEditMode)
+        DeletePasswordButton(snackFunction, viewModel, navController)
+    }
+}
+
+@Composable
+fun ModeButton(label: String, onclick: () -> Unit){
+    Button(
+        onClick = { onclick() },
+        shape = RectangleShape
+    ) {
+        Text(label)
     }
 }
 
@@ -79,37 +109,72 @@ fun PasswordDetailedCard(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 10.dp)
+                    .padding(horizontal = horizontalFramePadding, vertical = 10.dp)
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     when(state.mode) {
-                        PasswordDetailUiMode.BASIC_INFO_MODE -> {
-                            ApplicationInfoSection(viewModel)
-                            PasswordInfoSection(viewModel)
-                            DateInfoSection(viewModel, settings)
-                            SecurityInfoSection(viewModel)
-                            ButtonsSection(
-                                password = state.password,
+                        PasswordDetailUiMode.FULL_INFO_MODE -> {
+                            DetailedMode(
                                 viewModel = viewModel,
+                                settings = settings,
+                                password = state.password,
                                 context = context,
                                 snackFunction = snackFunction,
                                 navController = navController
                             )
                         }
                         PasswordDetailUiMode.EDIT_MODE -> {
-                            UpdateSection(viewModel, snackFunction)
+                            EditMode(
+                                viewModel = viewModel,
+                                snackFunction = snackFunction
+                            )
+                        }
+
+                        PasswordDetailUiMode.BASIC_INFO_MODE -> {
+                            BasicMode()
                         }
                         else -> {
 
                         }
                     }
                 }
-
             }
         }
     }
+}
+
+@Composable
+fun DetailedMode(
+    viewModel: PasswordDetailViewModel,
+    settings: SettingsViewModel,
+    password: PasswordData?,
+    context: Context,
+    snackFunction: (String)-> Unit,
+    navController: NavController
+){
+    ApplicationInfoSection(viewModel)
+    PasswordInfoSection(viewModel)
+    DateInfoSection(viewModel, settings)
+    SecurityInfoSection(viewModel)
+    ButtonsSection(
+        password = password,
+        viewModel = viewModel,
+        context = context,
+        snackFunction = snackFunction,
+        navController = navController
+    )
+}
+
+@Composable
+fun BasicMode(){
+
+}
+
+@Composable
+fun EditMode(viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
+    UpdateSection(viewModel, snackFunction)
 }
 
 @Composable
@@ -163,8 +228,8 @@ fun ButtonsSection(
 
     TogglePasswordVisibilityButton(viewModel)
     CopyToClipboardButton(password.plainPassword.value, context, snackFunction)
-    UpdateSectionEnableButton(viewModel)
-    DeletePasswordButton(snackFunction, viewModel, navController)
+    //UpdateSectionEnableButton(viewModel)
+    //DeletePasswordButton(snackFunction, viewModel, navController)
 }
 
 @Composable
@@ -224,20 +289,18 @@ fun CopyToClipboardButton(passwordText: String, context: Context, snackFunction:
         )
     }
 }
-// TODO: Hacer botón de modificar contraseña
-// TODO: Hacer el usecase de modificar contraseña
-// TODO: Adecentar la interfaz
 
 @Composable
 fun DeletePasswordButton(snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel, navController: NavController){
     Button(
         onClick = {
             viewModel.onDeletePassword()
+            viewModel.onDeleteMode()
             snackFunction("Contraseña eliminada")
-            navController.popBackStack()
+            navController.navigate("ShowPasswordScreen")
         }
     ) {
-        Text("Eliminar contraseña")
+        Text("Eliminar")
     }
 }
 

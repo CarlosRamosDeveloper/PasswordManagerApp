@@ -4,4 +4,5 @@ enum class PasswordDetailUiMode {
     BASIC_INFO_MODE,
     FULL_INFO_MODE,
     EDIT_MODE,
+    DELETE_MODE
 }

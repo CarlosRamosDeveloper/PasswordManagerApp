@@ -120,6 +120,14 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun onDeleteMode(){
+        _uiState.update {
+            it.copy(
+                mode = PasswordDetailUiMode.DELETE_MODE
+            )
+        }
+    }
+
     fun onDeletePassword (){
         deletePasswordUseCase.invoke(passwordId)
     }
