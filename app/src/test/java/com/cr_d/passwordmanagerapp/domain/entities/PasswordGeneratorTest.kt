@@ -15,8 +15,8 @@ class PasswordGeneratorTest {
             hasSpecials = true,
             passwordLength = 20
         )
-        val generator = PasswordGenerator(data)
-        val password = generator.generatePassword()
+        val generator = PasswordGenerator()
+        val password = generator.generatePassword(data)
 
         Assertions.assertEquals(20, password.length)
     }
@@ -30,8 +30,8 @@ class PasswordGeneratorTest {
             hasSpecials = true,
             passwordLength = 5
         )
-        val generator = PasswordGenerator(data)
-        val password = generator.generatePassword()
+        val generator = PasswordGenerator()
+        val password = generator.generatePassword(data)
 
         Assertions.assertTrue(password.length >= PasswordPolicy.MIN_GENERATED_LENGTH)
     }
@@ -45,8 +45,8 @@ class PasswordGeneratorTest {
             hasSpecials = true,
             passwordLength = 200
         )
-        val generator = PasswordGenerator(data)
-        val password = generator.generatePassword()
+        val generator = PasswordGenerator()
+        val password = generator.generatePassword(data)
 
         Assertions.assertTrue(password.length <= PasswordPolicy.MAX_LENGTH)
     }
@@ -60,8 +60,8 @@ class PasswordGeneratorTest {
             hasSpecials = false,
             passwordLength = 20
         )
-        val generator = PasswordGenerator(data)
-        val password = generator.generatePassword()
+        val generator = PasswordGenerator()
+        val password = generator.generatePassword(data)
 
         Assertions.assertTrue(password.any { it.isLowerCase() })
     }
@@ -75,8 +75,8 @@ class PasswordGeneratorTest {
             hasSpecials = false,
             passwordLength = 20
         )
-        val generator = PasswordGenerator(data)
-        val password = generator.generatePassword()
+        val generator = PasswordGenerator()
+        val password = generator.generatePassword(data)
 
         Assertions.assertTrue(password.any { it.isUpperCase() })
     }
@@ -90,8 +90,8 @@ class PasswordGeneratorTest {
             hasSpecials = false,
             passwordLength = 20
         )
-        val generator = PasswordGenerator(data)
-        val password = generator.generatePassword()
+        val generator = PasswordGenerator()
+        val password = generator.generatePassword(data)
         Assertions.assertTrue(password.any { it.isDigit() })
     }
 
@@ -104,8 +104,8 @@ class PasswordGeneratorTest {
             hasSpecials = true,
             passwordLength = 20
         )
-        val generator = PasswordGenerator(data)
-        val password = generator.generatePassword()
+        val generator = PasswordGenerator()
+        val password = generator.generatePassword(data)
 
         Assertions.assertTrue(password.any { it in PasswordPolicy.SYMBOL_CHARS })
     }
@@ -119,10 +119,10 @@ class PasswordGeneratorTest {
             hasSpecials = false,
             passwordLength = 20
         )
-        val generator = PasswordGenerator(data)
+        val generator = PasswordGenerator()
 
         Assertions.assertThrows(IllegalArgumentException::class.java) {
-            generator.generatePassword()
+            generator.generatePassword(data)
         }
     }
 
@@ -135,8 +135,8 @@ class PasswordGeneratorTest {
             hasSpecials = true,
             passwordLength = 50
         )
-        val generator = PasswordGenerator(data)
-        val password = generator.generatePassword()
+        val generator = PasswordGenerator()
+        val password = generator.generatePassword(data)
 
         Assertions.assertTrue(password.any { it.isLowerCase() })
         Assertions.assertTrue(password.any { it.isUpperCase() })

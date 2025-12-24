@@ -57,7 +57,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     }
 
     val debugJavaClasses = fileTree("${buildDir}/intermediates/javac/debug/classes") {
-        include("**/passwordmanagerapp/domain/**")
+        include("**/passwordmanagerapp/domain/**", "**/passwordmanagerapp/application/**")
         exclude(
             "**/R.class",
             "**/R\$*.class",
@@ -68,7 +68,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     }
 
     val debugKotlinClasses = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
-        include("**/passwordmanagerapp/domain/**")
+        include("**/passwordmanagerapp/domain/**","**/passwordmanagerapp/application/**")
         exclude(
             "**/R.class",
             "**/R\$*.class",
@@ -92,6 +92,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.animation.core.lint)
+    implementation("androidx.compose.material:material-icons-extended")
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(kotlin("test"))

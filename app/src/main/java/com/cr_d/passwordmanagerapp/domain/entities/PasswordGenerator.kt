@@ -2,32 +2,29 @@ package com.cr_d.passwordmanagerapp.domain.entities
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 
-class PasswordGenerator (
-    var passwordDataGeneration: PasswordDataGeneration
-    ){
+class PasswordGenerator (){
+    fun generatePassword(passwordData: PasswordDataGeneration): String {
 
-    fun generatePassword(): String {
-
-        if (passwordDataGeneration.passwordLength < PasswordPolicy.MIN_GENERATED_LENGTH) passwordDataGeneration.passwordLength = PasswordPolicy.MIN_GENERATED_LENGTH
-        if (passwordDataGeneration.passwordLength > PasswordPolicy.MAX_LENGTH) passwordDataGeneration.passwordLength = PasswordPolicy.MAX_LENGTH
+        if (passwordData.passwordLength < PasswordPolicy.MIN_GENERATED_LENGTH) passwordData.passwordLength = PasswordPolicy.MIN_GENERATED_LENGTH
+        if (passwordData.passwordLength > PasswordPolicy.MAX_LENGTH) passwordData.passwordLength = PasswordPolicy.MAX_LENGTH
 
         val availableSets = buildList {
-            if (passwordDataGeneration.hasLowerCase) add(PasswordPolicy.LOWER_CHARS)
-            if (passwordDataGeneration.hasUpperCase) add(PasswordPolicy.UPPER_CHARS)
-            if (passwordDataGeneration.hasNumbers) add(PasswordPolicy.NUMBER_CHARS)
-            if (passwordDataGeneration.hasSpecials) add(PasswordPolicy.SYMBOL_CHARS)
+            if (passwordData.hasLowerCase) add(PasswordPolicy.LOWER_CHARS)
+            if (passwordData.hasUpperCase) add(PasswordPolicy.UPPER_CHARS)
+            if (passwordData.hasNumbers) add(PasswordPolicy.NUMBER_CHARS)
+            if (passwordData.hasSpecials) add(PasswordPolicy.SYMBOL_CHARS)
         }
 
         require(availableSets.isNotEmpty()) { "At least one character set must be selected" }
 
         val passwordChars = mutableListOf<Char>()
 
-        if (passwordDataGeneration.hasLowerCase) passwordChars += PasswordPolicy.LOWER_CHARS.random()
-        if (passwordDataGeneration.hasUpperCase) passwordChars += PasswordPolicy.UPPER_CHARS.random()
-        if (passwordDataGeneration.hasNumbers) passwordChars += PasswordPolicy.NUMBER_CHARS.random()
-        if (passwordDataGeneration.hasSpecials) passwordChars += PasswordPolicy.SYMBOL_CHARS.random()
+        if (passwordData.hasLowerCase) passwordChars += PasswordPolicy.LOWER_CHARS.random()
+        if (passwordData.hasUpperCase) passwordChars += PasswordPolicy.UPPER_CHARS.random()
+        if (passwordData.hasNumbers) passwordChars += PasswordPolicy.NUMBER_CHARS.random()
+        if (passwordData.hasSpecials) passwordChars += PasswordPolicy.SYMBOL_CHARS.random()
 
-        while (passwordChars.size < passwordDataGeneration.passwordLength) {
+        while (passwordChars.size < passwordData.passwordLength) {
             val set = availableSets.random()
             passwordChars += set.random()
         }
