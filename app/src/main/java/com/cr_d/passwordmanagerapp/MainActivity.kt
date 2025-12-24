@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -40,7 +39,6 @@ import kotlinx.coroutines.launch
 import com.cr_d.passwordmanagerapp.ui.models.CustomNavigationItem
 import com.cr_d.passwordmanagerapp.ui.router.Router
 import com.cr_d.passwordmanagerapp.ui.theme.PasswordManagerAppTheme
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
