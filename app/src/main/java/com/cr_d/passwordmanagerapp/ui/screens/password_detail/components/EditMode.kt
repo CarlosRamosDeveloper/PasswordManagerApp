@@ -18,9 +18,7 @@ import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 
 @Composable
-fun EditMode(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
-    val isGeneratePasswordEnabled = passwordState.isGeneratePasswordEnabled
-
+fun EditMode(isGeneratePasswordEnabled: Boolean, passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(vertical = AppConfig.HORIZONTAL_FRAME_PADDING), horizontalAlignment = Alignment.CenterHorizontally) {

@@ -68,6 +68,7 @@ fun PasswordDetailedCard(
 
                     PasswordDetailUiMode.EDIT_MODE -> {
                         EditMode(
+                            isGeneratePasswordEnabled = state.isGeneratePasswordEnabled,
                             passwordState = state,
                             viewModel = viewModel,
                             snackFunction = snackFunction
