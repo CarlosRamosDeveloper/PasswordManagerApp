@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,16 +21,13 @@ import com.cr_d.passwordmanagerapp.ui.common_components.DecimalFormField
 import com.cr_d.passwordmanagerapp.ui.common_components.ErrorMessage
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
-import com.cr_d.passwordmanagerapp.ui.models.AppConfig
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 
 @Composable
 fun EditMode(isGeneratePasswordEnabled: Boolean, passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(
-            vertical = AppConfig.HORIZONTAL_FRAME_PADDING),
+        .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ApplicationEditInfo(passwordState, viewModel)
@@ -54,6 +52,7 @@ fun ApplicationEditInfo(passwordState: PasswordDetailViewModel.UiState, viewMode
             passwordState.editInfo.newAccount,
             viewModel::onAccountChanged
         )
+        Spacer(Modifier.size(15.dp))
     }
 }
 
