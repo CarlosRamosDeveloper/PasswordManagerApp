@@ -42,9 +42,9 @@ fun Router(
     val context = LocalContext.current
     val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
 
-    NavHost(navController = navController, startDestination = "SettingsScreen") {
+    NavHost(navController = navController, startDestination = "ShowPasswordScreen") {
         composable("MainScreen") {
-            MainScreen(innerPadding, navController)
+            MainScreen(innerPadding)
         }
         composable("CreatePasswordScreen") {
             val generator = PasswordGenerator()

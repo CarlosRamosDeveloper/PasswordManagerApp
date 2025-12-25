@@ -14,5 +14,3 @@ fun DetailedMode(
     MetadataInfoSection(password.metadata, settings)
     SecurityInfoSection(String.format("%.2f", password.securityScore))
 }
-
-
