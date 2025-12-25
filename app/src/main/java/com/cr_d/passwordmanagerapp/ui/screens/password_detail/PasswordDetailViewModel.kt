@@ -204,6 +204,7 @@ class PasswordDetailViewModel(
             )
         }
         loadPassword()
+        onEnableFullInfoMode()
     }
 
     fun onGeneratePassword(){

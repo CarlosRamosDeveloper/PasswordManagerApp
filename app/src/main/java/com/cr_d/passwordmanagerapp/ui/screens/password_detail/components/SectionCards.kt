@@ -16,6 +16,7 @@ import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomCheck
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
+import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.models.formatAs
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
@@ -86,7 +87,7 @@ fun ButtonsInPasswordSection(
     Row (Modifier
         .fillMaxWidth()
         .padding(bottom = 5.dp), horizontalArrangement = Arrangement.SpaceAround){
-        TogglePasswordVisibilityButton(isPasswordShown, viewModel)
+        TogglePasswordVisibilityButton(isPasswordShown, viewModel::onVisibilityToggle)
         CopyToClipboardButton(passwordPlainText, context, snackFunction)
     }
 }

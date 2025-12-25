@@ -18,6 +18,7 @@ import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
 import com.cr_d.passwordmanagerapp.ui.common_components.DecimalFormField
 import com.cr_d.passwordmanagerapp.ui.common_components.ErrorMessage
+import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
@@ -32,9 +33,9 @@ fun EditMode(isGeneratePasswordEnabled: Boolean, passwordState: PasswordDetailVi
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ApplicationEditInfo(passwordState, viewModel)
-        PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel)
+        PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel::onGeneratePasswordSectionToggle)
         if(isGeneratePasswordEnabled) MetadataEditInfo(passwordState, viewModel)
-        PasswordEditInfo(passwordState, viewModel, snackFunction)
+        NewPasswordInfoCard(passwordState, viewModel, snackFunction)
     }
 }
 
@@ -42,14 +43,22 @@ fun EditMode(isGeneratePasswordEnabled: Boolean, passwordState: PasswordDetailVi
 fun ApplicationEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel){
     InfoCard {
         SectionTitle("Información de aplicación")
-        ApplicationOutlinedTextField("Aplicacion", passwordState.editInfo.newAppName, viewModel::onAppNameChanged)
+        ApplicationOutlinedTextField(
+            "Aplicacion",
+            passwordState.editInfo.newAppName,
+            viewModel::onAppNameChanged
+        )
         ApplicationOutlinedTextField("Url", passwordState.editInfo.newUrl, viewModel::onUrlChanged)
-        ApplicationOutlinedTextField("Cuenta", passwordState.editInfo.newAccount, viewModel::onAccountChanged)
+        ApplicationOutlinedTextField(
+            "Cuenta",
+            passwordState.editInfo.newAccount,
+            viewModel::onAccountChanged
+        )
     }
 }
 
 @Composable
-fun PasswordEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
+fun NewPasswordInfoCard(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     InfoCard {
         CardTitle("Contraseña")
         CustomRow(
@@ -57,8 +66,12 @@ fun PasswordEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: 
             String.format("%.2f", passwordState.editInfo.newSecurityScore),
             false
         )
-        ApplicationOutlinedTextField("Contraseña", passwordState.editInfo.newPlainPassword.value, viewModel::onPlainPasswordChange)
-        UpdatePasswordButton(viewModel, snackFunction)
+        ApplicationOutlinedTextField(
+            "Contraseña",
+            passwordState.editInfo.newPlainPassword.value,
+            viewModel::onPlainPasswordChange
+        )
+        UpdatePasswordButton(snackFunction, viewModel::onUpdatePassword)
     }
 }
 
@@ -70,22 +83,25 @@ fun MetadataEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: 
         CustomCheckboxForm(
             "Contiene minúsculas",
             passwordState.editInfo.newLowerCase,
-        ){viewModel.onOptionChanged(PasswordOption.LOWERCASE, it) }
+        ) { viewModel.onOptionChanged(PasswordOption.LOWERCASE, it) }
         CustomCheckboxForm(
             "Contiene mayusculas",
             passwordState.editInfo.newUpperCase,
-        ){viewModel.onOptionChanged(PasswordOption.UPPERCASE, it) }
+        ) { viewModel.onOptionChanged(PasswordOption.UPPERCASE, it) }
         CustomCheckboxForm(
             "Contiene numeros",
             passwordState.editInfo.newNumbers,
-        ){viewModel.onOptionChanged(PasswordOption.NUMBERS, it) }
+        ) { viewModel.onOptionChanged(PasswordOption.NUMBERS, it) }
         CustomCheckboxForm(
             "Contiene carácteres especiales",
             passwordState.editInfo.newSpecials,
-        ){viewModel.onOptionChanged(PasswordOption.SPECIALS, it) }
+        ) { viewModel.onOptionChanged(PasswordOption.SPECIALS, it) }
         Text("La longitud mínima de la nueva contraseña será de ${PasswordPolicy.MIN_GENERATED_LENGTH}")
-        DecimalFormField(passwordState.editInfo.newPasswordLength, viewModel::onPasswordLengthChanged)
-        if(errorMessage != "") ErrorMessage(errorMessage)
+        DecimalFormField(
+            passwordState.editInfo.newPasswordLength,
+            viewModel::onPasswordLengthChanged
+        )
+        if (errorMessage != "") ErrorMessage(errorMessage)
         GeneratePasswordButton(viewModel)
     }
 }

@@ -29,7 +29,7 @@ fun HeaderButtons(viewModel: PasswordDetailViewModel, snackFunction: (String)-> 
         ModeButton("Info", viewModel::onEnableBasicInfoMode)
         ModeButton("Detalle", viewModel::onEnableFullInfoMode)
         ModeButton("Editar", viewModel::onEnableEditMode)
-        DeletePasswordButton(snackFunction, viewModel, navController)
+        DeletePasswordButton(snackFunction, viewModel::onDeletePassword, navController)
     }
 }
 

@@ -26,12 +26,13 @@ import androidx.navigation.NavController
 import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
+import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 
 @Composable
-fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, viewModel: PasswordDetailViewModel){
+fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, onclick: () -> Unit){
     Button(
-        onClick = viewModel::onVisibilityToggle
+        onClick = { onclick() }
     ) {
 
         val progress by animateFloatAsState(
@@ -94,10 +95,10 @@ fun CopyToClipboardButton(passwordText: String, context: Context, snackFunction:
 }
 
 @Composable
-fun DeletePasswordButton(snackFunction: (String)-> Unit, viewModel: PasswordDetailViewModel, navController: NavController){
+fun DeletePasswordButton(snackFunction: (String)-> Unit, onclick: () -> Unit, navController: NavController){
     Button(
         onClick = {
-            viewModel.onDeletePassword()
+            onclick()
             snackFunction("Contraseña eliminada")
             navController.navigate("ShowPasswordScreen")
         }
@@ -107,20 +108,19 @@ fun DeletePasswordButton(snackFunction: (String)-> Unit, viewModel: PasswordDeta
 }
 
 @Composable
-fun PasswordGenerationToggle(isGeneratePasswordEnabled: Boolean, viewModel: PasswordDetailViewModel){
+fun PasswordGenerationToggle(isGeneratePasswordEnabled: Boolean, onclick: () -> Unit){
     FullWidthButton(
-        if(isGeneratePasswordEnabled) "Desactivar generación de contraseñas" else "Activar generación de contraseñas",
-        { viewModel.onGeneratePasswordSectionToggle() },
+        if (isGeneratePasswordEnabled) "Desactivar generación de contraseñas" else "Activar generación de contraseñas",
+        { onclick() },
         40
     )
 }
 
 @Composable
-fun UpdatePasswordButton(viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
+fun UpdatePasswordButton(snackFunction: (String)-> Unit, updateMethod: () -> Unit){
     FullWidthButton("Actualizar contraseña", {
-        viewModel.onUpdatePassword()
         snackFunction("Contraseña actualizada correctamente")
-        viewModel.onEnableFullInfoMode()
+        updateMethod()
     })
 }
 
