@@ -19,17 +19,17 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ApplicationTitle(appTitle : String){
-    Text(appTitle, fontSize = 50.sp, modifier = Modifier.padding(bottom = 10.dp))
+    Text(appTitle, fontSize = 50.sp, modifier = Modifier.padding(5.dp))
 }
 
 @Composable
 fun CardTitle(cardTitle: String){
-    Text(cardTitle, fontSize = 35.sp)
+    Text(cardTitle, fontSize = 35.sp, modifier = Modifier.padding(vertical = 10.dp))
 }
 
 @Composable
 fun SectionTitle(sectionTitle: String){
-    Text(sectionTitle, fontSize = 25.sp, modifier = Modifier.padding(vertical = 5.dp))
+    Text(sectionTitle, fontSize = 25.sp, modifier = Modifier.padding(vertical = 10.dp))
 }
 
 @Composable
