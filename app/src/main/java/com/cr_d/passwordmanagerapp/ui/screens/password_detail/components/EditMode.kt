@@ -5,15 +5,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
+import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
 import com.cr_d.passwordmanagerapp.ui.common_components.DecimalFormField
 import com.cr_d.passwordmanagerapp.ui.common_components.ErrorMessage
@@ -26,7 +27,10 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailView
 fun EditMode(isGeneratePasswordEnabled: Boolean, passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     Column(modifier = Modifier
         .fillMaxWidth()
-        .padding(vertical = AppConfig.HORIZONTAL_FRAME_PADDING), horizontalAlignment = Alignment.CenterHorizontally) {
+        .padding(
+            vertical = AppConfig.HORIZONTAL_FRAME_PADDING),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         ApplicationEditInfo(passwordState, viewModel)
         PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel)
         if(isGeneratePasswordEnabled) MetadataEditInfo(passwordState, viewModel)
@@ -61,7 +65,7 @@ fun PasswordEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: 
 fun MetadataEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel){
     val errorMessage = passwordState.errorMessage
     InfoCard {
-        SectionTitle("Metadatos")
+        CardTitle("Nueva contraseña")
         CustomCheckboxForm(
             "Contiene minúsculas",
             passwordState.editInfo.newLowerCase,
@@ -78,6 +82,7 @@ fun MetadataEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: 
             "Contiene carácteres especiales",
             passwordState.editInfo.newSpecials,
         ){viewModel.onOptionChanged(PasswordOption.SPECIALS, it) }
+        Text("La longitud mínima de la nueva contraseña será de ${PasswordPolicy.MIN_GENERATED_LENGTH}")
         DecimalFormField(passwordState.editInfo.newPasswordLength, viewModel::onPasswordLengthChanged)
         if(errorMessage != "") ErrorMessage(errorMessage)
         GeneratePasswordButton(viewModel)
@@ -98,15 +103,5 @@ fun CustomCheckboxForm(labelText: String, value: Boolean, onValueChange: (Boolea
             checked = value,
             onCheckedChange = { onValueChange(!value) }
         )
-    }
-}
-
-@Composable
-fun GeneratePasswordButton(viewModel: PasswordDetailViewModel){
-    Column (modifier = Modifier.padding(top = 30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(onClick = viewModel::onGeneratePassword
-        ) {
-            Text("Generar contraseña")
-        }
     }
 }
