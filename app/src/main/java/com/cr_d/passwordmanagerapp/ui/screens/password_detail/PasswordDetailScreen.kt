@@ -23,8 +23,6 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.HeaderB
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.PasswordCard
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
-val horizontalFramePadding = 20.dp
-
 @Composable
 fun PasswordDetailScreen(
     innerPadding: PaddingValues,

@@ -10,15 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
+import com.cr_d.passwordmanagerapp.ui.models.AppConfig
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.horizontalFramePadding
 
 @Composable
 fun HeaderButtons(viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit, navController: NavController){
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = horizontalFramePadding, vertical = 5.dp),
+            .padding(horizontal = AppConfig.HORIZONTAL_FRAME_PADDING, vertical = 5.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     )
