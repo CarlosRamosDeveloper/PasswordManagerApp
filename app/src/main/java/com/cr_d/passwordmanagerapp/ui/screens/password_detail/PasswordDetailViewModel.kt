@@ -31,8 +31,8 @@ class PasswordDetailViewModel(
         val isPasswordShown: Boolean = false,
         val mode: PasswordDetailUiMode = PasswordDetailUiMode.BASIC_INFO_MODE,
         val password: PasswordData? = null,
-        val isUpdateSectionEnabled: Boolean = false,
-        val editInfo: EditInfo = EditInfo()
+        val editInfo: EditInfo = EditInfo(),
+        val isGeneratePasswordEnabled: Boolean = false
     )
 
     data class EditInfo(
@@ -114,6 +114,14 @@ class PasswordDetailViewModel(
         _uiState.update {
             it.copy(
                 isPasswordShown = !uiState.value.isPasswordShown
+            )
+        }
+    }
+
+    fun onGeneratePasswordToggle () {
+        _uiState.update {
+            it.copy(
+                isGeneratePasswordEnabled = !uiState.value.isGeneratePasswordEnabled
             )
         }
     }
