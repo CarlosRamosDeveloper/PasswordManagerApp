@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
+import com.cr_d.passwordmanagerapp.ui.common_components.DecimalFormField
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
@@ -42,6 +44,7 @@ fun ApplicationEditInfo(passwordState: PasswordDetailViewModel.UiState, viewMode
 @Composable
 fun PasswordEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     InfoCard {
+        CustomRow("Puntuación de seguridad", String.format("%.2f",passwordState.editInfo.newSecurityScore), false)
         ApplicationOutlinedTextField("Contraseña", passwordState.editInfo.newPlainPassword.value, viewModel::onPlainPasswordChange)
         UpdatePasswordButton(viewModel, snackFunction)
     }
@@ -67,6 +70,8 @@ fun MetadataEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: 
             "Contiene carácteres especiales",
             passwordState.editInfo.newSpecials,
         ){viewModel.onOptionChanged(PasswordOption.SPECIALS, it) }
+        DecimalFormField(passwordState.editInfo.newPasswordLength, viewModel::onPasswordLengthChanged)
+        GeneratePasswordButton(viewModel)
     }
 }
 
@@ -84,5 +89,15 @@ fun CustomCheckboxForm(labelText: String, value: Boolean, onValueChange: (Boolea
             checked = value,
             onCheckedChange = { onValueChange(!value) }
         )
+    }
+}
+
+@Composable
+fun GeneratePasswordButton(viewModel: PasswordDetailViewModel){
+    Column (modifier = Modifier.padding(top = 30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Button(onClick = viewModel::onGeneratePassword
+        ) {
+            Text("Generar contraseña")
+        }
     }
 }

@@ -8,11 +8,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
@@ -21,6 +24,8 @@ import kotlinx.coroutines.launch
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
     val passwordId: Int,
+    val generatePasswordUseCase: GeneratePasswordUseCase,
+    val securityScoreCalculator: CalculateSecurityScoreUseCase,
     val updatePasswordUseCase: UpdatePasswordUseCase,
     val deletePasswordUseCase: DeletePasswordUseCase
 ): ViewModel() {
@@ -32,7 +37,8 @@ class PasswordDetailViewModel(
         val mode: PasswordDetailUiMode = PasswordDetailUiMode.BASIC_INFO_MODE,
         val password: PasswordData? = null,
         val editInfo: EditInfo = EditInfo(),
-        val isGeneratePasswordEnabled: Boolean = false
+        val isGeneratePasswordEnabled: Boolean = false,
+        val errorMessage: String = ""
     )
 
     data class EditInfo(
@@ -110,6 +116,21 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun onPasswordLengthChanged(value: Int){
+        _uiState.update {
+            it.copy(
+                editInfo = it.editInfo.copy(newPasswordLength = value)
+            )
+        }
+    }
+
+    fun onSecurityCalculatorChanged(value: Double){
+        _uiState.update {
+            it.copy(
+                editInfo = it.editInfo.copy(newSecurityScore = value)
+            )
+        }
+    }
     fun onVisibilityToggle () {
         _uiState.update {
             it.copy(
@@ -182,5 +203,37 @@ class PasswordDetailViewModel(
             )
         }
         loadPassword()
+    }
+
+    fun onGeneratePassword(){
+        val passwordDataGeneration = PasswordDataGeneration(
+            _uiState.value.editInfo.newLowerCase,
+            _uiState.value.editInfo.newUpperCase,
+            _uiState.value.editInfo.newNumbers,
+            _uiState.value.editInfo.newSpecials,
+            _uiState.value.editInfo.newPasswordLength
+        )
+        try {
+            val password = generatePasswordUseCase(passwordDataGeneration)
+
+            _uiState.update {
+                it.copy(
+                    editInfo = it.editInfo.copy(
+                        newSecurityScore = securityScoreCalculator(password),
+                        newPlainPassword = PlainPassword(password)
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _uiState.update {
+                it.copy(
+                    errorMessage = e.message ?: "Error al generar contraseña",
+                    editInfo = it.editInfo.copy(
+                        newSecurityScore = 0.0,
+                        newPlainPassword = PlainPassword("")
+                    )
+                )
+            }
+        }
     }
 }

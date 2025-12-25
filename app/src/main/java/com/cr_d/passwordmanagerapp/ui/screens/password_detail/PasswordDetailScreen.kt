@@ -59,6 +59,13 @@ fun PasswordDetailedCard(
                 .fillMaxWidth()
             ) {
                 when(state.mode) {
+                    PasswordDetailUiMode.BASIC_INFO_MODE -> {
+                        BasicMode(
+                            password = state.password,
+                            settings = settings,
+                        )
+                    }
+
                     PasswordDetailUiMode.FULL_INFO_MODE -> {
                         DetailedMode(
                             password = state.password,
@@ -73,16 +80,6 @@ fun PasswordDetailedCard(
                             viewModel = viewModel,
                             snackFunction = snackFunction
                         )
-                    }
-
-                    PasswordDetailUiMode.BASIC_INFO_MODE -> {
-                        BasicMode(
-                            password = state.password,
-                            settings = settings,
-                        )
-                    }
-                    else -> {
-
                     }
                 }
                 if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(

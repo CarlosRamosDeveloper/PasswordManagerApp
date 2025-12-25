@@ -23,13 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.cr_d.passwordmanagerapp.R
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
+import com.cr_d.passwordmanagerapp.ui.common_components.DecimalFormField
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 @Composable
@@ -69,7 +68,7 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
             )
         }
 
-        CampoDecimal(state.passwordLength, viewModel::onPasswordLengthChanged)
+        DecimalFormField(state.passwordLength, viewModel::onPasswordLengthChanged)
 
         PasswordButtonsSection(viewModel)
 
@@ -98,26 +97,6 @@ fun CustomCheckbox(labelText: String, value: Boolean, onValueChange: (Boolean) -
         )
         Text(labelText)
     }
-}
-
-@Composable
-fun CampoDecimal(value: Int, onValueChange: (Int) -> Unit) {
-    val textValue = value.toString()
-
-    OutlinedTextField(
-        value = textValue,
-        onValueChange = { newText ->
-            if (newText.matches(Regex("^\\d*\$"))) {
-                val intValue = newText.toIntOrNull() ?: 0
-                onValueChange(intValue)
-            }
-        },
-        label = { Text("Valor decimal") },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done
-        )
-    )
 }
 
 @Composable

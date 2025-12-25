@@ -33,7 +33,7 @@ fun SectionTitle(sectionTitle: String){
 }
 
 @Composable
-fun CustomRow(fieldName: String, value: String){
+fun CustomRow(fieldName: String, value: String, showDivider: Boolean = true){
     Row(Modifier
         .fillMaxWidth()
         .padding(horizontal = 20.dp, vertical = 5.dp),
@@ -44,7 +44,7 @@ fun CustomRow(fieldName: String, value: String){
         Spacer(modifier = Modifier.weight(1f))
         Text(value)
     }
-    HorizontalDivider(thickness = 2.dp)
+    if (showDivider) HorizontalDivider(thickness = 2.dp)
 }
 
 @Composable
