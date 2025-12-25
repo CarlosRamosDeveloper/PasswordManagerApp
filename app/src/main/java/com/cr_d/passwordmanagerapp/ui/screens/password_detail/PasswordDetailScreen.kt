@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -51,59 +49,52 @@ fun PasswordDetailedCard(
     settings: SettingsViewModel,
 ){
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
+    val settings = settings.settings.collectAsStateWithLifecycle().value
 
     when {
         state.password == null -> {
             CircularProgressIndicator()
         }
         else -> {
-            /*Card(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxWidth()
-                    .padding(horizontal = horizontalFramePadding, vertical = 10.dp)
+            Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
+                when(state.mode) {
+                    PasswordDetailUiMode.FULL_INFO_MODE -> {
+                        DetailedMode(
+                            password = state.password,
+                            settings = settings,
+                        )
+                    }
+                    PasswordDetailUiMode.EDIT_MODE -> {
+                        EditMode(
+                            viewModel = viewModel,
+                            snackFunction = snackFunction
+                        )
+                    }
 
-             */
-                    when(state.mode) {
-                        PasswordDetailUiMode.FULL_INFO_MODE -> {
-                            DetailedMode(
-                                viewModel = viewModel,
-                                settings = settings,
-                            )
-                        }
-                        PasswordDetailUiMode.EDIT_MODE -> {
-                            EditMode(
-                                viewModel = viewModel,
-                                snackFunction = snackFunction
-                            )
-                        }
+                    PasswordDetailUiMode.BASIC_INFO_MODE -> {
+                        BasicMode(
+                            password = state.password,
+                            settings = settings,
+                        )
+                    }
+                    else -> {
 
-                        PasswordDetailUiMode.BASIC_INFO_MODE -> {
-                            BasicMode(
-                                viewModel = viewModel,
-                                settings = settings,
-                            )
-                        }
-                        else -> {
-
-                        }
                     }
                 }
+                if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
+                    password = state.password,
+                    viewModel = viewModel,
+                    isPasswordShown = state.isPasswordShown,
+                    context = context,
+                    snackFunction = snackFunction
+                )
             }
-    /*
-            if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
-                password = state.password,
-                viewModel = viewModel,
-                isPasswordShown = state.isPasswordShown,
-                context = context,
-                snackFunction = snackFunction
-            )
 
-     */
-
+        }
     }
+}
 
