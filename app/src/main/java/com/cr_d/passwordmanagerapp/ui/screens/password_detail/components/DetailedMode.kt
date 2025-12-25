@@ -3,8 +3,6 @@ package com.cr_d.passwordmanagerapp.ui.screens.password_detail.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,7 +34,6 @@ fun DetailedMode(
 fun ApplicationInfoSection(appInfo: ApplicationInfo){
     Card(
         modifier = Modifier
-
             .fillMaxWidth()
             .padding(horizontal = horizontalFramePadding, vertical = 10.dp)
     ) {
@@ -55,20 +52,19 @@ fun ApplicationInfoSection(appInfo: ApplicationInfo){
 fun MetadataInfoSection(metadataInfo: PasswordMetadata, settings: SettingsViewModel.AppSettings){
     Card(
         modifier = Modifier
-
             .fillMaxWidth()
             .padding(horizontal = horizontalFramePadding, vertical = 10.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-    SectionTitle("Metadatos de la contraseña")
-    CustomRow("Fecha de creación:", "${metadataInfo.creationDate.formatAs(settings.dateFormat)}")
-    CustomRow("Última actualización:", "${metadataInfo.lastUpdate.formatAs(settings.dateFormat)}")
-    CustomCheck("Minúsculas", metadataInfo.hasLowerCase)
-    CustomCheck("Mayúsculas", metadataInfo.hasUpperCase)
-    CustomCheck("Números", metadataInfo.hasNumbers)
-    CustomCheck("Especiales", metadataInfo.hasSpecials)
+            SectionTitle("Metadatos de la contraseña")
+            CustomRow("Fecha de creación:", "${metadataInfo.creationDate.formatAs(settings.dateFormat)}")
+            CustomRow("Última actualización:", "${metadataInfo.lastUpdate.formatAs(settings.dateFormat)}")
+            CustomCheck("Minúsculas", metadataInfo.hasLowerCase)
+            CustomCheck("Mayúsculas", metadataInfo.hasUpperCase)
+            CustomCheck("Números", metadataInfo.hasNumbers)
+            CustomCheck("Especiales", metadataInfo.hasSpecials)
         }
     }
 }
@@ -77,7 +73,6 @@ fun MetadataInfoSection(metadataInfo: PasswordMetadata, settings: SettingsViewMo
 fun SecurityInfoSection(securityScore: Double){
     Card(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
             .fillMaxWidth()
             .padding(horizontal = horizontalFramePadding, vertical = 10.dp)
     ) {
