@@ -12,24 +12,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.cr_d.passwordmanagerapp.R
 
+import com.cr_d.passwordmanagerapp.R
+import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
+import com.cr_d.passwordmanagerapp.ui.common_components.DecimalFormField
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
+import com.cr_d.passwordmanagerapp.ui.common_components.ErrorMessage
 
 @Composable
 fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordViewModel, context: Context, snackFunction: (String)-> Unit){
@@ -68,7 +65,7 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
             )
         }
 
-        CampoDecimal(state.passwordLength, viewModel::onPasswordLengthChanged)
+        DecimalFormField(state.passwordLength, viewModel::onPasswordLengthChanged)
 
         PasswordButtonsSection(viewModel)
 
@@ -86,7 +83,7 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
 }
 
 @Composable
-fun CustomCheckbox(labelText: String, value: Boolean, onValueChange: (Boolean) -> Unit, modifier:  Modifier = Modifier ) {
+fun CustomCheckbox(labelText: String, value: Boolean, onValueChange: (Boolean) -> Unit, modifier:  Modifier = Modifier) {
     Row(
         modifier = modifier.padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -97,26 +94,6 @@ fun CustomCheckbox(labelText: String, value: Boolean, onValueChange: (Boolean) -
         )
         Text(labelText)
     }
-}
-
-@Composable
-fun CampoDecimal(value: Int, onValueChange: (Int) -> Unit) {
-    val textValue = value.toString()
-
-    OutlinedTextField(
-        value = textValue,
-        onValueChange = { newText ->
-            if (newText.matches(Regex("^\\d*\$"))) {
-                val intValue = newText.toIntOrNull() ?: 0
-                onValueChange(intValue)
-            }
-        },
-        label = { Text("Valor decimal") },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done
-        )
-    )
 }
 
 @Composable
@@ -173,11 +150,6 @@ fun PasswordSection(password: String, viewModel: CreatePasswordViewModel, contex
 }
 
 @Composable
-fun ErrorMessage(error: String){
-    Text(error, color= Color.Red, fontSize = 30.sp)
-}
-
-@Composable
 fun PasswordSectionText(text: String){
     Text(text, modifier= Modifier.padding(vertical = 5.dp))
 }
@@ -203,19 +175,8 @@ fun ApplicationSection(viewModel: CreatePasswordViewModel){
         ApplicationOutlinedTextField("Url de la aplicación", state.appUrl, viewModel::onAppUrlChanged)
         ApplicationOutlinedTextField("Cuenta", state.account, viewModel::onAccountChanged)
     }
-
 }
 
-@Composable
-fun ApplicationOutlinedTextField(label: String, param: String, onValueChange: (String) -> Unit){
-    OutlinedTextField(
-        value = param,
-        onValueChange = {onValueChange(it)},
-        label = { Text(label) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-    )
-}
 
 @Composable
 fun CopyToClipboardButton(passwordText: String, context: Context, snackFunction: (String)-> Unit){
