@@ -40,7 +40,7 @@ fun EditMode(isGeneratePasswordEnabled: Boolean, passwordState: PasswordDetailVi
 @Composable
 fun ApplicationEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel){
     InfoCard {
-        SectionTitle("Información de aplicación")
+        CardTitle("Información de aplicación")
         ApplicationOutlinedTextField(
             "Aplicacion",
             passwordState.editInfo.newAppName,
