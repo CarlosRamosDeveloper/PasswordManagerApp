@@ -42,9 +42,9 @@ fun Router(
     val context = LocalContext.current
     val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
 
-    NavHost(navController = navController, startDestination = "SettingsScreen") {
+    NavHost(navController = navController, startDestination = "ShowPasswordScreen") {
         composable("MainScreen") {
-            MainScreen(innerPadding, navController)
+            MainScreen(innerPadding)
         }
         composable("CreatePasswordScreen") {
             val generator = PasswordGenerator()
@@ -75,6 +75,10 @@ fun Router(
             type = NavType.IntType
         })) { backstackEntry ->
             val passwordId = backstackEntry.arguments?.getInt("passwordId") ?: 1
+            val generator = PasswordGenerator()
+            val generatePasswordUseCase = GeneratePasswordUseCase(generator)
+            val scoreCalculator = SecurityScoreCalculator()
+            val scoreCalculatorUseCase = CalculateSecurityScoreUseCase(scoreCalculator)
             PasswordDetailScreen(
                 innerPadding = innerPadding,
                 context = context,
@@ -82,8 +86,10 @@ fun Router(
                 viewModel = PasswordDetailViewModel(
                     repository = repo,
                     passwordId = passwordId,
+                    generatePasswordUseCase = generatePasswordUseCase,
+                    securityScoreCalculator = scoreCalculatorUseCase,
                     updatePasswordUseCase = UpdatePasswordUseCase(repo,
-                        CalculateSecurityScoreUseCase(SecurityScoreCalculator())),
+                        CalculateSecurityScoreUseCase(scoreCalculator)),
                     deletePasswordUseCase = DeletePasswordUseCase(repo)
                 ),
                 settings = settingsViewModel,
