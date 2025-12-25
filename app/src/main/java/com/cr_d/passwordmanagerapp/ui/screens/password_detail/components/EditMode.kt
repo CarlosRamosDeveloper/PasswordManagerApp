@@ -11,8 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
@@ -29,7 +29,7 @@ fun EditMode(isGeneratePasswordEnabled: Boolean, passwordState: PasswordDetailVi
         .fillMaxWidth()
         .padding(
             vertical = AppConfig.HORIZONTAL_FRAME_PADDING),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ApplicationEditInfo(passwordState, viewModel)
         PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel)
@@ -51,6 +51,7 @@ fun ApplicationEditInfo(passwordState: PasswordDetailViewModel.UiState, viewMode
 @Composable
 fun PasswordEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     InfoCard {
+        CardTitle("Contraseña")
         CustomRow(
             "Puntuación de seguridad",
             String.format("%.2f", passwordState.editInfo.newSecurityScore),

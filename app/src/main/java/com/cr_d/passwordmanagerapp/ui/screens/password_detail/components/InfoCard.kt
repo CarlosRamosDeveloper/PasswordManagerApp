@@ -20,6 +20,7 @@ fun InfoCard(content: @Composable ColumnScope.() -> Unit){
             .padding(horizontal = AppConfig.HORIZONTAL_FRAME_PADDING, vertical = 10.dp)
     ) {
         Column(
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally, content = content)
     }
 }
