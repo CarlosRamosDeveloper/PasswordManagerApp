@@ -1,6 +1,7 @@
 package com.cr_d.passwordmanagerapp.ui.screens.password_detail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +16,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
+import kotlinx.coroutines.launch
 
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
@@ -30,6 +32,10 @@ class PasswordDetailViewModel(
         val mode: PasswordDetailUiMode = PasswordDetailUiMode.BASIC_INFO_MODE,
         val password: PasswordData? = null,
         val isUpdateSectionEnabled: Boolean = false,
+        val editInfo: EditInfo = EditInfo()
+    )
+
+    data class EditInfo(
         val newAppName: String = "",
         val newUrl: String = "",
         val newAccount: String = "",
@@ -37,31 +43,42 @@ class PasswordDetailViewModel(
         val newUpperCase: Boolean = false,
         val newNumbers: Boolean = false,
         val newSpecials: Boolean = false,
+        val newPasswordLength: Int = PasswordPolicy.MIN_LENGTH,
         val newPlainPassword: PlainPassword = PlainPassword(""),
         val newSecurityScore: Double = 0.0
     )
 
     init {
-        val password = repository.findById(passwordId)
-        _uiState.update {
-            it.copy(
-                password = password,
-                newAppName = password?.appInfo?.applicationName ?: "",
-                newUrl = password?.appInfo?.url ?: "",
-                newAccount = password?.appInfo?.account ?: "",
-                newLowerCase = password?.metadata?.hasLowerCase ?: false,
-                newUpperCase =  password?.metadata?.hasUpperCase ?: false,
-                newNumbers = password?.metadata?.hasNumbers ?: false,
-                newSpecials = password?.metadata?.hasSpecials ?: false,
-                newPlainPassword = password?.plainPassword ?: PlainPassword("")
-            )
+        loadPassword()
+    }
+
+    private fun loadPassword(){
+        viewModelScope.launch {
+            val password = repository.findById(passwordId) ?: return@launch
+
+            _uiState.update {
+                it.copy(
+                    password = password,
+                    editInfo = EditInfo(
+                        newAppName = password.appInfo.applicationName,
+                        newUrl = password.appInfo.url,
+                        newAccount = password.appInfo.account,
+                        newLowerCase = password.metadata.hasLowerCase,
+                        newUpperCase =  password.metadata.hasUpperCase,
+                        newNumbers = password.metadata.hasNumbers,
+                        newSpecials = password.metadata.hasSpecials,
+                        newPasswordLength = password.plainPassword.value.length,
+                        newPlainPassword = password.plainPassword
+                    )
+                )
+            }
         }
     }
 
     fun onAppNameChanged(value: String){
         _uiState.update {
             it.copy(
-                newAppName = value
+                editInfo = it.editInfo.copy(newAppName = value)
             )
         }
     }
@@ -69,7 +86,7 @@ class PasswordDetailViewModel(
     fun onUrlChanged(value: String){
         _uiState.update {
             it.copy(
-                newUrl = value
+                editInfo = it.editInfo.copy(newUrl = value)
             )
         }
     }
@@ -77,7 +94,7 @@ class PasswordDetailViewModel(
     fun onAccountChanged(value: String){
         _uiState.update {
             it.copy(
-                newAccount = value
+                editInfo = it.editInfo.copy(newAccount = value)
             )
         }
     }
@@ -85,10 +102,10 @@ class PasswordDetailViewModel(
     fun onOptionChanged(option: PasswordOption, value: Boolean) {
         _uiState.update {
             when (option) {
-                PasswordOption.LOWERCASE -> it.copy(newLowerCase = value)
-                PasswordOption.UPPERCASE -> it.copy(newUpperCase = value)
-                PasswordOption.NUMBERS -> it.copy(newNumbers = value)
-                PasswordOption.SPECIALS -> it.copy(newSpecials = value)
+                PasswordOption.LOWERCASE -> it.copy(editInfo = it.editInfo.copy(newLowerCase = value))
+                PasswordOption.UPPERCASE -> it.copy(editInfo = it.editInfo.copy(newUpperCase = value))
+                PasswordOption.NUMBERS -> it.copy(editInfo = it.editInfo.copy(newNumbers = value))
+                PasswordOption.SPECIALS -> it.copy(editInfo = it.editInfo.copy(newSpecials = value))
             }
         }
     }
@@ -104,7 +121,7 @@ class PasswordDetailViewModel(
     fun onPlainPasswordChange (plainPassword: String){
         _uiState.update {
             it.copy(
-                newPlainPassword = PlainPassword(plainPassword)
+                editInfo = it.editInfo.copy(newPlainPassword = PlainPassword(plainPassword))
             )
         }
     }
@@ -135,19 +152,19 @@ class PasswordDetailViewModel(
 
     fun onDeletePassword (){
         deletePasswordUseCase.invoke(passwordId)
-        resetStatus()
+        loadPassword()
     }
 
     fun onUpdatePassword (){
         val newAppInfo = ApplicationInfo(
-            applicationName = _uiState.value.newAppName,
-            url = _uiState.value.newUrl,
-            account = _uiState.value.newAccount
+            applicationName = _uiState.value.editInfo.newAppName,
+            url = _uiState.value.editInfo.newUrl,
+            account = _uiState.value.editInfo.newAccount
         )
 
         val updatedPassword = updatePasswordUseCase.invoke(
             id = _uiState.value.password!!.id,
-            newPassword = _uiState.value.newPlainPassword.value,
+            newPassword = _uiState.value.editInfo.newPlainPassword.value,
             appInfo = newAppInfo
         )
 
@@ -156,23 +173,6 @@ class PasswordDetailViewModel(
                 password = updatedPassword
             )
         }
-        resetStatus()
-    }
-
-    fun resetStatus(){
-        val password = repository.findById(passwordId)
-
-        _uiState.update {
-            it.copy(
-                newAppName = password?.appInfo?.applicationName ?: "",
-                newUrl = password?.appInfo?.url ?: "",
-                newAccount = password?.appInfo?.account ?: "",
-                newLowerCase = password?.metadata?.hasLowerCase ?: false,
-                newUpperCase =  password?.metadata?.hasUpperCase ?: false,
-                newNumbers = password?.metadata?.hasNumbers ?: false,
-                newSpecials = password?.metadata?.hasSpecials ?: false,
-                newPlainPassword = password?.plainPassword ?: PlainPassword("")
-            )
-        }
+        loadPassword()
     }
 }

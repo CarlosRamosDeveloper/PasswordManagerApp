@@ -33,16 +33,16 @@ fun EditMode(passwordState: PasswordDetailViewModel.UiState, viewModel: Password
 fun ApplicationEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel){
     InfoCard {
         SectionTitle("Información de aplicación")
-        ApplicationOutlinedTextField("Aplicacion", passwordState.newAppName, viewModel::onAppNameChanged)
-        ApplicationOutlinedTextField("Url", passwordState.newUrl, viewModel::onUrlChanged)
-        ApplicationOutlinedTextField("Cuenta", passwordState.newAccount, viewModel::onAccountChanged)
+        ApplicationOutlinedTextField("Aplicacion", passwordState.editInfo.newAppName, viewModel::onAppNameChanged)
+        ApplicationOutlinedTextField("Url", passwordState.editInfo.newUrl, viewModel::onUrlChanged)
+        ApplicationOutlinedTextField("Cuenta", passwordState.editInfo.newAccount, viewModel::onAccountChanged)
     }
 }
 
 @Composable
 fun PasswordEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     InfoCard {
-        ApplicationOutlinedTextField("Contraseña", passwordState.newPlainPassword.value, viewModel::onPlainPasswordChange)
+        ApplicationOutlinedTextField("Contraseña", passwordState.editInfo.newPlainPassword.value, viewModel::onPlainPasswordChange)
         UpdatePasswordButton(viewModel, snackFunction)
     }
 }
@@ -53,19 +53,19 @@ fun MetadataEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: 
         SectionTitle("Metadatos")
         CustomCheckboxForm(
             "Contiene minúsculas",
-            passwordState.newLowerCase,
+            passwordState.editInfo.newLowerCase,
         ){viewModel.onOptionChanged(PasswordOption.LOWERCASE, it) }
         CustomCheckboxForm(
             "Contiene mayusculas",
-            passwordState.newUpperCase,
+            passwordState.editInfo.newUpperCase,
         ){viewModel.onOptionChanged(PasswordOption.UPPERCASE, it) }
         CustomCheckboxForm(
             "Contiene numeros",
-            passwordState.newNumbers,
+            passwordState.editInfo.newNumbers,
         ){viewModel.onOptionChanged(PasswordOption.NUMBERS, it) }
         CustomCheckboxForm(
             "Contiene carácteres especiales",
-            passwordState.newSpecials,
+            passwordState.editInfo.newSpecials,
         ){viewModel.onOptionChanged(PasswordOption.SPECIALS, it) }
     }
 }
