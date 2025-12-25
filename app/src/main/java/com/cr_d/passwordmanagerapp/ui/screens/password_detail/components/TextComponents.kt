@@ -29,7 +29,7 @@ fun CardTitle(cardTitle: String){
 
 @Composable
 fun SectionTitle(sectionTitle: String){
-    Text(sectionTitle, fontSize = 25.sp)
+    Text(sectionTitle, fontSize = 25.sp, modifier = Modifier.padding(vertical = 5.dp))
 }
 
 @Composable

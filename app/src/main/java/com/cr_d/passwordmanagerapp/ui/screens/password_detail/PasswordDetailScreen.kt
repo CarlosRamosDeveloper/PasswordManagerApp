@@ -57,7 +57,7 @@ fun PasswordDetailedCard(
             CircularProgressIndicator()
         }
         else -> {
-            Card(
+            /*Card(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
@@ -66,6 +66,8 @@ fun PasswordDetailedCard(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
+
+             */
                     when(state.mode) {
                         PasswordDetailUiMode.FULL_INFO_MODE -> {
                             DetailedMode(
@@ -92,6 +94,7 @@ fun PasswordDetailedCard(
                     }
                 }
             }
+    /*
             if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
                 password = state.password,
                 viewModel = viewModel,
@@ -99,6 +102,8 @@ fun PasswordDetailedCard(
                 context = context,
                 snackFunction = snackFunction
             )
-        }
+
+     */
+
     }
-}
+
