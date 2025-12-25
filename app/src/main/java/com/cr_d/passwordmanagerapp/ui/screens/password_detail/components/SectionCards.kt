@@ -58,7 +58,6 @@ fun PasswordCard(
 ){
     InfoCard {
         CardTitle("Contraseña")
-        HorizontalDivider(thickness = 2.dp, modifier = Modifier.padding(vertical = 10.dp))
         ButtonsInPasswordSection(
             passwordPlainText = passwordPlainText,
             isPasswordShown = isPasswordShown,
