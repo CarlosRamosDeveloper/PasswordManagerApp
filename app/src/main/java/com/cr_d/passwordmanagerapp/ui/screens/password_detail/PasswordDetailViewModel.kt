@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlin.Double
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
@@ -19,7 +21,6 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
-import kotlinx.coroutines.launch
 
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
@@ -74,7 +75,8 @@ class PasswordDetailViewModel(
                         newNumbers = password.metadata.hasNumbers,
                         newSpecials = password.metadata.hasSpecials,
                         newPasswordLength = password.plainPassword.value.length,
-                        newPlainPassword = password.plainPassword
+                        newPlainPassword = password.plainPassword,
+                        newSecurityScore = password.securityScore
                     )
                 )
             }
@@ -124,13 +126,6 @@ class PasswordDetailViewModel(
         }
     }
 
-    fun onSecurityCalculatorChanged(value: Double){
-        _uiState.update {
-            it.copy(
-                editInfo = it.editInfo.copy(newSecurityScore = value)
-            )
-        }
-    }
     fun onVisibilityToggle () {
         _uiState.update {
             it.copy(
@@ -139,7 +134,7 @@ class PasswordDetailViewModel(
         }
     }
 
-    fun onGeneratePasswordToggle () {
+    fun onGeneratePasswordSectionToggle () {
         _uiState.update {
             it.copy(
                 isGeneratePasswordEnabled = !uiState.value.isGeneratePasswordEnabled
@@ -158,7 +153,9 @@ class PasswordDetailViewModel(
     fun onEnableEditMode() {
         _uiState.update {
             it.copy(
-                mode = PasswordDetailUiMode.EDIT_MODE
+                mode = PasswordDetailUiMode.EDIT_MODE,
+                isGeneratePasswordEnabled = false,
+                isPasswordShown = false
             )
         }
     }
@@ -166,7 +163,9 @@ class PasswordDetailViewModel(
     fun onEnableBasicInfoMode(){
         _uiState.update {
             it.copy(
-                mode = PasswordDetailUiMode.BASIC_INFO_MODE
+                mode = PasswordDetailUiMode.BASIC_INFO_MODE,
+                isGeneratePasswordEnabled = false,
+                isPasswordShown = false
             )
         }
     }
@@ -174,7 +173,9 @@ class PasswordDetailViewModel(
     fun onEnableFullInfoMode(){
         _uiState.update {
             it.copy(
-                mode = PasswordDetailUiMode.FULL_INFO_MODE
+                mode = PasswordDetailUiMode.FULL_INFO_MODE,
+                isGeneratePasswordEnabled = false,
+                isPasswordShown = false
             )
         }
     }
@@ -218,6 +219,7 @@ class PasswordDetailViewModel(
 
             _uiState.update {
                 it.copy(
+                    errorMessage = "",
                     editInfo = it.editInfo.copy(
                         newSecurityScore = securityScoreCalculator(password),
                         newPlainPassword = PlainPassword(password)

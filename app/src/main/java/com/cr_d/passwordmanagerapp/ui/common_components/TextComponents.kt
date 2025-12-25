@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.password_detail.components
+package com.cr_d.passwordmanagerapp.ui.common_components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -45,6 +46,11 @@ fun CustomRow(fieldName: String, value: String, showDivider: Boolean = true){
         Text(value)
     }
     if (showDivider) HorizontalDivider(thickness = 2.dp)
+}
+
+@Composable
+fun ErrorMessage(error: String){
+    Text(error, color= Color.Red, fontSize = 30.sp)
 }
 
 @Composable

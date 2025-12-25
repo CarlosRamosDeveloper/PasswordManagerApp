@@ -14,7 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
+import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
 import com.cr_d.passwordmanagerapp.ui.common_components.DecimalFormField
+import com.cr_d.passwordmanagerapp.ui.common_components.ErrorMessage
+import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
@@ -44,7 +47,11 @@ fun ApplicationEditInfo(passwordState: PasswordDetailViewModel.UiState, viewMode
 @Composable
 fun PasswordEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     InfoCard {
-        CustomRow("Puntuación de seguridad", String.format("%.2f",passwordState.editInfo.newSecurityScore), false)
+        CustomRow(
+            "Puntuación de seguridad",
+            String.format("%.2f", passwordState.editInfo.newSecurityScore),
+            false
+        )
         ApplicationOutlinedTextField("Contraseña", passwordState.editInfo.newPlainPassword.value, viewModel::onPlainPasswordChange)
         UpdatePasswordButton(viewModel, snackFunction)
     }
@@ -52,6 +59,7 @@ fun PasswordEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: 
 
 @Composable
 fun MetadataEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: PasswordDetailViewModel){
+    val errorMessage = passwordState.errorMessage
     InfoCard {
         SectionTitle("Metadatos")
         CustomCheckboxForm(
@@ -71,6 +79,7 @@ fun MetadataEditInfo(passwordState: PasswordDetailViewModel.UiState, viewModel: 
             passwordState.editInfo.newSpecials,
         ){viewModel.onOptionChanged(PasswordOption.SPECIALS, it) }
         DecimalFormField(passwordState.editInfo.newPasswordLength, viewModel::onPasswordLengthChanged)
+        if(errorMessage != "") ErrorMessage(errorMessage)
         GeneratePasswordButton(viewModel)
     }
 }

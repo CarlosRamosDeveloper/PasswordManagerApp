@@ -3,6 +3,9 @@ package com.cr_d.passwordmanagerapp.ui.screens.password_detail.components
 import androidx.compose.runtime.Composable
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationTitle
+import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
+import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.models.formatAs
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 

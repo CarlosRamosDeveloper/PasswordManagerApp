@@ -109,7 +109,7 @@ fun DeletePasswordButton(snackFunction: (String)-> Unit, viewModel: PasswordDeta
 @Composable
 fun PasswordGenerationToggle(isGeneratePasswordEnabled: Boolean, viewModel: PasswordDetailViewModel){
     Button(
-        onClick = { viewModel.onGeneratePasswordToggle() }
+        onClick = { viewModel.onGeneratePasswordSectionToggle() }
     ){
         if(isGeneratePasswordEnabled) Text("Desactivar generación de contraseñas")
         else Text("Activar generación de contraseñas")

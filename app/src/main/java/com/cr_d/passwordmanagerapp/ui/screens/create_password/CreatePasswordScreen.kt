@@ -12,24 +12,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 import com.cr_d.passwordmanagerapp.R
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.common_components.DecimalFormField
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
+import com.cr_d.passwordmanagerapp.ui.common_components.ErrorMessage
 
 @Composable
 fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordViewModel, context: Context, snackFunction: (String)-> Unit){
@@ -150,11 +147,6 @@ fun PasswordSection(password: String, viewModel: CreatePasswordViewModel, contex
         }
         CopyToClipboardButton(password, context, snackFunction)
     }
-}
-
-@Composable
-fun ErrorMessage(error: String){
-    Text(error, color= Color.Red, fontSize = 30.sp)
 }
 
 @Composable
