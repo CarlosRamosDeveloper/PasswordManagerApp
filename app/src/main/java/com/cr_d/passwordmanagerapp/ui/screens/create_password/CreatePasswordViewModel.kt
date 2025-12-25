@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.update
 import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
-import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
