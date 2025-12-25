@@ -27,8 +27,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cr_d.passwordmanagerapp.R
 
+import com.cr_d.passwordmanagerapp.R
+import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 @Composable
@@ -203,19 +204,8 @@ fun ApplicationSection(viewModel: CreatePasswordViewModel){
         ApplicationOutlinedTextField("Url de la aplicación", state.appUrl, viewModel::onAppUrlChanged)
         ApplicationOutlinedTextField("Cuenta", state.account, viewModel::onAccountChanged)
     }
-
 }
 
-@Composable
-fun ApplicationOutlinedTextField(label: String, param: String, onValueChange: (String) -> Unit){
-    OutlinedTextField(
-        value = param,
-        onValueChange = {onValueChange(it)},
-        label = { Text(label) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-    )
-}
 
 @Composable
 fun CopyToClipboardButton(passwordText: String, context: Context, snackFunction: (String)-> Unit){

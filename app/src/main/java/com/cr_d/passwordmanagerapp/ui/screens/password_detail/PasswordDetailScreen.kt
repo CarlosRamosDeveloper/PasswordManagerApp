@@ -65,8 +65,10 @@ fun PasswordDetailedCard(
                             settings = settings,
                         )
                     }
+
                     PasswordDetailUiMode.EDIT_MODE -> {
                         EditMode(
+                            passwordState = state,
                             viewModel = viewModel,
                             snackFunction = snackFunction
                         )
