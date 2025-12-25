@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
 
 @Composable
-fun InfoCard(content: @Composable ColumnScope.() -> Unit){
+fun InfoCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit){
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = AppConfig.HORIZONTAL_FRAME_PADDING, vertical = 10.dp)
     ) {
