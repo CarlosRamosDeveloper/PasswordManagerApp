@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.OutlinedTextField
@@ -62,4 +63,9 @@ fun CustomCheckboxForm(labelText: String, value: Boolean, onValueChange: (Boolea
             onCheckedChange = { onValueChange(!value) }
         )
     }
+}
+
+@Composable
+fun UnderFormSpacer(){
+    Spacer(Modifier.size(20.dp))
 }
