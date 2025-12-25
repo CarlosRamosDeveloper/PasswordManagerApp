@@ -9,10 +9,12 @@ import kotlinx.coroutines.flow.update
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
+import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
@@ -31,6 +33,10 @@ class PasswordDetailViewModel(
         val newAppName: String = "",
         val newUrl: String = "",
         val newAccount: String = "",
+        val newLowerCase: Boolean = false,
+        val newUpperCase: Boolean = false,
+        val newNumbers: Boolean = false,
+        val newSpecials: Boolean = false,
         val newPlainPassword: PlainPassword = PlainPassword(""),
         val newSecurityScore: Double = 0.0
     )
@@ -43,6 +49,10 @@ class PasswordDetailViewModel(
                 newAppName = password?.appInfo?.applicationName ?: "",
                 newUrl = password?.appInfo?.url ?: "",
                 newAccount = password?.appInfo?.account ?: "",
+                newLowerCase = password?.metadata?.hasLowerCase ?: false,
+                newUpperCase =  password?.metadata?.hasUpperCase ?: false,
+                newNumbers = password?.metadata?.hasNumbers ?: false,
+                newSpecials = password?.metadata?.hasSpecials ?: false,
                 newPlainPassword = password?.plainPassword ?: PlainPassword("")
             )
         }
@@ -69,6 +79,17 @@ class PasswordDetailViewModel(
             it.copy(
                 newAccount = value
             )
+        }
+    }
+
+    fun onOptionChanged(option: PasswordOption, value: Boolean) {
+        _uiState.update {
+            when (option) {
+                PasswordOption.LOWERCASE -> it.copy(newLowerCase = value)
+                PasswordOption.UPPERCASE -> it.copy(newUpperCase = value)
+                PasswordOption.NUMBERS -> it.copy(newNumbers = value)
+                PasswordOption.SPECIALS -> it.copy(newSpecials = value)
+            }
         }
     }
 
@@ -112,24 +133,9 @@ class PasswordDetailViewModel(
         }
     }
 
-    fun onUpdateSectionVisibilityToggle(){
-        _uiState.update {
-            it.copy(
-                isUpdateSectionEnabled = !uiState.value.isUpdateSectionEnabled
-            )
-        }
-    }
-
-    fun onDeleteMode(){
-        _uiState.update {
-            it.copy(
-                mode = PasswordDetailUiMode.DELETE_MODE
-            )
-        }
-    }
-
     fun onDeletePassword (){
         deletePasswordUseCase.invoke(passwordId)
+        resetStatus()
     }
 
     fun onUpdatePassword (){
@@ -148,6 +154,24 @@ class PasswordDetailViewModel(
         _uiState.update {
             it.copy(
                 password = updatedPassword
+            )
+        }
+        resetStatus()
+    }
+
+    fun resetStatus(){
+        val password = repository.findById(passwordId)
+
+        _uiState.update {
+            it.copy(
+                newAppName = password?.appInfo?.applicationName ?: "",
+                newUrl = password?.appInfo?.url ?: "",
+                newAccount = password?.appInfo?.account ?: "",
+                newLowerCase = password?.metadata?.hasLowerCase ?: false,
+                newUpperCase =  password?.metadata?.hasUpperCase ?: false,
+                newNumbers = password?.metadata?.hasNumbers ?: false,
+                newSpecials = password?.metadata?.hasSpecials ?: false,
+                newPlainPassword = password?.plainPassword ?: PlainPassword("")
             )
         }
     }

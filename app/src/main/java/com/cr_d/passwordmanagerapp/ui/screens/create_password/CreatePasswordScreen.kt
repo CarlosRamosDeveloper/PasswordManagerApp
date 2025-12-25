@@ -87,7 +87,7 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
 }
 
 @Composable
-fun CustomCheckbox(labelText: String, value: Boolean, onValueChange: (Boolean) -> Unit, modifier:  Modifier = Modifier ) {
+fun CustomCheckbox(labelText: String, value: Boolean, onValueChange: (Boolean) -> Unit, modifier:  Modifier = Modifier) {
     Row(
         modifier = modifier.padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically

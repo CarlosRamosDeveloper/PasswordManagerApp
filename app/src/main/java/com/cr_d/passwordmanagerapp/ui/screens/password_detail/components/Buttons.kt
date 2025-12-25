@@ -28,7 +28,6 @@ import kotlin.math.max
 import com.cr_d.passwordmanagerapp.R
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 
-
 @Composable
 fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, viewModel: PasswordDetailViewModel){
     Button(
@@ -99,7 +98,6 @@ fun DeletePasswordButton(snackFunction: (String)-> Unit, viewModel: PasswordDeta
     Button(
         onClick = {
             viewModel.onDeletePassword()
-            viewModel.onDeleteMode()
             snackFunction("Contraseña eliminada")
             navController.navigate("ShowPasswordScreen")
         }
@@ -114,6 +112,7 @@ fun UpdatePasswordButton(viewModel: PasswordDetailViewModel, snackFunction: (Str
         onClick = {
             viewModel.onUpdatePassword()
             snackFunction("Contraseña actualizada correctamente")
+            viewModel.onEnableFullInfoMode()
         }
     ) {
         Text("Actualizar contraseña")
