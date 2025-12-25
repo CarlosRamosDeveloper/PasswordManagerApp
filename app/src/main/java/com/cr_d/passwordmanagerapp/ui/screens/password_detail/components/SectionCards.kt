@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 import com.cr_d.passwordmanagerapp.ui.models.formatAs
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
@@ -51,7 +50,7 @@ fun SecurityInfoSection(securityScore: String){
 
 @Composable
 fun PasswordCard(
-    password: PasswordData,
+    passwordPlainText: String,
     viewModel: PasswordDetailViewModel,
     isPasswordShown: Boolean,
     context: Context,
@@ -61,12 +60,13 @@ fun PasswordCard(
         CardTitle("Contraseña")
         HorizontalDivider(thickness = 2.dp, modifier = Modifier.padding(vertical = 10.dp))
         ButtonsInPasswordSection(
-            password = password,
+            passwordPlainText = passwordPlainText,
+            isPasswordShown = isPasswordShown,
             viewModel = viewModel,
             context = context,
             snackFunction = snackFunction
         )
-        if (isPasswordShown) Text(password.plainPassword.value)
+        if (isPasswordShown) Text(passwordPlainText)
         else Text("********")
 
     }
@@ -74,16 +74,16 @@ fun PasswordCard(
 
 @Composable
 fun ButtonsInPasswordSection(
-    password: PasswordData?,
+    passwordPlainText: String,
+    isPasswordShown: Boolean,
     viewModel: PasswordDetailViewModel,
     context: Context,
     snackFunction: (String)-> Unit,
 ){
-    if (password == null) return
     Row (Modifier
         .fillMaxWidth()
         .padding(bottom = 5.dp), horizontalArrangement = Arrangement.SpaceAround){
-        TogglePasswordVisibilityButton(viewModel)
-        CopyToClipboardButton(password.plainPassword.value, context, snackFunction)
+        TogglePasswordVisibilityButton(isPasswordShown, viewModel)
+        CopyToClipboardButton(passwordPlainText, context, snackFunction)
     }
 }

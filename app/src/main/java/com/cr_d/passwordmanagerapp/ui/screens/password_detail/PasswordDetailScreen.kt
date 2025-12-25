@@ -86,7 +86,7 @@ fun PasswordDetailedCard(
                     }
                 }
                 if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
-                    password = state.password,
+                    passwordPlainText = state.password.plainPassword.value,
                     viewModel = viewModel,
                     isPasswordShown = state.isPasswordShown,
                     context = context,

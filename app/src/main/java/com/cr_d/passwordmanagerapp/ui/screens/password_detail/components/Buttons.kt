@@ -15,7 +15,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,19 +30,17 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailView
 
 
 @Composable
-fun TogglePasswordVisibilityButton(viewModel: PasswordDetailViewModel){
-    val passwordState = viewModel.uiState.collectAsState().value.isPasswordShown
-
+fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, viewModel: PasswordDetailViewModel){
     Button(
         onClick = viewModel::onVisibilityToggle
     ) {
 
         val progress by animateFloatAsState(
-            targetValue = if (passwordState) 1f else 0f,
+            targetValue = if (isPasswordShown) 1f else 0f,
             animationSpec = tween(300)
         )
 
-        if(passwordState){
+        if(isPasswordShown){
             Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(R.drawable.outline_visibility_off_24),
