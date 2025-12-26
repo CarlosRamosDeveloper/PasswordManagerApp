@@ -88,8 +88,7 @@ fun Router(
                     passwordId = passwordId,
                     generatePasswordUseCase = generatePasswordUseCase,
                     securityScoreCalculator = scoreCalculatorUseCase,
-                    updatePasswordUseCase = UpdatePasswordUseCase(repo,
-                        CalculateSecurityScoreUseCase(scoreCalculator)),
+                    updatePasswordUseCase = UpdatePasswordUseCase(repo),
                     deletePasswordUseCase = DeletePasswordUseCase(repo)
                 ),
                 settings = settingsViewModel,

@@ -5,7 +5,6 @@ import java.time.LocalDate
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.PasswordEntity
 import com.cr_d.passwordmanagerapp.data.mapper.toDomainCalculated
-import com.cr_d.passwordmanagerapp.data.mapper.toEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 class InMemoryPasswordRepository : IPasswordRepository {
@@ -112,7 +111,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         )
     )
 
-    private var lastId = 20
+    private var lastId = 10
 
     private fun parseData(): List<PasswordData> {
         return passwords.map { it.toDomainCalculated() }
@@ -127,7 +126,6 @@ class InMemoryPasswordRepository : IPasswordRepository {
     }
 
     override fun findByAccount(account: String): List<PasswordData> {
-
         return parseData().filter { it.appInfo.appAccount == account }
     }
 
@@ -135,14 +133,14 @@ class InMemoryPasswordRepository : IPasswordRepository {
         return parseData().find { it.id == id }
     }
 
-    override fun save(passwordData: PasswordData) {
+    override fun save(passwordData: PasswordEntity) {
         val passwordWithId = passwordData.copy(id = ++lastId)
-        passwords.add(passwordWithId.toEntity())
+        passwords.add(passwordWithId)
     }
 
-    override fun update(passwordData: PasswordData) {
+    override fun update(passwordData: PasswordEntity) {
         val index = passwords.indexOfFirst { it.id == passwordData.id }
-        if (index != -1) passwords[index] = passwordData.toEntity()
+        if (index != -1) passwords[index] = passwordData
     }
 
     override fun delete(id: Int) {

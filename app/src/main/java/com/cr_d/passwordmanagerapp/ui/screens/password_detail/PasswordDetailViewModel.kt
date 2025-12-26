@@ -13,7 +13,9 @@ import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreU
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
+import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toUIState
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
@@ -187,9 +189,17 @@ class PasswordDetailViewModel(
             appInfo = newAppInfo
         )
 
+        val updatedMetadata = PasswordAnalyzer.analyze(updatedPassword.plainPassword)
+        val updatedSecurityScore = securityScoreCalculator(updatedPassword.plainPassword)
+        val uiStateParsedPassword = updatedPassword
+            .toDomain(
+                metadata = updatedMetadata,
+                score = updatedSecurityScore
+            ).toUIState()
+
         _uiState.update {
             it.copy(
-                password = updatedPassword.toUIState()
+                password = uiStateParsedPassword
             )
         }
         loadPassword()
