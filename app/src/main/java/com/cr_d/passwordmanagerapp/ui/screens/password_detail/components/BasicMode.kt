@@ -20,7 +20,7 @@ fun BasicMode(
         SectionTitle("Información resumida")
         CustomRow("Nombre de usuario", password.appInfo.account)
         CustomRow("Sitio Web", password.appInfo.url)
-        CustomRow("Última Modificación", password.metadata.lastUpdate.formatAs(settings.dateFormat))
+        CustomRow("Última Modificación", password.dateInfo.lastUpdate.formatAs(settings.dateFormat))
         CustomRow("Puntuación de seguridad", String.format("%.2f", password.securityScore))
     }
 }

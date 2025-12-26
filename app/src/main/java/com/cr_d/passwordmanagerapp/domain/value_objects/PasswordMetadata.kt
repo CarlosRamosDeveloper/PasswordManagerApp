@@ -7,6 +7,4 @@ data class PasswordMetadata(
     val hasUpperCase: Boolean,
     val hasNumbers: Boolean,
     val hasSpecials: Boolean,
-    val creationDate: LocalDate,
-    val lastUpdate: LocalDate,
 )

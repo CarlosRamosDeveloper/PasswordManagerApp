@@ -26,13 +26,15 @@ class UpdatePasswordUseCase (
             hasUpperCase = analyzedData.hasUpperCase,
             hasNumbers = analyzedData.hasNumbers,
             hasSpecials = analyzedData.hasSpecials,
+        )
+        val dateInfo = existing.dateInfo.copy(
             lastUpdate = LocalDate.now()
         )
-
         val updated = existing.copy(
             plainPassword = PlainPassword(newPassword),
             appInfo = appInfo,
             metadata = updatedMetadata,
+            dateInfo = dateInfo,
             securityScore = updateScore
         )
 

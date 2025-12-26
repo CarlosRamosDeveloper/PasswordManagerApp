@@ -11,6 +11,6 @@ fun DetailedMode(
     settings: SettingsViewModel.AppSettings
 ){
     ApplicationInfoSection(password.appInfo)
-    MetadataInfoSection(password.metadata, settings)
+    MetadataInfoSection(password.metadata, password.dateInfo, settings)
     SecurityInfoSection(String.format("%.2f", password.securityScore))
 }

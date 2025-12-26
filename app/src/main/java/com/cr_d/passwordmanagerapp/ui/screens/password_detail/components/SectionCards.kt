@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
@@ -20,7 +21,6 @@ import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.models.formatAs
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
 @Composable
@@ -34,11 +34,11 @@ fun ApplicationInfoSection(appInfo: ApplicationInfo){
 }
 
 @Composable
-fun MetadataInfoSection(metadataInfo: PasswordMetadata, settings: SettingsViewModel.AppSettings){
+fun MetadataInfoSection(metadataInfo: PasswordMetadata, dateInfo: DateInfo, settings: SettingsViewModel.AppSettings){
     InfoCard {
         SectionTitle("Metadatos de la contraseña")
-        CustomRow("Fecha de creación:", metadataInfo.creationDate.formatAs(settings.dateFormat))
-        CustomRow("Última actualización:", metadataInfo.lastUpdate.formatAs(settings.dateFormat))
+        CustomRow("Fecha de creación:", dateInfo.creationDate.formatAs(settings.dateFormat))
+        CustomRow("Última actualización:", dateInfo.lastUpdate.formatAs(settings.dateFormat))
         CustomCheck("Contiene minúsculas", metadataInfo.hasLowerCase)
         CustomCheck("Contiene mayúsculas", metadataInfo.hasUpperCase)
         CustomCheck("Contiene números", metadataInfo.hasNumbers)
@@ -57,7 +57,7 @@ fun SecurityInfoSection(securityScore: String){
 @Composable
 fun PasswordCard(
     passwordPlainText: String,
-    viewModel: PasswordDetailViewModel,
+    onVisibilityToggleFunction: () -> Unit,
     isPasswordShown: Boolean,
     context: Context,
     snackFunction: (String) -> Unit
@@ -67,7 +67,7 @@ fun PasswordCard(
         ButtonsInPasswordSection(
             passwordPlainText = passwordPlainText,
             isPasswordShown = isPasswordShown,
-            viewModel = viewModel,
+            onVisibilityToggleFunction = onVisibilityToggleFunction,
             context = context,
             snackFunction = snackFunction
         )
@@ -81,14 +81,14 @@ fun PasswordCard(
 fun ButtonsInPasswordSection(
     passwordPlainText: String,
     isPasswordShown: Boolean,
-    viewModel: PasswordDetailViewModel,
+    onVisibilityToggleFunction: () -> Unit,
     context: Context,
     snackFunction: (String)-> Unit,
 ){
     Row (Modifier
         .fillMaxWidth()
         .padding(bottom = 5.dp), horizontalArrangement = Arrangement.SpaceAround){
-        TogglePasswordVisibilityButton(isPasswordShown, viewModel::onVisibilityToggle)
+        TogglePasswordVisibilityButton(isPasswordShown, onVisibilityToggleFunction)
         CopyToClipboardButton(passwordPlainText, context, snackFunction)
     }
 }

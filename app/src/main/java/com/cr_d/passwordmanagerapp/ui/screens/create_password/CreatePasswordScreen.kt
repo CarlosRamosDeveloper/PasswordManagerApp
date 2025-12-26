@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
@@ -34,6 +36,7 @@ import com.cr_d.passwordmanagerapp.ui.common_components.UnderFormSpacer
 @Composable
 fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordViewModel, context: Context, snackFunction: (String)-> Unit){
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
+    val password = state.password
 
     Column(Modifier
         .fillMaxSize()
@@ -42,33 +45,37 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CardTitle("Crear nueva contraseña")
-        MetadataInfo(state, viewModel)
-        PasswordButtonsSection(viewModel, snackFunction)
+        MetadataInfo(password.metadata, state.passwordLength, viewModel)
+        PasswordButtonsSection(
+            generatePasswordFunction = viewModel::generatePassword,
+            clearPasswordFunction = viewModel::clearPassword,
+            snackFunction = snackFunction
+        )
 
         if(state.passwordError.isNotBlank()) ErrorMessage(state.passwordError)
 
-        if(state.generatedPassword.isNotBlank()) PasswordInfoSection(state.generatedPassword, state.passwordScore, context, snackFunction)
+        if(state.generatedPassword.isNotBlank()) PasswordInfoSection(state.generatedPassword, state.password.score, context, snackFunction)
 
         if(state.generatedPassword.isNotBlank() &&
-            state.appUrl.isNotBlank() &&
-            state.account.isNotBlank() &&
-            state.appName.isNotBlank())
+            password.appInfo.url.isNotBlank() &&
+            password.appInfo.account.isNotBlank() &&
+            password.appInfo.applicationName.isNotBlank())
             FullWidthButton("Almacenar contraseña",
                 { viewModel.savePassword(state.generatedPassword) })
 
-        if(state.generatedPassword.isNotBlank()) ApplicationSection(state, viewModel)
+        if(state.generatedPassword.isNotBlank()) ApplicationSection(password.appInfo, viewModel)
     }
 }
 
 @Composable
-fun MetadataInfo(metadataInfo: CreatePasswordViewModel.UiState, viewModel: CreatePasswordViewModel){
+fun MetadataInfo(metadataInfo: PasswordMetadata, passwordLength: Int, viewModel: CreatePasswordViewModel){
     InfoCard {
         CardTitle("Información de contraseña")
         CustomCheckboxForm("Minúsculas", metadataInfo.hasLowerCase) { viewModel.onOptionChanged(PasswordOption.LOWERCASE, it) }
         CustomCheckboxForm("Mayúsculas", metadataInfo.hasUpperCase) { viewModel.onOptionChanged(PasswordOption.UPPERCASE, it) }
         CustomCheckboxForm("Números", metadataInfo.hasNumbers) { viewModel.onOptionChanged(PasswordOption.NUMBERS, it) }
         CustomCheckboxForm("Carácteres especiales", metadataInfo.hasSpecials) { viewModel.onOptionChanged(PasswordOption.SPECIALS, it) }
-        DecimalFormField(metadataInfo.passwordLength, viewModel::onPasswordLengthChanged)
+        DecimalFormField(passwordLength, viewModel::onPasswordLengthChanged)
         UnderFormSpacer()
     }
 }
@@ -88,27 +95,28 @@ fun PasswordInfoSection(password: String, passwordScore: Double, context: Contex
 
 @Composable
 fun PasswordButtonsSection(
-    viewModel: CreatePasswordViewModel,
+    generatePasswordFunction: () -> Unit,
+    clearPasswordFunction: () -> Unit,
     snackFunction: (String)-> Unit
 ){
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
         CustomButton("Generar contraseña",
             {
-                viewModel.generatePassword()
+                generatePasswordFunction()
                 snackFunction("Contraseña creada satisfactoriamente")
             }
         )
-        CustomButton("Limpiar Contraseña", viewModel::clearPassword)
+        CustomButton("Limpiar Contraseña", clearPasswordFunction)
     }
 }
 
 @Composable
-fun ApplicationSection(state: CreatePasswordViewModel.UiState, viewModel: CreatePasswordViewModel){
+fun ApplicationSection(appInfo: ApplicationInfo, viewModel: CreatePasswordViewModel){
     InfoCard {
         CardTitle("Información de aplicación")
-        ApplicationOutlinedTextField("Nombre de aplicación", state.appName, viewModel::onAppNameChanged)
-        ApplicationOutlinedTextField("Url de la aplicación", state.appUrl, viewModel::onAppUrlChanged)
-        ApplicationOutlinedTextField("Cuenta", state.account, viewModel::onAccountChanged)
+        ApplicationOutlinedTextField("Nombre de aplicación", appInfo.applicationName, viewModel::onAppNameChanged)
+        ApplicationOutlinedTextField("Url de la aplicación", appInfo.url, viewModel::onAppUrlChanged)
+        ApplicationOutlinedTextField("Cuenta", appInfo.account, viewModel::onAccountChanged)
         UnderFormSpacer()
     }
 }

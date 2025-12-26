@@ -3,6 +3,7 @@ package com.cr_d.passwordmanagerapp.application.use_cases
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
@@ -20,6 +21,8 @@ class SavePasswordUseCase (
             hasUpperCase = analyzedData.hasUpperCase,
             hasNumbers = analyzedData.hasNumbers,
             hasSpecials = analyzedData.hasSpecials,
+        )
+        val dateInfo = DateInfo(
             creationDate = creationDate,
             lastUpdate = creationDate
         )
@@ -28,6 +31,7 @@ class SavePasswordUseCase (
             appInfo = appInfo,
             plainPassword = newPassword,
             metadata = metadata,
+            dateInfo = dateInfo,
             securityScore = score
         )
 

@@ -5,5 +5,7 @@ data class PasswordData (
     val plainPassword : PlainPassword,
     val appInfo: ApplicationInfo,
     val metadata: PasswordMetadata,
-    val securityScore : Double
+    val dateInfo: DateInfo,
+    val securityScore : Double,
+    val notes: String = ""
 )
