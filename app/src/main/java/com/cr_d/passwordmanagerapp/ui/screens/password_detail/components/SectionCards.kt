@@ -26,10 +26,10 @@ import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 @Composable
 fun ApplicationInfoSection(appInfo: ApplicationInfo){
     InfoCard {
-        ApplicationTitle(appInfo.applicationName)
+        ApplicationTitle(appInfo.appName)
         SectionTitle("Información de aplicación")
-        CustomRow("Nombre de usuario", appInfo.account)
-        CustomRow("Sitio Web", appInfo.url)
+        CustomRow("Nombre de usuario", appInfo.appAccount)
+        CustomRow("Sitio Web", appInfo.appUrl)
     }
 }
 

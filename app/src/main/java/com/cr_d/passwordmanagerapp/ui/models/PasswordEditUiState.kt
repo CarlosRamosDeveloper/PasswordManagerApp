@@ -4,14 +4,14 @@ import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
 data class PasswordEditUiState (
-    val newAppName: String = "",
-    val newUrl: String = "",
-    val newAccount: String = "",
-    val newLowerCase: Boolean = false,
-    val newUpperCase: Boolean = false,
-    val newNumbers: Boolean = false,
-    val newSpecials: Boolean = false,
-    val newPasswordLength: Int = PasswordPolicy.MIN_LENGTH,
-    val newPlainPassword: PlainPassword = PlainPassword(""),
-    val newSecurityScore: Double = 0.0
+    val appName: String = "",
+    val appUrl: String = "",
+    val appAccount: String = "",
+    val hasLowerCase: Boolean = false,
+    val hasUpperCase: Boolean = false,
+    val hasNumbers: Boolean = false,
+    val hasSpecials: Boolean = false,
+    val passwordLength: Int = PasswordPolicy.MIN_LENGTH,
+    val plainPassword: PlainPassword = PlainPassword(""),
+    val score: Double = 0.0
 )

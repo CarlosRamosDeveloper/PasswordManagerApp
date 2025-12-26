@@ -14,12 +14,13 @@ import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
+import com.cr_d.passwordmanagerapp.domain.value_objects.toUIState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
+import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
 
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
@@ -35,7 +36,7 @@ class PasswordDetailViewModel(
     data class UiState(
         val isPasswordShown: Boolean = false,
         val mode: PasswordDetailUiMode = PasswordDetailUiMode.BASIC_INFO_MODE,
-        val password: PasswordData? = null,
+        val password: PasswordUiState? = null,
         val editInfo: PasswordEditUiState = PasswordEditUiState(),
         val isGeneratePasswordEnabled: Boolean = false,
         val errorMessage: String = ""
@@ -48,21 +49,23 @@ class PasswordDetailViewModel(
     private fun loadPassword(){
         viewModelScope.launch {
             val password = repository.findById(passwordId) ?: return@launch
+            val parsedPassword = password.toUIState()
 
             _uiState.update {
                 it.copy(
-                    password = password,
+
+                    password = parsedPassword,
                     editInfo = PasswordEditUiState(
-                        newAppName = password.appInfo.applicationName,
-                        newUrl = password.appInfo.url,
-                        newAccount = password.appInfo.account,
-                        newLowerCase = password.metadata.hasLowerCase,
-                        newUpperCase =  password.metadata.hasUpperCase,
-                        newNumbers = password.metadata.hasNumbers,
-                        newSpecials = password.metadata.hasSpecials,
-                        newPasswordLength = password.plainPassword.value.length,
-                        newPlainPassword = password.plainPassword,
-                        newSecurityScore = password.securityScore
+                        appName = password.appInfo.appName,
+                        appUrl = password.appInfo.appUrl,
+                        appAccount = password.appInfo.appAccount,
+                        hasLowerCase = password.metadata.hasLowerCase,
+                        hasUpperCase =  password.metadata.hasUpperCase,
+                        hasNumbers = password.metadata.hasNumbers,
+                        hasSpecials = password.metadata.hasSpecials,
+                        passwordLength = password.plainPassword.value.length,
+                        plainPassword = password.plainPassword,
+                        score = password.score
                     )
                 )
             }
@@ -72,7 +75,7 @@ class PasswordDetailViewModel(
     fun onAppNameChanged(value: String){
         _uiState.update {
             it.copy(
-                editInfo = it.editInfo.copy(newAppName = value)
+                editInfo = it.editInfo.copy(appName = value)
             )
         }
     }
@@ -80,7 +83,7 @@ class PasswordDetailViewModel(
     fun onUrlChanged(value: String){
         _uiState.update {
             it.copy(
-                editInfo = it.editInfo.copy(newUrl = value)
+                editInfo = it.editInfo.copy(appUrl = value)
             )
         }
     }
@@ -88,7 +91,7 @@ class PasswordDetailViewModel(
     fun onAccountChanged(value: String){
         _uiState.update {
             it.copy(
-                editInfo = it.editInfo.copy(newAccount = value)
+                editInfo = it.editInfo.copy(appAccount = value)
             )
         }
     }
@@ -96,10 +99,10 @@ class PasswordDetailViewModel(
     fun onOptionChanged(option: PasswordOption, value: Boolean) {
         _uiState.update {
             when (option) {
-                PasswordOption.LOWERCASE -> it.copy(editInfo = it.editInfo.copy(newLowerCase = value))
-                PasswordOption.UPPERCASE -> it.copy(editInfo = it.editInfo.copy(newUpperCase = value))
-                PasswordOption.NUMBERS -> it.copy(editInfo = it.editInfo.copy(newNumbers = value))
-                PasswordOption.SPECIALS -> it.copy(editInfo = it.editInfo.copy(newSpecials = value))
+                PasswordOption.LOWERCASE -> it.copy(editInfo = it.editInfo.copy(hasLowerCase = value))
+                PasswordOption.UPPERCASE -> it.copy(editInfo = it.editInfo.copy(hasUpperCase = value))
+                PasswordOption.NUMBERS -> it.copy(editInfo = it.editInfo.copy(hasNumbers = value))
+                PasswordOption.SPECIALS -> it.copy(editInfo = it.editInfo.copy(hasSpecials = value))
             }
         }
     }
@@ -107,7 +110,7 @@ class PasswordDetailViewModel(
     fun onPasswordLengthChanged(value: Int){
         _uiState.update {
             it.copy(
-                editInfo = it.editInfo.copy(newPasswordLength = value)
+                editInfo = it.editInfo.copy(passwordLength = value)
             )
         }
     }
@@ -131,7 +134,7 @@ class PasswordDetailViewModel(
     fun onPlainPasswordChange (plainPassword: String){
         _uiState.update {
             it.copy(
-                editInfo = it.editInfo.copy(newPlainPassword = PlainPassword(plainPassword))
+                editInfo = it.editInfo.copy(plainPassword = PlainPassword(plainPassword))
             )
         }
     }
@@ -173,20 +176,20 @@ class PasswordDetailViewModel(
 
     fun onUpdatePassword (){
         val newAppInfo = ApplicationInfo(
-            applicationName = _uiState.value.editInfo.newAppName,
-            url = _uiState.value.editInfo.newUrl,
-            account = _uiState.value.editInfo.newAccount
+            appName = _uiState.value.editInfo.appName,
+            appUrl = _uiState.value.editInfo.appUrl,
+            appAccount = _uiState.value.editInfo.appAccount
         )
 
         val updatedPassword = updatePasswordUseCase.invoke(
-            id = _uiState.value.password!!.id,
-            newPassword = _uiState.value.editInfo.newPlainPassword.value,
+            id = passwordId,
+            newPassword = _uiState.value.editInfo.plainPassword.value,
             appInfo = newAppInfo
         )
 
         _uiState.update {
             it.copy(
-                password = updatedPassword
+                password = updatedPassword.toUIState()
             )
         }
         loadPassword()
@@ -195,11 +198,11 @@ class PasswordDetailViewModel(
 
     fun onGeneratePassword(){
         val passwordDataGeneration = PasswordDataGeneration(
-            _uiState.value.editInfo.newLowerCase,
-            _uiState.value.editInfo.newUpperCase,
-            _uiState.value.editInfo.newNumbers,
-            _uiState.value.editInfo.newSpecials,
-            _uiState.value.editInfo.newPasswordLength
+            _uiState.value.editInfo.hasLowerCase,
+            _uiState.value.editInfo.hasUpperCase,
+            _uiState.value.editInfo.hasNumbers,
+            _uiState.value.editInfo.hasSpecials,
+            _uiState.value.editInfo.passwordLength
         )
         try {
             val password = generatePasswordUseCase(passwordDataGeneration)
@@ -208,8 +211,8 @@ class PasswordDetailViewModel(
                 it.copy(
                     errorMessage = "",
                     editInfo = it.editInfo.copy(
-                        newSecurityScore = securityScoreCalculator(password),
-                        newPlainPassword = PlainPassword(password)
+                        score = securityScoreCalculator(password),
+                        plainPassword = PlainPassword(password)
                     )
                 )
             }
@@ -218,8 +221,8 @@ class PasswordDetailViewModel(
                 it.copy(
                     errorMessage = e.message ?: "Error al generar contraseña",
                     editInfo = it.editInfo.copy(
-                        newSecurityScore = 0.0,
-                        newPlainPassword = PlainPassword("")
+                        score = 0.0,
+                        plainPassword = PlainPassword("")
                     )
                 )
             }

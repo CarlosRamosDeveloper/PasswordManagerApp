@@ -17,9 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
-
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CopyToClipboardButton
@@ -57,9 +57,9 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
         if(state.generatedPassword.isNotBlank()) PasswordInfoSection(state.generatedPassword, state.password.score, context, snackFunction)
 
         if(state.generatedPassword.isNotBlank() &&
-            password.appInfo.url.isNotBlank() &&
-            password.appInfo.account.isNotBlank() &&
-            password.appInfo.applicationName.isNotBlank())
+            password.appInfo.appUrl.isNotBlank() &&
+            password.appInfo.appAccount.isNotBlank() &&
+            password.appInfo.appName.isNotBlank())
             FullWidthButton("Almacenar contraseña",
                 { viewModel.savePassword(state.generatedPassword) })
 
@@ -114,9 +114,9 @@ fun PasswordButtonsSection(
 fun ApplicationSection(appInfo: ApplicationInfo, viewModel: CreatePasswordViewModel){
     InfoCard {
         CardTitle("Información de aplicación")
-        ApplicationOutlinedTextField("Nombre de aplicación", appInfo.applicationName, viewModel::onAppNameChanged)
-        ApplicationOutlinedTextField("Url de la aplicación", appInfo.url, viewModel::onAppUrlChanged)
-        ApplicationOutlinedTextField("Cuenta", appInfo.account, viewModel::onAccountChanged)
+        ApplicationOutlinedTextField("Nombre de aplicación", appInfo.appName, viewModel::onAppNameChanged)
+        ApplicationOutlinedTextField("Url de la aplicación", appInfo.appUrl, viewModel::onAppUrlChanged)
+        ApplicationOutlinedTextField("Cuenta", appInfo.appAccount, viewModel::onAccountChanged)
         UnderFormSpacer()
     }
 }

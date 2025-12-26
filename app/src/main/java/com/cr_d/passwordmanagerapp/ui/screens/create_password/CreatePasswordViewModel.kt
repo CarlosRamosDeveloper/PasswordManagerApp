@@ -85,7 +85,7 @@ class CreatePasswordViewModel(
             it.copy(
                 password = it.password.copy(
                     appInfo = it.password.appInfo.copy(
-                        applicationName = value
+                        appName = value
                     )
                 )
             )
@@ -97,7 +97,7 @@ class CreatePasswordViewModel(
             it.copy(
                 password = it.password.copy(
                     appInfo = it.password.appInfo.copy(
-                        url = value
+                        appUrl = value
                     )
                 )
             )
@@ -109,7 +109,7 @@ class CreatePasswordViewModel(
             it.copy(
                 password = it.password.copy(
                     appInfo = it.password.appInfo.copy(
-                        account = value
+                        appAccount = value
                     )
                 )
             )
@@ -156,9 +156,9 @@ class CreatePasswordViewModel(
     fun savePassword(password: String){
         val passwordData = _uiState.value.password
         val appInfo = ApplicationInfo(
-            passwordData.appInfo.applicationName,
-            passwordData.appInfo.url,
-            passwordData.appInfo.account
+            passwordData.appInfo.appName,
+            passwordData.appInfo.appUrl,
+            passwordData.appInfo.appAccount
         )
         try {
             savePasswordUseCase.invoke(password, appInfo, passwordData.score)

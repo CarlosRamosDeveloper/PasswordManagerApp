@@ -1,11 +1,12 @@
 package com.cr_d.passwordmanagerapp.application.use_cases
 
+import java.time.LocalDate
+
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
-import java.time.LocalDate
 
 class UpdatePasswordUseCase (
     private val repository: IPasswordRepository,
@@ -35,7 +36,7 @@ class UpdatePasswordUseCase (
             appInfo = appInfo,
             metadata = updatedMetadata,
             dateInfo = dateInfo,
-            securityScore = updateScore
+            score = updateScore
         )
 
         repository.update(updated)

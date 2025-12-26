@@ -32,7 +32,7 @@ class SavePasswordUseCase (
             plainPassword = newPassword,
             metadata = metadata,
             dateInfo = dateInfo,
-            securityScore = score
+            score = score
         )
 
         repository.save(passwordData)
