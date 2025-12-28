@@ -1,43 +1,44 @@
 package com.cr_d.passwordmanagerapp.application.use_cases
 
+import java.time.LocalDate
+
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
+import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
-import java.time.LocalDate
 
 class UpdatePasswordUseCase (
     private val repository: IPasswordRepository,
-    private val securityScoreUseCase: CalculateSecurityScoreUseCase
 ){
-    operator fun invoke(
-        id: Int,
+    suspend operator fun invoke(
+        id: Long,
         newPassword: String,
         appInfo: ApplicationInfo,
     ): PasswordData {
         val existing = repository.findById(id)
             ?: throw IllegalArgumentException("Password not found")
 
-        val analyzedData = PasswordAnalyzer.analyze(newPassword)
-        val updateScore = securityScoreUseCase(newPassword)
-        val updatedMetadata = existing.metadata.copy(
-            hasLowerCase = analyzedData.hasLowerCase,
-            hasUpperCase = analyzedData.hasUpperCase,
-            hasNumbers = analyzedData.hasNumbers,
-            hasSpecials = analyzedData.hasSpecials,
+        val dateInfo = DateInfo(
+            creationDate = existing.dateInfo.creationDate,
             lastUpdate = LocalDate.now()
         )
+        val metadataInfo = PasswordAnalyzer.analyze(newPassword)
 
-        val updated = existing.copy(
+        val updatedPassword = PasswordData(
+            id = existing.id,
             plainPassword = PlainPassword(newPassword),
             appInfo = appInfo,
-            metadata = updatedMetadata,
-            securityScore = updateScore
+            dateInfo = dateInfo,
+            score = SecurityScoreCalculator().calculate(newPassword),
+            metadata = metadataInfo,
+            notes = ""
         )
 
-        repository.update(updated)
+        repository.update(updatedPassword)
 
-        return updated
+        return updatedPassword
     }
 }
