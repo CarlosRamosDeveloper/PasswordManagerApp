@@ -2,6 +2,7 @@ package com.cr_d.passwordmanagerapp.application.interfaces
 
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.mapper.toDomainCalculated
+import com.cr_d.passwordmanagerapp.data.mapper.toEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 class RoomPasswordRepository (private val dao: PasswordDao): IPasswordRepository {
@@ -10,30 +11,26 @@ class RoomPasswordRepository (private val dao: PasswordDao): IPasswordRepository
     }
 
     override suspend fun findByApplication(app: String): List<PasswordData> {
-        return dao.getAll().map{
-            it.toDomainCalculated()
-        }.filter {
-            it.appInfo.appName == app
-        }
+        return findAll().filter { it.appInfo.appName == app }
     }
 
     override suspend fun findByAccount(account: String): List<PasswordData> {
-        TODO("Not yet implemented")
+        return findAll().filter { it.appInfo.appAccount == account }
     }
 
     override suspend fun findById(id: Long): PasswordData? {
-        TODO("Not yet implemented")
+        return dao.getUserById(id.toInt())?.toDomainCalculated()
     }
 
     override suspend fun save(passwordData: PasswordData) {
-        TODO("Not yet implemented")
+        dao.insertPassword(passwordData.toEntity())
     }
 
     override suspend fun update(passwordData: PasswordData) {
-        TODO("Not yet implemented")
+        dao.updatePassword(passwordData.toEntity())
     }
 
     override suspend fun delete(id: Long) {
-        TODO("Not yet implemented")
+        dao.deletePassword(id)
     }
 }
