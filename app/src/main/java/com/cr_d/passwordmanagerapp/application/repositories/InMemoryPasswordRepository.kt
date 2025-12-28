@@ -5,6 +5,7 @@ import java.time.LocalDate
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.data.mapper.toDomainCalculated
+import com.cr_d.passwordmanagerapp.data.mapper.toEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 class InMemoryPasswordRepository : IPasswordRepository {
@@ -117,7 +118,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         return passwords.map { it.toDomainCalculated() }
     }
 
-    override fun findAll(): List<PasswordData> {
+    override suspend fun findAll(): List<PasswordData> {
         return parseData()
     }
 
@@ -133,14 +134,14 @@ class InMemoryPasswordRepository : IPasswordRepository {
         return parseData().find { it.id == id }
     }
 
-    override fun save(passwordData: PasswordEntity) {
+    override fun save(passwordData: PasswordData) {
         val passwordWithId = passwordData.copy(id = ++lastId)
-        passwords.add(passwordWithId)
+        passwords.add(passwordWithId.toEntity())
     }
 
-    override fun update(passwordData: PasswordEntity) {
+    override fun update(passwordData: PasswordData) {
         val index = passwords.indexOfFirst { it.id == passwordData.id }
-        if (index != -1) passwords[index] = passwordData
+        if (index != -1) passwords[index] = passwordData.toEntity()
     }
 
     override fun delete(id: Long) {
