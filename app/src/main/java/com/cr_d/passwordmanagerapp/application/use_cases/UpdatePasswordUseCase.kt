@@ -4,7 +4,12 @@ import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
+import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
 class UpdatePasswordUseCase (
     private val repository: IPasswordRepository,
@@ -13,19 +18,23 @@ class UpdatePasswordUseCase (
         id: Long,
         newPassword: String,
         appInfo: ApplicationInfo,
-    ): PasswordEntity {
+    ): PasswordData {
         val existing = repository.findById(id)
             ?: throw IllegalArgumentException("Password not found")
 
-        val creationDate = LocalDate.now()
-        val updatedPassword = PasswordEntity(
+        val dateInfo = DateInfo(
+            creationDate = existing.dateInfo.creationDate,
+            lastUpdate = LocalDate.now()
+        )
+        val metadataInfo = PasswordAnalyzer.analyze(newPassword)
+
+        val updatedPassword = PasswordData(
             id = existing.id,
-            plainPassword = newPassword,
-            appName = appInfo.appName,
-            appUrl = appInfo.appUrl,
-            account = appInfo.appAccount,
-            creationDate = existing.dateInfo.creationDate.toString(),
-            lastUpdate = creationDate.toString(),
+            plainPassword = PlainPassword(newPassword),
+            appInfo = appInfo,
+            dateInfo = dateInfo,
+            score = SecurityScoreCalculator().calculate(newPassword),
+            metadata = metadataInfo,
             notes = ""
         )
 

@@ -4,7 +4,13 @@ import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
+import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
+import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
+import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
 class SavePasswordUseCase (
     private val repository: IPasswordRepository,
@@ -13,16 +19,21 @@ class SavePasswordUseCase (
         password: String,
         appInfo: ApplicationInfo,
         score: Double
-    ): PasswordEntity {
+    ): PasswordData {
+
         val creationDate = LocalDate.now()
-        val newPassword = PasswordEntity(
+        val dateInfo = DateInfo(
+            creationDate = creationDate,
+            lastUpdate = creationDate
+        )
+        val metadataInfo = PasswordAnalyzer.analyze(password)
+        val newPassword = PasswordData(
             id = 0,
-            plainPassword = password,
-            appName = appInfo.appName,
-            appUrl = appInfo.appUrl,
-            account = appInfo.appAccount,
-            creationDate = creationDate.toString(),
-            lastUpdate = creationDate.toString(),
+            plainPassword = PlainPassword(password),
+            appInfo = appInfo,
+            dateInfo = dateInfo,
+            score = SecurityScoreCalculator().calculate(password),
+            metadata = metadataInfo,
             notes = ""
         )
 
