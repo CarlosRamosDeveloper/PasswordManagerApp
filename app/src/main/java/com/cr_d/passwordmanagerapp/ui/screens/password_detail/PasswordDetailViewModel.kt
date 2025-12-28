@@ -189,13 +189,7 @@ class PasswordDetailViewModel(
             appInfo = newAppInfo
         )
 
-        val updatedMetadata = PasswordAnalyzer.analyze(updatedPassword.plainPassword)
-        val updatedSecurityScore = securityScoreCalculator(updatedPassword.plainPassword)
-        val uiStateParsedPassword = updatedPassword
-            .toDomain(
-                metadata = updatedMetadata,
-                score = updatedSecurityScore
-            ).toUIState()
+        val uiStateParsedPassword = updatedPassword.toUIState()
 
         _uiState.update {
             it.copy(
