@@ -10,7 +10,7 @@ import androidx.room.Update
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 
 @Dao
-interface IPasswordDao {
+interface PasswordDao {
 
     @Query("SELECT * FROM PasswordEntity")
     suspend fun getAll(): List<PasswordEntity>
