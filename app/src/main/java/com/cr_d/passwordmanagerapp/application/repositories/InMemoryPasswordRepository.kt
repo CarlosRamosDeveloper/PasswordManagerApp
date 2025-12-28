@@ -111,7 +111,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         )
     )
 
-    private var lastId = 10
+    private var lastId = 10L
 
     private fun parseData(): List<PasswordData> {
         return passwords.map { it.toDomainCalculated() }
@@ -129,7 +129,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         return parseData().filter { it.appInfo.appAccount == account }
     }
 
-    override fun findById(id: Int): PasswordData? {
+    override fun findById(id: Long): PasswordData? {
         return parseData().find { it.id == id }
     }
 
@@ -143,7 +143,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
         if (index != -1) passwords[index] = passwordData
     }
 
-    override fun delete(id: Int) {
+    override fun delete(id: Long) {
         passwords.removeIf { it.id==id }
     }
 }

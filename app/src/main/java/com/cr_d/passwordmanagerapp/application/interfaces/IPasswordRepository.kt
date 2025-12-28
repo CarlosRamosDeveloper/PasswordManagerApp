@@ -7,8 +7,8 @@ interface IPasswordRepository {
     fun findAll(): List<PasswordData>
     fun findByApplication(app: String): List<PasswordData>
     fun findByAccount(account: String): List<PasswordData>
-    fun findById(id: Int): PasswordData?
+    fun findById(id: Long): PasswordData?
     fun save(passwordData: PasswordEntity)
     fun update(passwordData: PasswordEntity)
-    fun delete(id: Int)
+    fun delete(id: Long)
 }

@@ -10,7 +10,7 @@ class UpdatePasswordUseCase (
     private val repository: IPasswordRepository,
 ){
     operator fun invoke(
-        id: Int,
+        id: Long,
         newPassword: String,
         appInfo: ApplicationInfo,
     ): PasswordEntity {

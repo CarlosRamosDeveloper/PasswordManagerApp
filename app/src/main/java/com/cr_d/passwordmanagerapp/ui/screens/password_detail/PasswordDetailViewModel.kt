@@ -26,7 +26,7 @@ import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
 
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
-    val passwordId: Int,
+    val passwordId: Long,
     val generatePasswordUseCase: GeneratePasswordUseCase,
     val securityScoreCalculator: CalculateSecurityScoreUseCase,
     val updatePasswordUseCase: UpdatePasswordUseCase,

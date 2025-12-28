@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class PasswordEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Long,
     @ColumnInfo(name = "password")
     val plainPassword: String,
     @ColumnInfo(name = "app_name")
