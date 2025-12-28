@@ -1,6 +1,7 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +15,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+import kotlinx.coroutines.launch
 
 class CreatePasswordViewModel(
     val generatePasswordUseCase: GeneratePasswordUseCase,
@@ -154,20 +156,22 @@ class CreatePasswordViewModel(
     }
 
     fun savePassword(password: String){
-        val passwordData = _uiState.value.password
-        val appInfo = ApplicationInfo(
-            passwordData.appInfo.appName,
-            passwordData.appInfo.appUrl,
-            passwordData.appInfo.appAccount
-        )
-        try {
-            savePasswordUseCase.invoke(password, appInfo, passwordData.score)
-            resetStatus()
-        } catch (e: Exception){
-            _uiState.update {
-                it.copy(
-                    passwordError = e.message.toString()
-                )
+        viewModelScope.launch {
+            val passwordData = _uiState.value.password
+            val appInfo = ApplicationInfo(
+                passwordData.appInfo.appName,
+                passwordData.appInfo.appUrl,
+                passwordData.appInfo.appAccount
+            )
+            try {
+                savePasswordUseCase.invoke(password, appInfo, passwordData.score)
+                resetStatus()
+            } catch (e: Exception){
+                _uiState.update {
+                    it.copy(
+                        passwordError = e.message.toString()
+                    )
+                }
             }
         }
     }

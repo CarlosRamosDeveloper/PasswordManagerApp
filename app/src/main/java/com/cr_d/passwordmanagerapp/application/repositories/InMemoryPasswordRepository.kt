@@ -122,29 +122,29 @@ class InMemoryPasswordRepository : IPasswordRepository {
         return parseData()
     }
 
-    override fun findByApplication(app: String): List<PasswordData> {
+    override suspend fun findByApplication(app: String): List<PasswordData> {
         return parseData().filter { it.appInfo.appName == app }
     }
 
-    override fun findByAccount(account: String): List<PasswordData> {
+    override suspend fun findByAccount(account: String): List<PasswordData> {
         return parseData().filter { it.appInfo.appAccount == account }
     }
 
-    override fun findById(id: Long): PasswordData? {
+    override suspend fun findById(id: Long): PasswordData? {
         return parseData().find { it.id == id }
     }
 
-    override fun save(passwordData: PasswordData) {
+    override suspend fun save(passwordData: PasswordData) {
         val passwordWithId = passwordData.copy(id = ++lastId)
         passwords.add(passwordWithId.toEntity())
     }
 
-    override fun update(passwordData: PasswordData) {
+    override suspend fun update(passwordData: PasswordData) {
         val index = passwords.indexOfFirst { it.id == passwordData.id }
         if (index != -1) passwords[index] = passwordData.toEntity()
     }
 
-    override fun delete(id: Long) {
+    override suspend fun delete(id: Long) {
         passwords.removeIf { it.id==id }
     }
 }

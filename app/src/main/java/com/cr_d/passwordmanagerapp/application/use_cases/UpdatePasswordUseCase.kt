@@ -3,7 +3,6 @@ package com.cr_d.passwordmanagerapp.application.use_cases
 import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
@@ -14,7 +13,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 class UpdatePasswordUseCase (
     private val repository: IPasswordRepository,
 ){
-    operator fun invoke(
+    suspend operator fun invoke(
         id: Long,
         newPassword: String,
         appInfo: ApplicationInfo,

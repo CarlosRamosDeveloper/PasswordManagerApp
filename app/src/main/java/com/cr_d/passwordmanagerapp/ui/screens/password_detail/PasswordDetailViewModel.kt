@@ -172,32 +172,36 @@ class PasswordDetailViewModel(
     }
 
     fun onDeletePassword (){
-        deletePasswordUseCase.invoke(passwordId)
-        loadPassword()
+        viewModelScope.launch {
+            deletePasswordUseCase.invoke(passwordId)
+            loadPassword()
+        }
     }
 
     fun onUpdatePassword (){
-        val newAppInfo = ApplicationInfo(
-            appName = _uiState.value.editInfo.appName,
-            appUrl = _uiState.value.editInfo.appUrl,
-            appAccount = _uiState.value.editInfo.appAccount
-        )
-
-        val updatedPassword = updatePasswordUseCase.invoke(
-            id = passwordId,
-            newPassword = _uiState.value.editInfo.plainPassword.value,
-            appInfo = newAppInfo
-        )
-
-        val uiStateParsedPassword = updatedPassword.toUIState()
-
-        _uiState.update {
-            it.copy(
-                password = uiStateParsedPassword
+        viewModelScope.launch {
+            val newAppInfo = ApplicationInfo(
+                appName = _uiState.value.editInfo.appName,
+                appUrl = _uiState.value.editInfo.appUrl,
+                appAccount = _uiState.value.editInfo.appAccount
             )
+
+            val updatedPassword = updatePasswordUseCase.invoke(
+                id = passwordId,
+                newPassword = _uiState.value.editInfo.plainPassword.value,
+                appInfo = newAppInfo
+            )
+
+            val uiStateParsedPassword = updatedPassword.toUIState()
+
+            _uiState.update {
+                it.copy(
+                    password = uiStateParsedPassword
+                )
+            }
+            loadPassword()
+            onEnableFullInfoMode()
         }
-        loadPassword()
-        onEnableFullInfoMode()
     }
 
     fun onGeneratePassword(){

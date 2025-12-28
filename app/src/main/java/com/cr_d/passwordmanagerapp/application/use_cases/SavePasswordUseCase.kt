@@ -15,7 +15,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 class SavePasswordUseCase (
     private val repository: IPasswordRepository,
 ){
-    operator fun invoke(
+    suspend operator fun invoke(
         password: String,
         appInfo: ApplicationInfo,
         score: Double
