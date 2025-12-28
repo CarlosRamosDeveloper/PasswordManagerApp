@@ -72,9 +72,9 @@ fun Router(
             )
         }
         composable("PasswordDataScreen/{passwordId}", arguments = listOf(navArgument("passwordId") {
-            type = NavType.IntType
+            type = NavType.LongType
         })) { backstackEntry ->
-            val passwordId = backstackEntry.arguments?.getInt("passwordId") ?: 1
+            val passwordId = backstackEntry.arguments?.getLong("passwordId") ?: 1
             val generator = PasswordGenerator()
             val generatePasswordUseCase = GeneratePasswordUseCase(generator)
             val scoreCalculator = SecurityScoreCalculator()
@@ -88,8 +88,7 @@ fun Router(
                     passwordId = passwordId,
                     generatePasswordUseCase = generatePasswordUseCase,
                     securityScoreCalculator = scoreCalculatorUseCase,
-                    updatePasswordUseCase = UpdatePasswordUseCase(repo,
-                        CalculateSecurityScoreUseCase(scoreCalculator)),
+                    updatePasswordUseCase = UpdatePasswordUseCase(repo),
                     deletePasswordUseCase = DeletePasswordUseCase(repo)
                 ),
                 settings = settingsViewModel,

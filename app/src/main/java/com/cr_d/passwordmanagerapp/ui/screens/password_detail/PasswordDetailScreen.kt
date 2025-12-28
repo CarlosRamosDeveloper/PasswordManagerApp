@@ -76,15 +76,15 @@ fun PasswordDetailedCard(
                     PasswordDetailUiMode.EDIT_MODE -> {
                         EditMode(
                             isGeneratePasswordEnabled = state.isGeneratePasswordEnabled,
-                            passwordState = state,
+                            passwordState = state.editInfo,
                             viewModel = viewModel,
                             snackFunction = snackFunction
                         )
                     }
                 }
                 if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
-                    passwordPlainText = state.password.plainPassword.value,
-                    viewModel = viewModel,
+                    passwordPlainText = state.password.plainPassword,
+                    onVisibilityToggleFunction = viewModel::onVisibilityToggle,
                     isPasswordShown = state.isPasswordShown,
                     context = context,
                     snackFunction = snackFunction

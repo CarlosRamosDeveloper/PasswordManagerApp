@@ -6,7 +6,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 class GetAllPasswordsUseCase (
     private val repository: IPasswordRepository
 ){
-    operator fun invoke(): List<PasswordData>{
+    suspend operator fun invoke(): List<PasswordData>{
         return repository.findAll()
     }
 }

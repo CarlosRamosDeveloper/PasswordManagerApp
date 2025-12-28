@@ -1,38 +1,44 @@
 package com.cr_d.passwordmanagerapp.application.use_cases
 
+import java.time.LocalDate
+
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
+import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
-import java.time.LocalDate
 
 class SavePasswordUseCase (
     private val repository: IPasswordRepository,
 ){
-    operator fun invoke(password: String, appInfo: ApplicationInfo, score: Double ): PasswordData {
-        val analyzedData = PasswordAnalyzer.analyze(password)
-        val newPassword = PlainPassword(password)
+    suspend operator fun invoke(
+        password: String,
+        appInfo: ApplicationInfo,
+        score: Double
+    ): PasswordData {
+
         val creationDate = LocalDate.now()
-        val metadata = PasswordMetadata(
-            hasLowerCase = analyzedData.hasLowerCase,
-            hasUpperCase = analyzedData.hasUpperCase,
-            hasNumbers = analyzedData.hasNumbers,
-            hasSpecials = analyzedData.hasSpecials,
+        val dateInfo = DateInfo(
             creationDate = creationDate,
             lastUpdate = creationDate
         )
-        val passwordData = PasswordData(
-            id= 0,
+        val metadataInfo = PasswordAnalyzer.analyze(password)
+        val newPassword = PasswordData(
+            id = 0,
+            plainPassword = PlainPassword(password),
             appInfo = appInfo,
-            plainPassword = newPassword,
-            metadata = metadata,
-            securityScore = score
+            dateInfo = dateInfo,
+            score = SecurityScoreCalculator().calculate(password),
+            metadata = metadataInfo,
+            notes = ""
         )
 
-        repository.save(passwordData)
+        repository.save(newPassword)
 
-        return passwordData
+        return newPassword
     }
 }
