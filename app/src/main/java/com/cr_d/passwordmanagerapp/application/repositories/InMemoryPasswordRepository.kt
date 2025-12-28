@@ -9,7 +9,9 @@ import com.cr_d.passwordmanagerapp.data.mapper.toEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 class InMemoryPasswordRepository : IPasswordRepository {
-    private val passwords = mutableListOf(
+    private val passwords = mutableListOf<PasswordEntity>()
+        /*
+        mutableListOf(
         PasswordEntity(
             id = 1,
             plainPassword = "Abcdef123!",
@@ -110,7 +112,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             lastUpdate = LocalDate.of(2024, 1, 5).toString(),
             notes = "Cuenta usada para cursos de meditación"
         )
-    )
+
+         */
 
     private var lastId = 10L
 

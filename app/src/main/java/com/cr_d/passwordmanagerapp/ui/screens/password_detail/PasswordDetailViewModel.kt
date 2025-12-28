@@ -10,12 +10,12 @@ import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
-import com.cr_d.passwordmanagerapp.data.mapper.toDomain
+import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.mapper.toUIState
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
@@ -52,10 +52,10 @@ class PasswordDetailViewModel(
         viewModelScope.launch {
             val password = repository.findById(passwordId) ?: return@launch
             val parsedPassword = password.toUIState()
+            val decryptedData = DecryptStringUseCase(CryptoService())
 
             _uiState.update {
                 it.copy(
-
                     password = parsedPassword,
                     editInfo = PasswordEditUiState(
                         appName = password.appInfo.appName,
@@ -65,8 +65,8 @@ class PasswordDetailViewModel(
                         hasUpperCase =  password.metadata.hasUpperCase,
                         hasNumbers = password.metadata.hasNumbers,
                         hasSpecials = password.metadata.hasSpecials,
-                        passwordLength = password.plainPassword.value.length,
-                        plainPassword = password.plainPassword,
+                        passwordLength = decryptedData(password.cipheredPassword).length,
+                        plainPassword = PlainPassword(decryptedData((password.cipheredPassword))),
                         score = password.score
                     )
                 )

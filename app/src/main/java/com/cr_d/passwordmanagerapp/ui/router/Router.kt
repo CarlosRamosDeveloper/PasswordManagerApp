@@ -42,7 +42,7 @@ fun Router(
     val context = LocalContext.current
     val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
 
-    NavHost(navController = navController, startDestination = "ShowPasswordScreen") {
+    NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
             MainScreen(innerPadding)
         }

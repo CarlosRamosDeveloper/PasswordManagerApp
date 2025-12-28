@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.data.mapper.toUIState
+import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
 import kotlinx.coroutines.launch
 
 class PasswordListViewModel(
@@ -25,13 +26,17 @@ class PasswordListViewModel(
     }
 
     data class UiState(
-        val passwords: List<PasswordData> = emptyList(),
+        val passwords: List<PasswordUiState> = emptyList(),
     )
 
     suspend fun loadPasswords(){
+        val parsedPasswords = getAllPasswordsUseCase().map {
+            it.toUIState()
+        }
+
         _uiState.update {
             it.copy(
-                passwords = getAllPasswordsUseCase()
+                passwords = parsedPasswords
             )
         }
     }

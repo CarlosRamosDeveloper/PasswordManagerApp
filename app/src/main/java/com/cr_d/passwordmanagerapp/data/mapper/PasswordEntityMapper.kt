@@ -1,5 +1,8 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
+import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
+import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
+import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
@@ -9,27 +12,39 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
-import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
-fun PasswordEntity.toDomainCalculated(): PasswordData =
-    this.toDomain(
-        metadata = PasswordAnalyzer.analyze(plainPassword),
-        score = SecurityScoreCalculator().calculate(plainPassword)
+fun PasswordEntity.toDomainCalculated(): PasswordData {
+    val decrypt = DecryptStringUseCase(CryptoService())
+    val encryptedData = EncryptedPayload(cipheredPassword, passwordIv)
+
+    return this.toDomain(
+        metadata = PasswordAnalyzer.analyze(decrypt(encryptedData)),
+        score = SecurityScoreCalculator().calculate(decrypt(encryptedData))
+    )
+}
+
+fun PasswordEntity.toDomain(metadata: PasswordMetadata, score: Double): PasswordData {
+    val cipheredPassword = EncryptedPayload(
+        this@toDomain.cipheredPassword, passwordIv
+    )
+    val cipheredNotes = EncryptedPayload(
+        this.cipheredNotes, this.notesIv
     )
 
-fun PasswordEntity.toDomain(metadata: PasswordMetadata, score: Double): PasswordData = PasswordData(
-    id = id,
-    plainPassword = PlainPassword(plainPassword),
-    appInfo = ApplicationInfo(
-        appName = appName,
-        appUrl = appUrl,
-        appAccount = account
-    ),
-    metadata = metadata,
-    dateInfo = DateInfo(
-        creationDate = LocalDate.parse(creationDate),
-        lastUpdate = LocalDate.parse(lastUpdate)
-    ),
-    score = score,
-    notes = notes
-)
+    return PasswordData(
+        id = id,
+        cipheredPassword = cipheredPassword,
+        appInfo = ApplicationInfo(
+            appName = appName,
+            appUrl = appUrl,
+            appAccount = account
+        ),
+        metadata = metadata,
+        dateInfo = DateInfo(
+            creationDate = LocalDate.parse(creationDate),
+            lastUpdate = LocalDate.parse(lastUpdate)
+        ),
+        score = score,
+        cipheredNotes = cipheredNotes
+    )
+}

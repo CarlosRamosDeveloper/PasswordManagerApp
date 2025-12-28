@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.interfaces.RoomPasswordRepository
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
-
 import com.cr_d.passwordmanagerapp.data.database.AppDatabase
 
 class RoomApplication : Application(){
@@ -24,7 +23,9 @@ class RoomApplication : Application(){
             applicationContext,
             AppDatabase::class.java,
             "password-database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
 
         val dao = db.passwordDao()
         val repo = RoomPasswordRepository(dao)

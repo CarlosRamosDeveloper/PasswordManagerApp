@@ -7,6 +7,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 
 data class PasswordUiState(
+    val id: Long = 0L,
     val plainPassword: String = "",
     val appInfo: ApplicationInfo = ApplicationInfo(
         appName = "",
