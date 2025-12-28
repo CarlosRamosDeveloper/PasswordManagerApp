@@ -1,6 +1,8 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
-import com.cr_d.passwordmanagerapp.data.PasswordEntity
+import java.time.LocalDate
+
+import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
@@ -25,8 +27,8 @@ fun PasswordEntity.toDomain(metadata: PasswordMetadata, score: Double): Password
     ),
     metadata = metadata,
     dateInfo = DateInfo(
-        creationDate = creationDate,
-        lastUpdate = lastUpdate
+        creationDate = LocalDate.parse(creationDate),
+        lastUpdate = LocalDate.parse(lastUpdate)
     ),
     score = score,
     notes = notes

@@ -1,6 +1,6 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
-import com.cr_d.passwordmanagerapp.data.PasswordEntity
+import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
@@ -11,8 +11,8 @@ fun PasswordData.toEntity(): PasswordEntity = PasswordEntity(
     appName = appInfo.appName,
     appUrl = appInfo.appUrl,
     account = appInfo.appAccount,
-    creationDate = dateInfo.creationDate,
-    lastUpdate = dateInfo.lastUpdate,
+    creationDate = dateInfo.creationDate.toString(),
+    lastUpdate = dateInfo.lastUpdate.toString(),
     notes = notes
 )
 

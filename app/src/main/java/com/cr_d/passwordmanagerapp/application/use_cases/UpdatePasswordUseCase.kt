@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.application.use_cases
 import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.data.PasswordEntity
+import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 
 class UpdatePasswordUseCase (
@@ -24,8 +24,8 @@ class UpdatePasswordUseCase (
             appName = appInfo.appName,
             appUrl = appInfo.appUrl,
             account = appInfo.appAccount,
-            creationDate = existing.dateInfo.creationDate,
-            lastUpdate = creationDate,
+            creationDate = existing.dateInfo.creationDate.toString(),
+            lastUpdate = creationDate.toString(),
             notes = ""
         )
 

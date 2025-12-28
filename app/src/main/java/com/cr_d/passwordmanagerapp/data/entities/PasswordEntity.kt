@@ -1,13 +1,12 @@
-package com.cr_d.passwordmanagerapp.data
+package com.cr_d.passwordmanagerapp.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDate
 
 @Entity
 data class PasswordEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo(name = "password")
     val plainPassword: String,
@@ -18,9 +17,9 @@ data class PasswordEntity(
     @ColumnInfo(name = "account")
     val account: String,
     @ColumnInfo(name = "creation_date")
-    val creationDate: LocalDate,
+    val creationDate: String,
     @ColumnInfo(name = "last_update")
-    val lastUpdate: LocalDate,
+    val lastUpdate: String,
     @ColumnInfo(name = "notes")
     val notes: String,
 )

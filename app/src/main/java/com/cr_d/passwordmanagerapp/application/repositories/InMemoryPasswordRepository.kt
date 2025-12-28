@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.application.repositories
 import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.data.PasswordEntity
+import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.data.mapper.toDomainCalculated
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
@@ -15,8 +15,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "Gmail",
             appUrl = "https://mail.google.com",
             account = "juan.perez@gmail.com",
-            creationDate = LocalDate.of(2023,1,10),
-            lastUpdate = LocalDate.of(2023, 12, 1),
+            creationDate = LocalDate.of(2023,1,10).toString(),
+            lastUpdate = LocalDate.of(2023, 12, 1).toString(),
             notes = ""
         ),
         PasswordEntity(
@@ -25,8 +25,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "Work Mail",
             appUrl = "https://mail.empresa.com",
             account = "ana@empresa.com",
-            creationDate = LocalDate.of(2021, 11, 1),
-            lastUpdate = LocalDate.of(2021, 11, 1),
+            creationDate = LocalDate.of(2021, 11, 1).toString(),
+            lastUpdate = LocalDate.of(2021, 11, 1).toString(),
             notes = ""
         ),
         PasswordEntity(
@@ -35,8 +35,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "LocalApp",
             appUrl = "http://localhost:8080",
             account = "usuario123",
-            creationDate = LocalDate.of(2020, 2, 20),
-            lastUpdate = LocalDate.of(2022, 2, 20),
+            creationDate = LocalDate.of(2020, 2, 20).toString(),
+            lastUpdate = LocalDate.of(2022, 2, 20).toString(),
             notes = ""
         ),
         PasswordEntity(
@@ -45,8 +45,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "BankPortal",
             appUrl = "https://bank.example.com",
             account = "maria98",
-            creationDate = LocalDate.of(2021, 8, 8),
-            lastUpdate = LocalDate.of(2024, 1, 10),
+            creationDate = LocalDate.of(2021, 8, 8).toString(),
+            lastUpdate = LocalDate.of(2024, 1, 10).toString(),
             notes = ""
         ),
         PasswordEntity(
@@ -55,8 +55,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "ChatApp",
             appUrl = "https://chat.example.com",
             account = "pedro@chat.com",
-            creationDate = LocalDate.of(2023, 3, 30),
-            lastUpdate = LocalDate.of(2023, 9, 5),
+            creationDate = LocalDate.of(2023, 3, 30).toString(),
+            lastUpdate = LocalDate.of(2023, 9, 5).toString(),
             notes = ""
         ),
         PasswordEntity(
@@ -65,8 +65,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "DevForge",
             appUrl = "https://devforge.io",
             account = "carlos.dev",
-            creationDate = LocalDate.of(2024, 1, 15),
-            lastUpdate = LocalDate.of(2024, 2, 2),
+            creationDate = LocalDate.of(2024, 1, 15).toString(),
+            lastUpdate = LocalDate.of(2024, 2, 2).toString(),
             notes = "Cuenta usada para pruebas internas"
         ),
         PasswordEntity(
@@ -75,8 +75,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "FoodRush",
             appUrl = "https://foodrush.es",
             account = "nacho.pizza",
-            creationDate = LocalDate.of(2022, 6, 12),
-            lastUpdate = LocalDate.of(2023, 4, 1),
+            creationDate = LocalDate.of(2022, 6, 12).toString(),
+            lastUpdate = LocalDate.of(2023, 4, 1).toString(),
             notes = ""
         ),
         PasswordEntity(
@@ -85,8 +85,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "SportsLive",
             appUrl = "https://sportslive.net",
             account = "mario_racing",
-            creationDate = LocalDate.of(2020, 9, 5),
-            lastUpdate = LocalDate.of(2023, 11, 30),
+            creationDate = LocalDate.of(2020, 9, 5).toString(),
+            lastUpdate = LocalDate.of(2023, 11, 30).toString(),
             notes = "Suscripción anual"
         ),
         PasswordEntity(
@@ -95,8 +95,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "PicNest",
             appUrl = "https://picnest.app",
             account = "lucia.photo",
-            creationDate = LocalDate.of(2023, 2, 1),
-            lastUpdate = LocalDate.of(2023, 2, 1),
+            creationDate = LocalDate.of(2023, 2, 1).toString(),
+            lastUpdate = LocalDate.of(2023, 2, 1).toString(),
             notes = ""
         ),
         PasswordEntity(
@@ -105,8 +105,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
             appName = "MindControl",
             appUrl = "https://mind-control.ai",
             account = "brainwave",
-            creationDate = LocalDate.of(2021, 12, 25),
-            lastUpdate = LocalDate.of(2024, 1, 5),
+            creationDate = LocalDate.of(2021, 12, 25).toString(),
+            lastUpdate = LocalDate.of(2024, 1, 5).toString(),
             notes = "Cuenta usada para cursos de meditación"
         )
     )
