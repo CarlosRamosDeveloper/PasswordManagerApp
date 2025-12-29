@@ -1,6 +1,7 @@
 package com.cr_d.passwordmanagerapp.ui.models
 
 import androidx.compose.ui.unit.dp
+
 import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 
 object AppConfig {

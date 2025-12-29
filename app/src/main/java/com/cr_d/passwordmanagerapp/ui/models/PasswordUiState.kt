@@ -1,13 +1,11 @@
 package com.cr_d.passwordmanagerapp.ui.models
 
-import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 import java.time.LocalDate
 
+import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
-
-
 
 data class PasswordUiState(
     val id: Long = 0L,

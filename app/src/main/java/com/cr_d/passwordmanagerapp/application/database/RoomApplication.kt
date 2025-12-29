@@ -2,6 +2,7 @@ package com.cr_d.passwordmanagerapp.application.database
 
 import android.app.Application
 import androidx.room.Room
+
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.interfaces.RoomPasswordRepository
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao

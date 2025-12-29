@@ -35,7 +35,6 @@ import com.cr_d.passwordmanagerapp.application.database.RoomApplication
 import com.cr_d.passwordmanagerapp.ui.models.CustomNavigationItem
 import com.cr_d.passwordmanagerapp.ui.router.Router
 
-
 @Composable
 fun AppScaffold(){
     val navController = rememberNavController()

@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
-import kotlinx.coroutines.launch
 
 class PasswordListViewModel(
     private val getAllPasswordsUseCase: GetAllPasswordsUseCase

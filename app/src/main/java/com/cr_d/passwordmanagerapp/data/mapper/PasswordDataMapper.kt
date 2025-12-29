@@ -1,14 +1,9 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
-import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
-import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
-import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
-
-val decrypt = DecryptStringUseCase(CryptoService())
 
 fun PasswordData.toEntity(): PasswordEntity = PasswordEntity(
     id = id,
