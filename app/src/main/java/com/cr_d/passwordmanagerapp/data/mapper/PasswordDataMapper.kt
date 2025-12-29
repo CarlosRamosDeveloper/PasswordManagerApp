@@ -4,7 +4,11 @@ import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
+import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+
+val decrypt = DecryptStringUseCase(CryptoService())
 
 fun PasswordData.toEntity(): PasswordEntity = PasswordEntity(
     id = id,
@@ -20,8 +24,6 @@ fun PasswordData.toEntity(): PasswordEntity = PasswordEntity(
 )
 
 fun PasswordData.toUIState(): PasswordUiState  {
-    val decrypt = DecryptStringUseCase(CryptoService())
-
     return PasswordUiState(
         id = id,
         plainPassword = decrypt(cipheredPassword),
@@ -33,3 +35,16 @@ fun PasswordData.toUIState(): PasswordUiState  {
         cipheredNotes = cipheredNotes,
     )
 }
+
+fun PasswordData.toEditUiState(passwordLength: Int): PasswordEditUiState = PasswordEditUiState(
+    plainPassword = PlainPassword(decrypt(cipheredPassword)),
+    appName = appInfo.appName,
+    appUrl = appInfo.appUrl,
+    appAccount = appInfo.appAccount,
+    hasLowerCase = metadata.hasLowerCase,
+    hasUpperCase = metadata.hasUpperCase,
+    hasNumbers = metadata.hasNumbers,
+    hasSpecials = metadata.hasSpecials,
+    passwordLength = passwordLength,
+    score = score
+)

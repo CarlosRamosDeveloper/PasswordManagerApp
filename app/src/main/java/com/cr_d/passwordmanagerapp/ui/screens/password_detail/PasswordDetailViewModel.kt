@@ -14,7 +14,8 @@ import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
-import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
+import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
+import com.cr_d.passwordmanagerapp.data.mapper.toEditUiState
 import com.cr_d.passwordmanagerapp.data.mapper.toUIState
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
@@ -30,7 +31,8 @@ class PasswordDetailViewModel(
     val generatePasswordUseCase: GeneratePasswordUseCase,
     val securityScoreCalculator: CalculateSecurityScoreUseCase,
     val updatePasswordUseCase: UpdatePasswordUseCase,
-    val deletePasswordUseCase: DeletePasswordUseCase
+    val deletePasswordUseCase: DeletePasswordUseCase,
+    val decrypt: DecryptStringUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -41,7 +43,9 @@ class PasswordDetailViewModel(
         val password: PasswordUiState? = null,
         val editInfo: PasswordEditUiState = PasswordEditUiState(),
         val isGeneratePasswordEnabled: Boolean = false,
-        val errorMessage: String = ""
+        val errorMessage: String = "",
+        val decipheredPassword: String = "",
+        val decipheredNotes: String = ""
     )
 
     init {
@@ -51,24 +55,12 @@ class PasswordDetailViewModel(
     private fun loadPassword(){
         viewModelScope.launch {
             val password = repository.findById(passwordId) ?: return@launch
-            val parsedPassword = password.toUIState()
-            val decryptedData = DecryptStringUseCase(CryptoService())
+            val pwdLength = decrypt(password.cipheredPassword).length
 
             _uiState.update {
                 it.copy(
-                    password = parsedPassword,
-                    editInfo = PasswordEditUiState(
-                        appName = password.appInfo.appName,
-                        appUrl = password.appInfo.appUrl,
-                        appAccount = password.appInfo.appAccount,
-                        hasLowerCase = password.metadata.hasLowerCase,
-                        hasUpperCase =  password.metadata.hasUpperCase,
-                        hasNumbers = password.metadata.hasNumbers,
-                        hasSpecials = password.metadata.hasSpecials,
-                        passwordLength = decryptedData(password.cipheredPassword).length,
-                        plainPassword = PlainPassword(decryptedData((password.cipheredPassword))),
-                        score = password.score
-                    )
+                    password = password.toUIState(),
+                    editInfo = password.toEditUiState(pwdLength)
                 )
             }
         }
@@ -117,11 +109,21 @@ class PasswordDetailViewModel(
         }
     }
 
-    fun onVisibilityToggle () {
-        _uiState.update {
-            it.copy(
-                isPasswordShown = !uiState.value.isPasswordShown
-            )
+    fun onPasswordVisibilityToggle () {
+        if (_uiState.value.isPasswordShown) {
+            _uiState.update {
+                it.copy(
+                    isPasswordShown = false,
+                    decipheredPassword = ""
+                )
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    isPasswordShown = true,
+                    decipheredPassword = decrypt(_uiState.value.password!!.cipheredPassword)
+                )
+            }
         }
     }
 
@@ -235,5 +237,9 @@ class PasswordDetailViewModel(
                 )
             }
         }
+    }
+
+    fun decipher(payload: EncryptedPayload): String {
+        return decrypt(payload)
     }
 }
