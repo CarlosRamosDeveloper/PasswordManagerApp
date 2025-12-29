@@ -2,17 +2,14 @@ package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.data.SampleData
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
-import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
-import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModel
-import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModel.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.data.SampleData
 
 class MainScreenViewModel (
     val repository: IPasswordRepository
@@ -21,8 +18,10 @@ class MainScreenViewModel (
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     data class UiState(
-        val isDialogShown: Boolean = false,
-        val totalPasswords: Int = 0
+        val isMassDeleteDialogShown: Boolean = false,
+        val isPopulateDatabaseDialogShown: Boolean = false,
+        val totalPasswords: Int = 0,
+        val totalWarnings: Int = 0
     )
 
     init {
@@ -39,18 +38,34 @@ class MainScreenViewModel (
         }
     }
 
-    fun onEnableDialog(){
+    fun onEnableMassDeleteDialog(){
         _uiState.update {
             it.copy(
-                isDialogShown = true
+                isMassDeleteDialogShown = true
             )
         }
     }
 
-    fun onDisableDialog(){
+    fun onDisableMassDeleteDialog(){
         _uiState.update {
             it.copy(
-                isDialogShown = false
+                isMassDeleteDialogShown = false
+            )
+        }
+    }
+
+    fun onEnablePopulateDatabaseDialog(){
+        _uiState.update {
+            it.copy(
+                isPopulateDatabaseDialogShown = true
+            )
+        }
+    }
+
+    fun onDisablePopulateDatabaseDialog(){
+        _uiState.update {
+            it.copy(
+                isPopulateDatabaseDialogShown = false
             )
         }
     }
@@ -59,6 +74,7 @@ class MainScreenViewModel (
         viewModelScope.launch {
             repository.massSave(SampleData.passwords)
             onTotalPasswordsChange()
+            onDisablePopulateDatabaseDialog()
         }
     }
 
@@ -66,6 +82,7 @@ class MainScreenViewModel (
         viewModelScope.launch {
             repository.massDelete()
             onTotalPasswordsChange()
+            onDisableMassDeleteDialog()
         }
     }
 }

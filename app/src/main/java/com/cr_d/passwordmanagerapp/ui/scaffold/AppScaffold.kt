@@ -32,7 +32,6 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.application.database.RoomApplication
-import com.cr_d.passwordmanagerapp.application.repositories.InMemoryPasswordRepository
 import com.cr_d.passwordmanagerapp.ui.models.CustomNavigationItem
 import com.cr_d.passwordmanagerapp.ui.router.Router
 
@@ -42,8 +41,7 @@ fun AppScaffold(){
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
     val repo =
-        //RoomApplication.getRepository()
-        InMemoryPasswordRepository()
+        RoomApplication.getRepository()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
