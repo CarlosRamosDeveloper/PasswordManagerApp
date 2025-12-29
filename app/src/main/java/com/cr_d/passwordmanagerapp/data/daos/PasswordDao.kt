@@ -19,12 +19,12 @@ interface PasswordDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPassword(password: PasswordEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertPasswordsAsList(passwords: List<PasswordEntity>): List<Long>
-
     @Update
     suspend fun updatePassword(password: PasswordEntity): Int
 
     @Query("DELETE FROM PasswordEntity WHERE id = :passwordId")
     suspend fun deletePassword(passwordId: Long): Int
+
+    @Query("DELETE FROM PasswordEntity")
+    suspend fun deleteAll()
 }

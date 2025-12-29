@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
 
 @Composable
 fun PasswordsListScreen(innerPadding: PaddingValues, navController: NavController, viewModel: PasswordListViewModel){
@@ -38,7 +38,7 @@ fun PasswordsListScreen(innerPadding: PaddingValues, navController: NavControlle
 }
 
 @Composable
-fun PasswordCard(password: PasswordData, navController: NavController,){
+fun PasswordCard(password: PasswordUiState, navController: NavController,){
     val verticalPadding = 10.dp
     val horizontalPadding = 20.dp
 

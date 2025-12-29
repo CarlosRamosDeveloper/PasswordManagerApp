@@ -7,26 +7,30 @@ import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
 
 fun PasswordData.toEntity(): PasswordEntity = PasswordEntity(
     id = id,
-    plainPassword = plainPassword.value,
+    cipheredPassword = cipheredPassword.encryptedText,
+    passwordIv = cipheredPassword.iv,
     appName = appInfo.appName,
     appUrl = appInfo.appUrl,
     account = appInfo.appAccount,
     creationDate = dateInfo.creationDate.toString(),
     lastUpdate = dateInfo.lastUpdate.toString(),
-    notes = notes
+    cipheredNotes = cipheredNotes.encryptedText,
+    notesIv = cipheredNotes.iv
 )
 
-fun PasswordData.toUIState(): PasswordUiState = PasswordUiState(
-    plainPassword = plainPassword.value,
-    appInfo = appInfo,
-    metadata = metadata,
-    dateInfo = dateInfo,
-    score = score,
-    notes = notes
-)
+fun PasswordData.toUiState(): PasswordUiState  {
+    return PasswordUiState(
+        id = id,
+        cipheredPassword = cipheredPassword,
+        appInfo = appInfo,
+        metadata = metadata,
+        dateInfo = dateInfo,
+        score = score,
+        cipheredNotes = cipheredNotes,
+    )
+}
 
 fun PasswordData.toEditUiState(passwordLength: Int): PasswordEditUiState = PasswordEditUiState(
-    plainPassword = plainPassword,
     appName = appInfo.appName,
     appUrl = appInfo.appUrl,
     appAccount = appInfo.appAccount,

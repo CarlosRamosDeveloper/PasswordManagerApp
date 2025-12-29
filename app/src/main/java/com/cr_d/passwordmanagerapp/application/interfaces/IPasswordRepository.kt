@@ -1,6 +1,5 @@
 package com.cr_d.passwordmanagerapp.application.interfaces
 
-import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 interface IPasswordRepository {
@@ -9,6 +8,8 @@ interface IPasswordRepository {
     suspend fun findByAccount(account: String): List<PasswordData>
     suspend fun findById(id: Long): PasswordData?
     suspend fun save(passwordData: PasswordData)
+    suspend fun massSave(passwords: List<PasswordData>)
     suspend fun update(passwordData: PasswordData)
     suspend fun delete(id: Long)
+    suspend fun massDelete()
 }

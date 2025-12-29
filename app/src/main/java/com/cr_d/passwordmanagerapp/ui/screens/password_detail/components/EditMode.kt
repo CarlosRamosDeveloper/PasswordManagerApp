@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
+import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomCheckboxForm
@@ -23,6 +24,8 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailView
 
 @Composable
 fun EditMode(
+    newPlainPassword: PlainPassword,
+    isPasswordShown: Boolean,
     isGeneratePasswordEnabled: Boolean,
     passwordState: PasswordEditUiState,
     viewModel: PasswordDetailViewModel,
@@ -37,7 +40,13 @@ fun EditMode(
         ApplicationEditInfo(passwordState, viewModel)
         PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel::onGeneratePasswordSectionToggle)
         if(isGeneratePasswordEnabled) MetadataEditInfo(passwordState, error, viewModel)
-        NewPasswordInfoCard(passwordState, viewModel, snackFunction)
+        NewPasswordInfoCard(
+            newPassword = newPlainPassword,
+            isPasswordShown = isPasswordShown,
+            passwordState = passwordState,
+            viewModel = viewModel,
+            snackFunction = snackFunction
+        )
     }
 }
 
@@ -65,7 +74,7 @@ fun ApplicationEditInfo(passwordState: PasswordEditUiState, viewModel: PasswordD
 }
 
 @Composable
-fun NewPasswordInfoCard(passwordState: PasswordEditUiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
+fun NewPasswordInfoCard(newPassword: PlainPassword, isPasswordShown: Boolean, passwordState: PasswordEditUiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
     InfoCard {
         CardTitle("Contraseña")
         CustomRow(
@@ -73,9 +82,11 @@ fun NewPasswordInfoCard(passwordState: PasswordEditUiState, viewModel: PasswordD
             String.format("%.2f", passwordState.score),
             false
         )
+        TogglePasswordVisibilityButton(isPasswordShown, viewModel::onPasswordVisibilityToggle)
         ApplicationOutlinedTextField(
             "Contraseña",
-            passwordState.plainPassword.value,
+            if(isPasswordShown) newPassword.value
+            else "*******",
             viewModel::onPlainPasswordChange
         )
         UpdatePasswordButton(snackFunction, viewModel::onUpdatePassword)

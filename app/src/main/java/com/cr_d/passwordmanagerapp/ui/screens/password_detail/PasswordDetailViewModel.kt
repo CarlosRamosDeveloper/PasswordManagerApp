@@ -10,12 +10,12 @@ import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
-import com.cr_d.passwordmanagerapp.data.mapper.toDomain
-import com.cr_d.passwordmanagerapp.data.mapper.toUIState
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
+import com.cr_d.passwordmanagerapp.data.mapper.toEditUiState
+import com.cr_d.passwordmanagerapp.data.mapper.toUiState
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
@@ -30,7 +30,8 @@ class PasswordDetailViewModel(
     val generatePasswordUseCase: GeneratePasswordUseCase,
     val securityScoreCalculator: CalculateSecurityScoreUseCase,
     val updatePasswordUseCase: UpdatePasswordUseCase,
-    val deletePasswordUseCase: DeletePasswordUseCase
+    val deletePasswordUseCase: DeletePasswordUseCase,
+    val decrypt: DecryptStringUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -41,7 +42,10 @@ class PasswordDetailViewModel(
         val password: PasswordUiState? = null,
         val editInfo: PasswordEditUiState = PasswordEditUiState(),
         val isGeneratePasswordEnabled: Boolean = false,
-        val errorMessage: String = ""
+        val errorMessage: String = "",
+        val decipheredPassword: String = "",
+        val decipheredNotes: String = "",
+        val newPassword: PlainPassword = PlainPassword("")
     )
 
     init {
@@ -51,24 +55,13 @@ class PasswordDetailViewModel(
     private fun loadPassword(){
         viewModelScope.launch {
             val password = repository.findById(passwordId) ?: return@launch
-            val parsedPassword = password.toUIState()
+            val pwdLength = decrypt(password.cipheredPassword).length
 
             _uiState.update {
                 it.copy(
-
-                    password = parsedPassword,
-                    editInfo = PasswordEditUiState(
-                        appName = password.appInfo.appName,
-                        appUrl = password.appInfo.appUrl,
-                        appAccount = password.appInfo.appAccount,
-                        hasLowerCase = password.metadata.hasLowerCase,
-                        hasUpperCase =  password.metadata.hasUpperCase,
-                        hasNumbers = password.metadata.hasNumbers,
-                        hasSpecials = password.metadata.hasSpecials,
-                        passwordLength = password.plainPassword.value.length,
-                        plainPassword = password.plainPassword,
-                        score = password.score
-                    )
+                    password = password.toUiState(),
+                    editInfo = password.toEditUiState(pwdLength),
+                    newPassword = PlainPassword(decrypt(password.cipheredPassword))
                 )
             }
         }
@@ -117,11 +110,26 @@ class PasswordDetailViewModel(
         }
     }
 
-    fun onVisibilityToggle () {
-        _uiState.update {
-            it.copy(
-                isPasswordShown = !uiState.value.isPasswordShown
-            )
+    fun onPasswordVisibilityToggle () {
+        if (_uiState.value.isPasswordShown) {
+            _uiState.update {
+                it.copy(
+                    isPasswordShown = false,
+                    decipheredPassword = "",
+                    newPassword = PlainPassword("")
+
+                )
+            }
+        } else {
+            _uiState.update {
+                val decryptedPassword = decrypt(_uiState.value.password!!.cipheredPassword)
+
+                it.copy(
+                    isPasswordShown = true,
+                    decipheredPassword = decryptedPassword,
+                    newPassword = PlainPassword(decryptedPassword)
+                )
+            }
         }
     }
 
@@ -136,7 +144,7 @@ class PasswordDetailViewModel(
     fun onPlainPasswordChange (plainPassword: String){
         _uiState.update {
             it.copy(
-                editInfo = it.editInfo.copy(plainPassword = PlainPassword(plainPassword))
+                newPassword = PlainPassword(plainPassword)
             )
         }
     }
@@ -188,11 +196,11 @@ class PasswordDetailViewModel(
 
             val updatedPassword = updatePasswordUseCase.invoke(
                 id = passwordId,
-                newPassword = _uiState.value.editInfo.plainPassword.value,
+                newPassword = _uiState.value.newPassword.value,
                 appInfo = newAppInfo
             )
 
-            val uiStateParsedPassword = updatedPassword.toUIState()
+            val uiStateParsedPassword = updatedPassword.toUiState()
 
             _uiState.update {
                 it.copy(
@@ -217,10 +225,11 @@ class PasswordDetailViewModel(
 
             _uiState.update {
                 it.copy(
+                    isPasswordShown = true,
                     errorMessage = "",
+                    newPassword = PlainPassword(password),
                     editInfo = it.editInfo.copy(
                         score = securityScoreCalculator(password),
-                        plainPassword = PlainPassword(password)
                     )
                 )
             }
@@ -228,9 +237,9 @@ class PasswordDetailViewModel(
             _uiState.update {
                 it.copy(
                     errorMessage = e.message ?: "Error al generar contraseña",
+                    newPassword = PlainPassword(""),
                     editInfo = it.editInfo.copy(
                         score = 0.0,
-                        plainPassword = PlainPassword("")
                     )
                 )
             }
