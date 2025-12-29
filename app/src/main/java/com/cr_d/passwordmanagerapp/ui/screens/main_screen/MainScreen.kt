@@ -20,5 +20,6 @@ fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
         Text("Filtros")
         Text("Cantidad warnings")
         FullWidthButton("Mass populate", viewModel::onPopulate)
+        FullWidthButton("Mass delete", viewModel::onMassDelete)
     }
 }

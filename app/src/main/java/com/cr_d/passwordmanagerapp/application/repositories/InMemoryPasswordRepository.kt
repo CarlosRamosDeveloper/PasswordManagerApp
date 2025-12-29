@@ -43,6 +43,6 @@ class InMemoryPasswordRepository : IPasswordRepository {
     }
 
     override suspend fun massDelete() {
-        TODO("Not yet implemented")
+        passwords.clear()
     }
 }
