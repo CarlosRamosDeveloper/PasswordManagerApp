@@ -23,12 +23,13 @@ fun PasswordData.toUIState(): PasswordUiState  {
     val decrypt = DecryptStringUseCase(CryptoService())
 
     return PasswordUiState(
-            id = id,
-    plainPassword = decrypt(cipheredPassword),
-    appInfo = appInfo,
-    metadata = metadata,
-    dateInfo = dateInfo,
-    score = score,
-    notes = decrypt(cipheredNotes)
+        id = id,
+        plainPassword = decrypt(cipheredPassword),
+        cipheredPassword = cipheredPassword,
+        appInfo = appInfo,
+        metadata = metadata,
+        dateInfo = dateInfo,
+        score = score,
+        cipheredNotes = cipheredNotes,
     )
 }
