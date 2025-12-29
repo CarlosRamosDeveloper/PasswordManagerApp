@@ -14,11 +14,13 @@ import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
+import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordScreen
@@ -42,7 +44,7 @@ fun Router(
     val context = LocalContext.current
     val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
 
-    NavHost(navController = navController, startDestination = "ShowPasswordScreen") {
+    NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
             MainScreen(innerPadding)
         }
@@ -89,7 +91,8 @@ fun Router(
                     generatePasswordUseCase = generatePasswordUseCase,
                     securityScoreCalculator = scoreCalculatorUseCase,
                     updatePasswordUseCase = UpdatePasswordUseCase(repo),
-                    deletePasswordUseCase = DeletePasswordUseCase(repo)
+                    deletePasswordUseCase = DeletePasswordUseCase(repo),
+                    decrypt = DecryptStringUseCase(CryptoService())
                 ),
                 settings = settingsViewModel,
                 navController = navController

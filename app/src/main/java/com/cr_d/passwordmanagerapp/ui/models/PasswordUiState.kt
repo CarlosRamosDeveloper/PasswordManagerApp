@@ -2,12 +2,14 @@ package com.cr_d.passwordmanagerapp.ui.models
 
 import java.time.LocalDate
 
+import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 
 data class PasswordUiState(
-    val plainPassword: String = "",
+    val id: Long = 0L,
+    val cipheredPassword : EncryptedPayload = AppConfig.emptyEncryptedPayload,
     val appInfo: ApplicationInfo = ApplicationInfo(
         appName = "",
         appUrl = "",
@@ -24,5 +26,6 @@ data class PasswordUiState(
         lastUpdate = LocalDate.now()
     ),
     val score: Double = 0.0,
-    val notes: String = ""
+    val notes: String = "",
+    val cipheredNotes: EncryptedPayload = AppConfig.emptyEncryptedPayload,
 )

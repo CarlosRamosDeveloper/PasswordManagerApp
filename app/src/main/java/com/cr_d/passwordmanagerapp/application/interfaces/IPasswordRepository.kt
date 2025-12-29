@@ -1,6 +1,5 @@
 package com.cr_d.passwordmanagerapp.application.interfaces
 
-import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 interface IPasswordRepository {

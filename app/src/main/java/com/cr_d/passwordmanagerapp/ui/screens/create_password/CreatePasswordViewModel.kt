@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
@@ -15,7 +16,6 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
-import kotlinx.coroutines.launch
 
 class CreatePasswordViewModel(
     val generatePasswordUseCase: GeneratePasswordUseCase,

@@ -7,9 +7,11 @@ import androidx.room.PrimaryKey
 @Entity
 data class PasswordEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long = 0L,
     @ColumnInfo(name = "password")
-    val plainPassword: String,
+    val cipheredPassword: ByteArray,
+    @ColumnInfo(name = "password_iv")
+    val passwordIv: ByteArray,
     @ColumnInfo(name = "app_name")
     val appName: String,
     @ColumnInfo(name = "app_url")
@@ -20,6 +22,8 @@ data class PasswordEntity(
     val creationDate: String,
     @ColumnInfo(name = "last_update")
     val lastUpdate: String,
-    @ColumnInfo(name = "notes")
-    val notes: String,
+    @ColumnInfo(name = "ciphered_notes")
+    val cipheredNotes: ByteArray,
+    @ColumnInfo(name = "notes_iv")
+    val notesIv: ByteArray
 )
