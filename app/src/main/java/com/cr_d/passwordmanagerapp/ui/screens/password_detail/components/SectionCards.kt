@@ -77,6 +77,12 @@ fun PasswordCard(
     }
 }
 
+// TODO: Rama nueva -> Poner avisos en detailScreen
+/*
+*  Copy to clipboard -> La contraseña se va a copiar sin cifrar, el portapapeles se borrará tras 30 segundos -> Atrás / Copiar
+*  Actualizar contraseña -> Este paso no se puede deshacer -> Atras / Actualizar
+*
+* */
 @Composable
 fun ButtonsInPasswordSection(
     passwordPlainText: String,

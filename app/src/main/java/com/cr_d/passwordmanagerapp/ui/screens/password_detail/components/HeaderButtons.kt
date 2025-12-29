@@ -11,25 +11,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 
 @Composable
-fun HeaderButtons(viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit, navController: NavController){
+fun HeaderButtons(viewModel: PasswordDetailViewModel){
     Row(
         Modifier
             .fillMaxWidth()
             .padding(horizontal = AppConfig.HORIZONTAL_FRAME_PADDING, vertical = 5.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
-    )
-    {
+    ) {
         ModeButton("Info", viewModel::onEnableBasicInfoMode)
         ModeButton("Detalle", viewModel::onEnableFullInfoMode)
         ModeButton("Editar", viewModel::onEnableEditMode)
-        DeletePasswordButton(snackFunction, viewModel::onDeletePassword, navController)
+        CommonButton("Eliminar", viewModel::onEnableDeleteDialog)
     }
 }
 

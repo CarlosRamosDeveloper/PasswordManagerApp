@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
+import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.BasicMode
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.DetailedMode
@@ -32,8 +33,8 @@ fun PasswordDetailScreen(
     navController: NavController
 ){
     Column (modifier = Modifier.padding(innerPadding)){
-        HeaderButtons(viewModel, snackFunction, navController)
-        PasswordDetailedCard(context, snackFunction, viewModel, settings)
+        HeaderButtons(viewModel)
+        PasswordDetailedCard(context, snackFunction, viewModel, settings, navController)
     }
 }
 
@@ -44,6 +45,7 @@ fun PasswordDetailedCard(
     snackFunction: (String)-> Unit,
     viewModel: PasswordDetailViewModel,
     settings: SettingsViewModel,
+    navController: NavController
 ){
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
     val settings = settings.settings.collectAsStateWithLifecycle().value
@@ -90,6 +92,19 @@ fun PasswordDetailedCard(
                     isPasswordShown = state.isPasswordShown,
                     context = context,
                     snackFunction = snackFunction
+                )
+
+                if (state.isDeleteDialogShown) ConfirmDialog(
+                    title = "Eliminar contraseña",
+                    message = "Este paso no se puede deshacer, ¿está seguro?",
+                    confirmButtonText = "Eliminar contraseña",
+                    onConfirm = {
+                        viewModel.onDeletePassword()
+                        snackFunction("Contraseña eliminada")
+                        navController.navigate("ShowPasswordScreen")
+                                },
+                    onDisable = viewModel::onDisableDeleteDialog,
+                    onDismiss = viewModel::onDisableDeleteDialog
                 )
             }
 

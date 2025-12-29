@@ -45,7 +45,9 @@ class PasswordDetailViewModel(
         val errorMessage: String = "",
         val decipheredPassword: String = "",
         val decipheredNotes: String = "",
-        val newPassword: PlainPassword = PlainPassword("")
+        val newPassword: PlainPassword = PlainPassword(""),
+        val isDeleteDialogShown: Boolean = false,
+        val isCopyToDialogShown: Boolean = false
     )
 
     init {
@@ -179,9 +181,42 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun onEnableDeleteDialog(){
+        _uiState.update {
+            it.copy(
+                isDeleteDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableDeleteDialog(){
+        _uiState.update {
+            it.copy(
+                isDeleteDialogShown = false
+            )
+        }
+    }
+
+    fun onEnableCopyDialog(){
+        _uiState.update {
+            it.copy(
+                isCopyToDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableCopyDialog(){
+        _uiState.update {
+            it.copy(
+                isCopyToDialogShown = false
+            )
+        }
+    }
+
     fun onDeletePassword (){
         viewModelScope.launch {
             deletePasswordUseCase.invoke(passwordId)
+            onDisableDeleteDialog()
             loadPassword()
         }
     }
