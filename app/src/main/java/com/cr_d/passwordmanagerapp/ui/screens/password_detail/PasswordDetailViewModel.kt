@@ -226,6 +226,7 @@ class PasswordDetailViewModel(
 
             _uiState.update {
                 it.copy(
+                    isPasswordShown = true,
                     errorMessage = "",
                     newPassword = PlainPassword(password),
                     editInfo = it.editInfo.copy(
