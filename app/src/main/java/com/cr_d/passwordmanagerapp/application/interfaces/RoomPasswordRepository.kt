@@ -26,11 +26,21 @@ class RoomPasswordRepository (private val dao: PasswordDao): IPasswordRepository
         dao.insertPassword(passwordData.toEntity())
     }
 
+    override suspend fun massSave(passwords: List<PasswordData>) {
+        passwords.forEach { pwd ->
+            dao.insertPassword(pwd.toEntity())
+        }
+    }
+
     override suspend fun update(passwordData: PasswordData) {
         dao.updatePassword(passwordData.toEntity())
     }
 
     override suspend fun delete(id: Long) {
         dao.deletePassword(id)
+    }
+
+    override suspend fun massDelete() {
+        TODO("Not yet implemented")
     }
 }

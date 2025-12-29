@@ -24,10 +24,11 @@ import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordScreen
-import com.cr_d.passwordmanagerapp.ui.screens.MainScreen
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailScreen
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordsListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsScreen
@@ -46,7 +47,7 @@ fun Router(
 
     NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
-            MainScreen(innerPadding)
+            MainScreen(innerPadding, MainScreenViewModel(repo))
         }
         composable("CreatePasswordScreen") {
             val generator = PasswordGenerator()
