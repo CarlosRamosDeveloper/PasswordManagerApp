@@ -16,7 +16,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 import com.cr_d.passwordmanagerapp.data.mapper.toEditUiState
-import com.cr_d.passwordmanagerapp.data.mapper.toUIState
+import com.cr_d.passwordmanagerapp.data.mapper.toUiState
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
@@ -59,7 +59,7 @@ class PasswordDetailViewModel(
 
             _uiState.update {
                 it.copy(
-                    password = password.toUIState(),
+                    password = password.toUiState(),
                     editInfo = password.toEditUiState(pwdLength)
                 )
             }
@@ -194,7 +194,7 @@ class PasswordDetailViewModel(
                 appInfo = newAppInfo
             )
 
-            val uiStateParsedPassword = updatedPassword.toUIState()
+            val uiStateParsedPassword = updatedPassword.toUiState()
 
             _uiState.update {
                 it.copy(

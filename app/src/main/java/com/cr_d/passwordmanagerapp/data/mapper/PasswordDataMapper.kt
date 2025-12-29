@@ -23,10 +23,9 @@ fun PasswordData.toEntity(): PasswordEntity = PasswordEntity(
     notesIv = cipheredNotes.iv
 )
 
-fun PasswordData.toUIState(): PasswordUiState  {
+fun PasswordData.toUiState(): PasswordUiState  {
     return PasswordUiState(
         id = id,
-        plainPassword = decrypt(cipheredPassword),
         cipheredPassword = cipheredPassword,
         appInfo = appInfo,
         metadata = metadata,
