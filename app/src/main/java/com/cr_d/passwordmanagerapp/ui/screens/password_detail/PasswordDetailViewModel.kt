@@ -246,8 +246,4 @@ class PasswordDetailViewModel(
             }
         }
     }
-
-    fun decipher(payload: EncryptedPayload): String {
-        return decrypt(payload)
-    }
 }
