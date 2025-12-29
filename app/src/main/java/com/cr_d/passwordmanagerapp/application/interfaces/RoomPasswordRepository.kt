@@ -41,6 +41,6 @@ class RoomPasswordRepository (private val dao: PasswordDao): IPasswordRepository
     }
 
     override suspend fun massDelete() {
-        TODO("Not yet implemented")
+        dao.deleteAll()
     }
 }

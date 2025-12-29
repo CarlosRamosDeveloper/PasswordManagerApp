@@ -42,8 +42,8 @@ fun AppScaffold(){
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
     val repo =
-        //RoomApplication.getRepository()
-        InMemoryPasswordRepository()
+        RoomApplication.getRepository()
+        //InMemoryPasswordRepository()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

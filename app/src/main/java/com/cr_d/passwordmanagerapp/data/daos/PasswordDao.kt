@@ -24,4 +24,7 @@ interface PasswordDao {
 
     @Query("DELETE FROM PasswordEntity WHERE id = :passwordId")
     suspend fun deletePassword(passwordId: Long): Int
+
+    @Query("DELETE FROM PasswordEntity")
+    suspend fun deleteAll()
 }
