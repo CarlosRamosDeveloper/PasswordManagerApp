@@ -2,7 +2,6 @@ package com.cr_d.passwordmanagerapp.ui.models
 
 import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
-import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 
 data class PasswordEditUiState (
     val appName: String = "",
@@ -13,7 +12,6 @@ data class PasswordEditUiState (
     val hasNumbers: Boolean = false,
     val hasSpecials: Boolean = false,
     val passwordLength: Int = PasswordPolicy.MIN_LENGTH,
-    val plainPassword: PlainPassword = PlainPassword(""),
     val cipheredNotes: EncryptedPayload = AppConfig.emptyEncryptedPayload,
     val cipheredPassword : EncryptedPayload = AppConfig.emptyEncryptedPayload,
     val score: Double = 0.0

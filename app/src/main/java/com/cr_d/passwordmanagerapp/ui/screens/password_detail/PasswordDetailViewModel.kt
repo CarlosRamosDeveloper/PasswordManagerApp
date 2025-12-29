@@ -45,7 +45,8 @@ class PasswordDetailViewModel(
         val isGeneratePasswordEnabled: Boolean = false,
         val errorMessage: String = "",
         val decipheredPassword: String = "",
-        val decipheredNotes: String = ""
+        val decipheredNotes: String = "",
+        val newPassword: PlainPassword = PlainPassword("")
     )
 
     init {
@@ -60,7 +61,8 @@ class PasswordDetailViewModel(
             _uiState.update {
                 it.copy(
                     password = password.toUiState(),
-                    editInfo = password.toEditUiState(pwdLength)
+                    editInfo = password.toEditUiState(pwdLength),
+                    newPassword = PlainPassword(decrypt(password.cipheredPassword))
                 )
             }
         }
@@ -114,14 +116,19 @@ class PasswordDetailViewModel(
             _uiState.update {
                 it.copy(
                     isPasswordShown = false,
-                    decipheredPassword = ""
+                    decipheredPassword = "",
+                    newPassword = PlainPassword("")
+
                 )
             }
         } else {
             _uiState.update {
+                val decryptedPassword = decrypt(_uiState.value.password!!.cipheredPassword)
+
                 it.copy(
                     isPasswordShown = true,
-                    decipheredPassword = decrypt(_uiState.value.password!!.cipheredPassword)
+                    decipheredPassword = decryptedPassword,
+                    newPassword = PlainPassword(decryptedPassword)
                 )
             }
         }
@@ -138,7 +145,7 @@ class PasswordDetailViewModel(
     fun onPlainPasswordChange (plainPassword: String){
         _uiState.update {
             it.copy(
-                editInfo = it.editInfo.copy(plainPassword = PlainPassword(plainPassword))
+                newPassword = PlainPassword(plainPassword)
             )
         }
     }
@@ -190,7 +197,7 @@ class PasswordDetailViewModel(
 
             val updatedPassword = updatePasswordUseCase.invoke(
                 id = passwordId,
-                newPassword = _uiState.value.editInfo.plainPassword.value,
+                newPassword = _uiState.value.newPassword.value,
                 appInfo = newAppInfo
             )
 
@@ -220,9 +227,9 @@ class PasswordDetailViewModel(
             _uiState.update {
                 it.copy(
                     errorMessage = "",
+                    newPassword = PlainPassword(password),
                     editInfo = it.editInfo.copy(
                         score = securityScoreCalculator(password),
-                        plainPassword = PlainPassword(password)
                     )
                 )
             }
@@ -230,9 +237,9 @@ class PasswordDetailViewModel(
             _uiState.update {
                 it.copy(
                     errorMessage = e.message ?: "Error al generar contraseña",
+                    newPassword = PlainPassword(""),
                     editInfo = it.editInfo.copy(
                         score = 0.0,
-                        plainPassword = PlainPassword("")
                     )
                 )
             }

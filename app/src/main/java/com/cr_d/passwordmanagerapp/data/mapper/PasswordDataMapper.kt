@@ -36,7 +36,6 @@ fun PasswordData.toUiState(): PasswordUiState  {
 }
 
 fun PasswordData.toEditUiState(passwordLength: Int): PasswordEditUiState = PasswordEditUiState(
-    plainPassword = PlainPassword(decrypt(cipheredPassword)),
     appName = appInfo.appName,
     appUrl = appInfo.appUrl,
     appAccount = appInfo.appAccount,
