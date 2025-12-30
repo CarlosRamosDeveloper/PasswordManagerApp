@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.passwords_list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,7 @@ class PasswordListViewModel(
     init {
         viewModelScope.launch {
             loadPasswords()
+            Log.d("CreationScreen", "List -> $this")
         }
     }
 

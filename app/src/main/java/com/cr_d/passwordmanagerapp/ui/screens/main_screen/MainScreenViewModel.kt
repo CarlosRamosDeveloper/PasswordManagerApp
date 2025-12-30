@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,7 @@ class MainScreenViewModel (
 
     init {
         onTotalPasswordsChange()
+        Log.d("CreationScreen", "Main -> $this")
     }
 
     fun onTotalPasswordsChange(){
