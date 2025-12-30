@@ -59,17 +59,14 @@ fun PasswordCard(
     passwordPlainText: String,
     onVisibilityToggleFunction: () -> Unit,
     isPasswordShown: Boolean,
-    context: Context,
-    snackFunction: (String) -> Unit
+    copyToClipboardFunction: () -> Unit
 ){
     InfoCard {
         CardTitle("Contraseña")
         ButtonsInPasswordSection(
-            passwordPlainText = passwordPlainText,
             isPasswordShown = isPasswordShown,
             onVisibilityToggleFunction = onVisibilityToggleFunction,
-            context = context,
-            snackFunction = snackFunction
+            copyToClipboardFunction = copyToClipboardFunction
         )
         if (isPasswordShown) Text(passwordPlainText)
         else Text("********")
@@ -79,22 +76,20 @@ fun PasswordCard(
 
 // TODO: Rama nueva -> Poner avisos en detailScreen
 /*
-*  Copy to clipboard -> La contraseña se va a copiar sin cifrar, el portapapeles se borrará tras 30 segundos -> Atrás / Copiar
+*
 *  Actualizar contraseña -> Este paso no se puede deshacer -> Atras / Actualizar
 *
 * */
 @Composable
 fun ButtonsInPasswordSection(
-    passwordPlainText: String,
     isPasswordShown: Boolean,
     onVisibilityToggleFunction: () -> Unit,
-    context: Context,
-    snackFunction: (String)-> Unit,
+    copyToClipboardFunction: () -> Unit
 ){
     Row (Modifier
         .fillMaxWidth()
         .padding(bottom = 5.dp), horizontalArrangement = Arrangement.SpaceAround){
         TogglePasswordVisibilityButton(isPasswordShown, onVisibilityToggleFunction)
-        CopyToClipboardButton(passwordPlainText, context, snackFunction)
+        CopyToClipboardButton(copyToClipboardFunction)
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import com.cr_d.passwordmanagerapp.ui.common_components.CustomButton
 
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
@@ -27,7 +28,7 @@ fun HeaderButtons(viewModel: PasswordDetailViewModel){
         ModeButton("Info", viewModel::onEnableBasicInfoMode)
         ModeButton("Detalle", viewModel::onEnableFullInfoMode)
         ModeButton("Editar", viewModel::onEnableEditMode)
-        CommonButton("Eliminar", viewModel::onEnableDeleteDialog)
+        CustomButton("Eliminar", viewModel::onEnableDeleteDialog)
     }
 }
 

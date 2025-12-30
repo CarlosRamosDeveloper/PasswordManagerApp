@@ -1,10 +1,5 @@
 package com.cr_d.passwordmanagerapp.ui.common_components
 
-import android.content.ClipData
-import android.content.ClipDescription
-import android.content.ClipboardManager
-import android.content.Context
-import android.os.PersistableBundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -34,18 +29,10 @@ fun CustomButton(
 }
 
 @Composable
-fun CopyToClipboardButton(passwordText: String, context: Context, snackFunction: (String)-> Unit){
+fun CopyToClipboardButton(onclick: () -> Unit){
     Button(
         onClick = {
-            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Copied_Text", passwordText).apply {
-                description.extras = PersistableBundle().apply {
-                    putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
-                }
-            }
-            clipboard.setPrimaryClip(clip)
-
-            snackFunction("Contraseña copiada en el portapapeles")
+            onclick()
         }
     ) {
         Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {

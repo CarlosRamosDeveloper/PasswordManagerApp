@@ -63,17 +63,6 @@ fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, onclick: () -> Unit
 }
 
 @Composable
-fun CommonButton(text: String, onclick: () -> Unit){
-    Button(
-        onClick = {
-            onclick()
-        }
-    ) {
-        Text(text)
-    }
-}
-
-@Composable
 fun PasswordGenerationToggle(isGeneratePasswordEnabled: Boolean, onclick: () -> Unit){
     FullWidthButton(
         if (isGeneratePasswordEnabled) "Desactivar generación de contraseñas" else "Activar generación de contraseñas",

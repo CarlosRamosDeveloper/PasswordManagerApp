@@ -1,7 +1,11 @@
 package com.cr_d.passwordmanagerapp.ui.screens.password_detail
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
 import android.content.Context
+import android.os.PersistableBundle
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -90,8 +94,7 @@ fun PasswordDetailedCard(
                     passwordPlainText = state.decipheredPassword,
                     onVisibilityToggleFunction = viewModel::onPasswordVisibilityToggle,
                     isPasswordShown = state.isPasswordShown,
-                    context = context,
-                    snackFunction = snackFunction
+                    copyToClipboardFunction = viewModel::onEnableCopyDialog
                 )
 
                 if (state.isDeleteDialogShown) ConfirmDialog(
@@ -105,6 +108,25 @@ fun PasswordDetailedCard(
                                 },
                     onDisable = viewModel::onDisableDeleteDialog,
                     onDismiss = viewModel::onDisableDeleteDialog
+                )
+
+                if (state.isCopyToDialogShown)  ConfirmDialog(
+                    title = "Copiar contraseña",
+                    message = "La información copiada dejará de estar cifrada en el portapapeles, se sugiere extremar precauciones",
+                    confirmButtonText = "Copiar en el portapapeles",
+                    onConfirm = {
+                        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val clip = ClipData.newPlainText("Copied_Text", viewModel.decipherPassword()).apply {
+                            description.extras = PersistableBundle().apply {
+                                putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
+                            }
+                        }
+                        clipboard.setPrimaryClip(clip)
+                        snackFunction("Contraseña copiada en el portapapeles")
+                        viewModel.onDisableCopyDialog()
+                    },
+                    onDisable = viewModel::onDisableCopyDialog,
+                    onDismiss = viewModel::onDisableCopyDialog
                 )
             }
 

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.String
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
@@ -69,6 +70,10 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun decipherPassword(): String{
+        return decrypt(_uiState.value.password!!.cipheredPassword)
+    }
+
     fun onAppNameChanged(value: String){
         _uiState.update {
             it.copy(
@@ -114,24 +119,23 @@ class PasswordDetailViewModel(
 
     fun onPasswordVisibilityToggle () {
         if (_uiState.value.isPasswordShown) {
-            _uiState.update {
-                it.copy(
-                    isPasswordShown = false,
-                    decipheredPassword = "",
-                    newPassword = PlainPassword("")
-
-                )
-            }
+            onDisablePasswordVisibility()
         } else {
             _uiState.update {
-                val decryptedPassword = decrypt(_uiState.value.password!!.cipheredPassword)
-
                 it.copy(
                     isPasswordShown = true,
-                    decipheredPassword = decryptedPassword,
-                    newPassword = PlainPassword(decryptedPassword)
+                    decipheredPassword = decipherPassword(),
                 )
             }
+        }
+    }
+
+    fun onDisablePasswordVisibility(){
+        _uiState.update {
+            it.copy(
+                isPasswordShown = false,
+                decipheredPassword = "",
+            )
         }
     }
 

@@ -43,7 +43,7 @@ fun EditMode(
         NewPasswordInfoCard(
             newPassword = newPlainPassword,
             isPasswordShown = isPasswordShown,
-            passwordState = passwordState,
+            scoreValue = String.format("%.2f", passwordState.score),
             viewModel = viewModel,
             snackFunction = snackFunction
         )
@@ -74,12 +74,18 @@ fun ApplicationEditInfo(passwordState: PasswordEditUiState, viewModel: PasswordD
 }
 
 @Composable
-fun NewPasswordInfoCard(newPassword: PlainPassword, isPasswordShown: Boolean, passwordState: PasswordEditUiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
+fun NewPasswordInfoCard(
+    newPassword: PlainPassword,
+    isPasswordShown: Boolean,
+    scoreValue: String,
+    viewModel: PasswordDetailViewModel,
+    snackFunction: (String)-> Unit
+){
     InfoCard {
         CardTitle("Contraseña")
         CustomRow(
             "Puntuación de seguridad",
-            String.format("%.2f", passwordState.score),
+            scoreValue,
             false
         )
         TogglePasswordVisibilityButton(isPasswordShown, viewModel::onPasswordVisibilityToggle)
