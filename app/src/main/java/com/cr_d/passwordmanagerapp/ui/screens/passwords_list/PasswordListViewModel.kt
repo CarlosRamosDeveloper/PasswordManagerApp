@@ -20,6 +20,10 @@ class PasswordListViewModel(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    data class UiState(
+        val passwords: List<PasswordUiState> = emptyList(),
+    )
+
     init {
         viewModelScope.launch {
             loadPasswords()
@@ -27,9 +31,11 @@ class PasswordListViewModel(
         }
     }
 
-    data class UiState(
-        val passwords: List<PasswordUiState> = emptyList(),
-    )
+    fun onRefresh(){
+        viewModelScope.launch {
+            loadPasswords()
+        }
+    }
 
     suspend fun loadPasswords(){
         val parsedPasswords = getAllPasswordsUseCase().map {

@@ -14,6 +14,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -25,10 +27,18 @@ import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
+    val scope = rememberCoroutineScope()
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        scope.launch {
+            viewModel.onRefresh()
+        }
+    }
 
     Column(
         modifier= Modifier

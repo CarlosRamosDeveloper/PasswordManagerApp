@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -37,13 +38,14 @@ fun Router(
     NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
             val mainViewModel: MainScreenViewModel = viewModel(
-                factory = AppGraph.mainScreenFactory()
+                factory = remember { AppGraph.mainScreenFactory },
+                viewModelStoreOwner = context
             )
             MainScreen(innerPadding, mainViewModel)
         }
         composable("CreatePasswordScreen") {
             val createPasswordViewModel: CreatePasswordViewModel = viewModel(
-                factory = AppGraph.createPasswordFactory(),
+                factory = remember { AppGraph.createPasswordFactory },
                 viewModelStoreOwner = context,
             )
             CreatePasswordScreen(
@@ -55,7 +57,8 @@ fun Router(
         }
         composable("ShowPasswordScreen") {
             val passwordListViewModel: PasswordListViewModel = viewModel(
-                factory = AppGraph.listPasswordFactory()
+                factory = remember { AppGraph.listPasswordFactory },
+                viewModelStoreOwner = context
             )
             PasswordsListScreen(
                 innerPadding = innerPadding,

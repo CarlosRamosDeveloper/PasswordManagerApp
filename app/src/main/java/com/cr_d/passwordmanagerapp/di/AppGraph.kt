@@ -17,23 +17,28 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailView
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModelFactory
 
 object AppGraph {
-    private var repository = RoomApplication.getRepository()
-    private val generator = PasswordGenerator()
-    private val generatePasswordUseCase = GeneratePasswordUseCase(generator)
-    private val scoreCalculator = SecurityScoreCalculator()
-    private val calculator = CalculateSecurityScoreUseCase(scoreCalculator)
-    private val createPasswordUseCase = SavePasswordUseCase(repository)
+    private val repository by lazy { RoomApplication.getRepository() }
+    private val generator by lazy { PasswordGenerator() }
+    private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(generator) }
+    private val scoreCalculator by lazy { SecurityScoreCalculator() }
+    private val calculator by lazy { CalculateSecurityScoreUseCase(scoreCalculator) }
+    private val createPasswordUseCase by lazy { SavePasswordUseCase(repository) }
 
-    fun mainScreenFactory() = MainScreenViewModelFactory(repository)
-    fun createPasswordFactory() =
+    val mainScreenFactory by lazy {
+        MainScreenViewModelFactory(repository)
+    }
+    val createPasswordFactory by lazy {
         CreatePasswordViewModelFactory(
             generatePasswordUseCase = generatePasswordUseCase,
             scoreCalculator = calculator,
-            savePasswordUseCase = createPasswordUseCase)
-    fun listPasswordFactory() =
+            savePasswordUseCase = createPasswordUseCase
+        )
+    }
+    val listPasswordFactory by lazy {
         PasswordListViewModelFactory(
             getAllPasswordsUseCase = GetAllPasswordsUseCase(repository)
         )
+    }
     fun detailPasswordFactory(passwordId: Long) = PasswordDetailViewModelFactory(
         repository = repository,
         passwordId = passwordId,

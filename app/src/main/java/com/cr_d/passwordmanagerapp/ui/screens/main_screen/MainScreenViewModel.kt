@@ -30,6 +30,10 @@ class MainScreenViewModel (
         Log.d("CreationScreen", "Main -> $this")
     }
 
+    fun onRefresh() {
+        onTotalPasswordsChange()
+    }
+
     fun onTotalPasswordsChange(){
         viewModelScope.launch {
             _uiState.update {
