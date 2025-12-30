@@ -87,7 +87,9 @@ fun PasswordDetailedCard(
                             isGeneratePasswordEnabled = state.isGeneratePasswordEnabled,
                             passwordState = state.editInfo,
                             viewModel = viewModel,
-                            passwordError = state.errorMessage
+                            passwordError = state.errorMessage,
+                            notes = state.newNotes,
+                            haveChangedNotes = viewModel.checkIfNotesHasChanged()
                         )
                     }
                 }

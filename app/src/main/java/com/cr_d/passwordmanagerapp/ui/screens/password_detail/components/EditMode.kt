@@ -30,14 +30,16 @@ fun EditMode(
     isGeneratePasswordEnabled: Boolean,
     passwordState: PasswordEditUiState,
     viewModel: PasswordDetailViewModel,
-    passwordError: String
+    passwordError: String,
+    notes: String,
+    haveChangedNotes: Boolean
 ){
     Column(modifier = Modifier
         .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ApplicationEditInfo(passwordState, viewModel)
-        NoteEditInfo("A")
+        NoteEditInfo(notes, viewModel::onNotesHasChanged, haveChangedNotes)
         PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel::onGeneratePasswordSectionToggle)
         if(isGeneratePasswordEnabled) MetadataEditInfo(passwordState, passwordError, viewModel)
         NewPasswordInfoCard(
@@ -123,10 +125,15 @@ fun MetadataEditInfo(passwordState: PasswordEditUiState, passwordError: String, 
 }
 
 @Composable
-fun NoteEditInfo(notes: String){
+fun NoteEditInfo(notes: String, onChangeNotesFunction: (String) -> Unit, haveChangedNotes: Boolean){
     InfoCard {
-        CustomOutlinedTextField("Notes", notes, {})
-        FullWidthButton("Actualizar nota", {})
+        CustomOutlinedTextField(
+            label = "Notes",
+            param = notes,
+            onValueChange = { onChangeNotesFunction(it) },
+            isSingleLine = false
+        )
+        if (haveChangedNotes) FullWidthButton("Actualizar nota", {})
     }
 }
 

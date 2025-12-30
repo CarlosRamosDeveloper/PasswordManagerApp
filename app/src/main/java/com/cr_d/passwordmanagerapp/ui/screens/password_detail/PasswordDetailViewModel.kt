@@ -48,6 +48,7 @@ class PasswordDetailViewModel(
         val decipheredPassword: String = "",
         val decipheredNotes: String = "",
         val newPassword: PlainPassword = PlainPassword(""),
+        val newNotes: String = "",
         val isDeleteDialogShown: Boolean = false,
         val isCopyToDialogShown: Boolean = false,
         val isUpdatePasswordDialogShown: Boolean = false
@@ -68,16 +69,35 @@ class PasswordDetailViewModel(
                     password = password.toUiState(),
                     editInfo = password.toEditUiState(pwdLength),
                     newPassword = PlainPassword(decrypt(password.cipheredPassword)),
-                    decipheredNotes = decipheredNotes
+                    decipheredNotes = decipheredNotes,
+                    newNotes = decipheredNotes
                 )
             }
         }
     }
 
+    fun decipherNotes():String{
+        return decrypt(_uiState.value.password!!.cipheredNotes)
+    }
+
+    fun onDeleteNote(){
+        _uiState.update {
+            it.copy(
+                newNotes = ""
+            )
+        }
+    }
     fun checkIfPasswordHasChanged(): Boolean{
         val lastPassword = decipherPassword()
         val newPassword = _uiState.value.newPassword.value
         return (lastPassword != newPassword)
+    }
+
+    fun checkIfNotesHasChanged(): Boolean {
+        val lastNotes = decipherNotes()
+        val newNotes = _uiState.value.newNotes
+
+        return (lastNotes != newNotes)
     }
 
     fun decipherPassword(): String{
@@ -161,6 +181,14 @@ class PasswordDetailViewModel(
         _uiState.update {
             it.copy(
                 newPassword = PlainPassword(plainPassword)
+            )
+        }
+    }
+
+    fun onNotesHasChanged(notes: String){
+        _uiState.update {
+            it.copy(
+                newNotes = notes
             )
         }
     }
@@ -262,7 +290,8 @@ class PasswordDetailViewModel(
             val updatedPassword = updatePasswordUseCase.invoke(
                 id = passwordId,
                 newPassword = _uiState.value.newPassword.value,
-                appInfo = newAppInfo
+                appInfo = newAppInfo,
+                // TODO: Agregar las notas aquí y en la firma
             )
 
             val uiStateParsedPassword = updatedPassword.toUiState()
