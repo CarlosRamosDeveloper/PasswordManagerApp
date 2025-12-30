@@ -128,7 +128,7 @@ fun MetadataEditInfo(passwordState: PasswordEditUiState, passwordError: String, 
 fun NoteEditInfo(notes: String, onChangeNotesFunction: (String) -> Unit, haveChangedNotes: Boolean, enableNoteUpdateDialogFunction: ()-> Unit){
     InfoCard {
         CustomOutlinedTextField(
-            label = "Notes",
+            label = "Notas",
             param = notes,
             onValueChange = { onChangeNotesFunction(it) },
             isSingleLine = false

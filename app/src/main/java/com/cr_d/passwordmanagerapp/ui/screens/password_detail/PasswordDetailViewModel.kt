@@ -310,7 +310,6 @@ class PasswordDetailViewModel(
                 id = passwordId,
                 newPassword = _uiState.value.newPassword.value,
                 appInfo = newAppInfo,
-                // TODO: Agregar las notas aquí y en la firma
             )
 
             val uiStateParsedPassword = updatedPassword.toUiState()

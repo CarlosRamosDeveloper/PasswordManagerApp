@@ -28,7 +28,6 @@ data class PasswordEntity(
     val notesIv: ByteArray
 )
 
-// TODO: Implementar notas -> PWD_Entity
 // TODO: Agregar tabla de aplicación -> APP_Entity
 // TODO: Agregar tabla de cuenta de usuario -> Account_Entity
 // TODO: Permitir la busqueda por app
