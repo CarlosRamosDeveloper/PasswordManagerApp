@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
@@ -60,19 +59,6 @@ fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, onclick: () -> Unit
                 Text("Mostrar", modifier = Modifier.padding(horizontal = 15.dp))
             }
         }
-    }
-}
-
-@Composable
-fun DeletePasswordButton(snackFunction: (String)-> Unit, onclick: () -> Unit, navController: NavController){
-    Button(
-        onClick = {
-            onclick()
-            snackFunction("Contraseña eliminada")
-            navController.navigate("ShowPasswordScreen")
-        }
-    ) {
-        Text("Eliminar")
     }
 }
 

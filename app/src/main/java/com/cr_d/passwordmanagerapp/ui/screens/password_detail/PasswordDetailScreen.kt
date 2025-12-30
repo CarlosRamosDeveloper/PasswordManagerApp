@@ -1,7 +1,11 @@
 package com.cr_d.passwordmanagerapp.ui.screens.password_detail
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
 import android.content.Context
+import android.os.PersistableBundle
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
+import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.BasicMode
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.DetailedMode
@@ -32,8 +37,8 @@ fun PasswordDetailScreen(
     navController: NavController
 ){
     Column (modifier = Modifier.padding(innerPadding)){
-        HeaderButtons(viewModel, snackFunction, navController)
-        PasswordDetailedCard(context, snackFunction, viewModel, settings)
+        HeaderButtons(viewModel)
+        PasswordDetailedCard(context, snackFunction, viewModel, settings, navController)
     }
 }
 
@@ -44,6 +49,7 @@ fun PasswordDetailedCard(
     snackFunction: (String)-> Unit,
     viewModel: PasswordDetailViewModel,
     settings: SettingsViewModel,
+    navController: NavController
 ){
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
     val settings = settings.settings.collectAsStateWithLifecycle().value
@@ -80,16 +86,72 @@ fun PasswordDetailedCard(
                             isGeneratePasswordEnabled = state.isGeneratePasswordEnabled,
                             passwordState = state.editInfo,
                             viewModel = viewModel,
-                            snackFunction = snackFunction
+                            passwordError = state.errorMessage
                         )
                     }
                 }
+
                 if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
                     passwordPlainText = state.decipheredPassword,
                     onVisibilityToggleFunction = viewModel::onPasswordVisibilityToggle,
                     isPasswordShown = state.isPasswordShown,
-                    context = context,
-                    snackFunction = snackFunction
+                    copyToClipboardFunction = viewModel::onEnableCopyDialog
+                )
+
+                if (state.isDeleteDialogShown) ConfirmDialog(
+                    title = "Eliminar contraseña",
+                    message = "Este paso no se puede deshacer, ¿está seguro?",
+                    confirmButtonText = "Eliminar contraseña",
+                    onConfirm = {
+                        viewModel.onDeletePassword()
+                        snackFunction("Contraseña eliminada")
+                        navController.navigate("ShowPasswordScreen")
+                                },
+                    onDisable = viewModel::onDisableDeleteDialog,
+                    onDismiss = viewModel::onDisableDeleteDialog
+                )
+
+                if (state.isCopyToDialogShown)  ConfirmDialog(
+                    title = "Copiar contraseña",
+                    message = "La información en el portapapeles no está cifrada, se sugiere extremar precauciones",
+                    confirmButtonText = "Copiar en el portapapeles",
+                    onConfirm = {
+                        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val clip = ClipData.newPlainText("Copied_Text", viewModel.decipherPassword()).apply {
+                            description.extras = PersistableBundle().apply {
+                                putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
+                            }
+                        }
+                        clipboard.setPrimaryClip(clip)
+                        snackFunction("Contraseña copiada en el portapapeles")
+                        viewModel.onDisableCopyDialog()
+                    },
+                    onDisable = viewModel::onDisableCopyDialog,
+                    onDismiss = viewModel::onDisableCopyDialog
+                )
+
+                if(state.isUpdatePasswordDialogShown) ConfirmDialog(
+                    title = "Actualizar contraseña",
+                    message =
+                        if (viewModel.checkIfPasswordHasChanged()) "Esta acción actualizará la contraseña de forma permanente"
+                        else "Atención, la contraseña no ha cambiado",
+                    confirmButtonText =
+                        if (viewModel.checkIfPasswordHasChanged())"Actualizar contraseña"
+                        else "Atrás",
+                    onConfirm = {
+                        if (viewModel.checkIfPasswordHasChanged()) {
+                            viewModel.onUpdatePassword()
+                            snackFunction("Contraseña actualizada correctamente")
+                        } else {
+                            snackFunction("La contraseña no ha cambiado")
+                        }
+                        viewModel.onDisableUpdateDialog()
+                    },
+                    onDisable = viewModel::onDisableUpdateDialog,
+                    onDismiss = {
+                        snackFunction("La contraseña no ha cambiado")
+                        viewModel.onDisableUpdateDialog()
+                    }
                 )
             }
 

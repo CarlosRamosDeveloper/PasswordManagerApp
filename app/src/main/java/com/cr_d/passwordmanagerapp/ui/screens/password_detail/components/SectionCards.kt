@@ -1,6 +1,5 @@
 package com.cr_d.passwordmanagerapp.ui.screens.password_detail.components
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,17 +58,14 @@ fun PasswordCard(
     passwordPlainText: String,
     onVisibilityToggleFunction: () -> Unit,
     isPasswordShown: Boolean,
-    context: Context,
-    snackFunction: (String) -> Unit
+    copyToClipboardFunction: () -> Unit
 ){
     InfoCard {
         CardTitle("Contraseña")
         ButtonsInPasswordSection(
-            passwordPlainText = passwordPlainText,
             isPasswordShown = isPasswordShown,
             onVisibilityToggleFunction = onVisibilityToggleFunction,
-            context = context,
-            snackFunction = snackFunction
+            copyToClipboardFunction = copyToClipboardFunction
         )
         if (isPasswordShown) Text(passwordPlainText)
         else Text("********")
@@ -79,16 +75,14 @@ fun PasswordCard(
 
 @Composable
 fun ButtonsInPasswordSection(
-    passwordPlainText: String,
     isPasswordShown: Boolean,
     onVisibilityToggleFunction: () -> Unit,
-    context: Context,
-    snackFunction: (String)-> Unit,
+    copyToClipboardFunction: () -> Unit
 ){
     Row (Modifier
         .fillMaxWidth()
         .padding(bottom = 5.dp), horizontalArrangement = Arrangement.SpaceAround){
         TogglePasswordVisibilityButton(isPasswordShown, onVisibilityToggleFunction)
-        CopyToClipboardButton(passwordPlainText, context, snackFunction)
+        CopyToClipboardButton(copyToClipboardFunction)
     }
 }
