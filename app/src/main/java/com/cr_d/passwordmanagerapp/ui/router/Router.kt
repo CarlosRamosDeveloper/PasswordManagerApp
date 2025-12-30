@@ -12,29 +12,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
-import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
-import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
+import com.cr_d.passwordmanagerapp.di.AppGraph
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailScreen
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordsListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModel
-import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModel
-import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModel
-import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsScreen
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
@@ -44,35 +30,22 @@ fun Router(
     innerPadding: PaddingValues,
     navController: NavHostController,
     snackFunction: (String)-> Unit,
-    repo: IPasswordRepository
 ){
     val context = LocalContext.current
-    val generator = PasswordGenerator()
-    val generatePasswordUseCase = GeneratePasswordUseCase(generator)
-    val scoreCalculator = SecurityScoreCalculator()
-    val createPasswordUseCase = SavePasswordUseCase(repo)
-
     val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
-    val mainViewModel: MainScreenViewModel = viewModel(
-        factory = MainScreenViewModelFactory(repo)
-    )
-    val createPasswordViewModel: CreatePasswordViewModel = viewModel(
-        factory = CreatePasswordViewModelFactory(
-            generatePasswordUseCase = generatePasswordUseCase,
-            scoreCalculator = CalculateSecurityScoreUseCase(scoreCalculator),
-            savePasswordUseCase = createPasswordUseCase)
-    )
-    val passwordListViewModel: PasswordListViewModel = viewModel(
-        factory = PasswordListViewModelFactory(
-            getAllPasswordsUseCase = GetAllPasswordsUseCase(repo)
-        )
-    )
 
     NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
+            val mainViewModel: MainScreenViewModel = viewModel(
+                factory = AppGraph.mainScreenFactory()
+            )
             MainScreen(innerPadding, mainViewModel)
         }
         composable("CreatePasswordScreen") {
+            val createPasswordViewModel: CreatePasswordViewModel = viewModel(
+                factory = AppGraph.createPasswordFactory(),
+                viewModelStoreOwner = context,
+            )
             CreatePasswordScreen(
                 innerPadding = innerPadding,
                 viewModel = createPasswordViewModel,
@@ -81,6 +54,9 @@ fun Router(
             )
         }
         composable("ShowPasswordScreen") {
+            val passwordListViewModel: PasswordListViewModel = viewModel(
+                factory = AppGraph.listPasswordFactory()
+            )
             PasswordsListScreen(
                 innerPadding = innerPadding,
                 navController = navController,
@@ -91,20 +67,8 @@ fun Router(
             type = NavType.LongType
         })) { backstackEntry ->
             val passwordId = backstackEntry.arguments?.getLong("passwordId") ?: 1
-            val generator = PasswordGenerator()
-            val generatePasswordUseCase = GeneratePasswordUseCase(generator)
-            val scoreCalculator = SecurityScoreCalculator()
-            val scoreCalculatorUseCase = CalculateSecurityScoreUseCase(scoreCalculator)
             val passwordDetailVM:PasswordDetailViewModel = viewModel(
-                factory = PasswordDetailViewModelFactory(
-                    repository = repo,
-                    passwordId = passwordId,
-                    generatePasswordUseCase = generatePasswordUseCase,
-                    securityScoreCalculator = scoreCalculatorUseCase,
-                    updatePasswordUseCase = UpdatePasswordUseCase(repo),
-                    deletePasswordUseCase = DeletePasswordUseCase(repo),
-                    decrypt = DecryptStringUseCase(CryptoService())
-                )
+                factory = AppGraph.detailPasswordFactory(passwordId)
             )
             PasswordDetailScreen(
                 innerPadding = innerPadding,
