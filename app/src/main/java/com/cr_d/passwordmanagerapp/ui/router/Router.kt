@@ -29,6 +29,7 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailScre
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordsListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModeFactory
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsScreen
@@ -82,11 +83,8 @@ fun Router(
             val generatePasswordUseCase = GeneratePasswordUseCase(generator)
             val scoreCalculator = SecurityScoreCalculator()
             val scoreCalculatorUseCase = CalculateSecurityScoreUseCase(scoreCalculator)
-            PasswordDetailScreen(
-                innerPadding = innerPadding,
-                context = context,
-                snackFunction = snackFunction,
-                viewModel = PasswordDetailViewModel(
+            val viewModel:PasswordDetailViewModel = viewModel(
+                factory = PasswordDetailViewModeFactory(
                     repository = repo,
                     passwordId = passwordId,
                     generatePasswordUseCase = generatePasswordUseCase,
@@ -94,7 +92,14 @@ fun Router(
                     updatePasswordUseCase = UpdatePasswordUseCase(repo),
                     deletePasswordUseCase = DeletePasswordUseCase(repo),
                     decrypt = DecryptStringUseCase(CryptoService())
-                ),
+                )
+            )
+
+            PasswordDetailScreen(
+                innerPadding = innerPadding,
+                context = context,
+                snackFunction = snackFunction,
+                viewModel = viewModel,
                 settings = settingsViewModel,
                 navController = navController
             )
@@ -104,3 +109,4 @@ fun Router(
         }
     }
 }
+
