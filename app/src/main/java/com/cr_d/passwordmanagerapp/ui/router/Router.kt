@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -12,17 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
-import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
-import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
+import com.cr_d.passwordmanagerapp.di.AppGraph
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailScreen
@@ -40,61 +31,53 @@ fun Router(
     innerPadding: PaddingValues,
     navController: NavHostController,
     snackFunction: (String)-> Unit,
-    repo: IPasswordRepository
 ){
     val context = LocalContext.current
     val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
 
     NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
-            MainScreen(innerPadding, MainScreenViewModel(repo))
+            val mainViewModel: MainScreenViewModel = viewModel(
+                factory = remember { AppGraph.mainScreenFactory },
+                viewModelStoreOwner = context
+            )
+            MainScreen(innerPadding, mainViewModel)
         }
         composable("CreatePasswordScreen") {
-            val generator = PasswordGenerator()
-            val generatePasswordUseCase = GeneratePasswordUseCase(generator)
-            val scoreCalculator = SecurityScoreCalculator()
-            val createPasswordUseCase = SavePasswordUseCase(repo)
+            val createPasswordViewModel: CreatePasswordViewModel = viewModel(
+                factory = remember { AppGraph.createPasswordFactory },
+                viewModelStoreOwner = context,
+            )
             CreatePasswordScreen(
                 innerPadding = innerPadding,
-                viewModel = CreatePasswordViewModel(
-                    generatePasswordUseCase,
-                    CalculateSecurityScoreUseCase(scoreCalculator),
-                    createPasswordUseCase
-                ),
+                viewModel = createPasswordViewModel,
                 context = context,
                 snackFunction = snackFunction
             )
         }
         composable("ShowPasswordScreen") {
+            val passwordListViewModel: PasswordListViewModel = viewModel(
+                factory = remember { AppGraph.listPasswordFactory },
+                viewModelStoreOwner = context
+            )
             PasswordsListScreen(
                 innerPadding = innerPadding,
                 navController = navController,
-                viewModel = PasswordListViewModel(
-                    GetAllPasswordsUseCase(repo)
-                )
+                viewModel = passwordListViewModel
             )
         }
         composable("PasswordDataScreen/{passwordId}", arguments = listOf(navArgument("passwordId") {
             type = NavType.LongType
         })) { backstackEntry ->
             val passwordId = backstackEntry.arguments?.getLong("passwordId") ?: 1
-            val generator = PasswordGenerator()
-            val generatePasswordUseCase = GeneratePasswordUseCase(generator)
-            val scoreCalculator = SecurityScoreCalculator()
-            val scoreCalculatorUseCase = CalculateSecurityScoreUseCase(scoreCalculator)
+            val passwordDetailVM:PasswordDetailViewModel = viewModel(
+                factory = AppGraph.detailPasswordFactory(passwordId)
+            )
             PasswordDetailScreen(
                 innerPadding = innerPadding,
                 context = context,
                 snackFunction = snackFunction,
-                viewModel = PasswordDetailViewModel(
-                    repository = repo,
-                    passwordId = passwordId,
-                    generatePasswordUseCase = generatePasswordUseCase,
-                    securityScoreCalculator = scoreCalculatorUseCase,
-                    updatePasswordUseCase = UpdatePasswordUseCase(repo),
-                    deletePasswordUseCase = DeletePasswordUseCase(repo),
-                    decrypt = DecryptStringUseCase(CryptoService())
-                ),
+                viewModel = passwordDetailVM,
                 settings = settingsViewModel,
                 navController = navController
             )
@@ -104,3 +87,4 @@ fun Router(
         }
     }
 }
+

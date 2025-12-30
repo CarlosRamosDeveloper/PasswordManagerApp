@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
-import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
+import com.cr_d.passwordmanagerapp.ui.common_components.CustomOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomCheckboxForm
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
@@ -30,13 +30,16 @@ fun EditMode(
     isGeneratePasswordEnabled: Boolean,
     passwordState: PasswordEditUiState,
     viewModel: PasswordDetailViewModel,
-    passwordError: String
+    passwordError: String,
+    notes: String,
+    haveChangedNotes: Boolean
 ){
     Column(modifier = Modifier
         .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ApplicationEditInfo(passwordState, viewModel)
+        NoteEditInfo(notes, viewModel::onNotesHasChanged, haveChangedNotes, viewModel::onEnableUpdateNotesDialog)
         PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel::onGeneratePasswordSectionToggle)
         if(isGeneratePasswordEnabled) MetadataEditInfo(passwordState, passwordError, viewModel)
         NewPasswordInfoCard(
@@ -52,17 +55,17 @@ fun EditMode(
 fun ApplicationEditInfo(passwordState: PasswordEditUiState, viewModel: PasswordDetailViewModel){
     InfoCard {
         CardTitle("Información de aplicación")
-        ApplicationOutlinedTextField(
+        CustomOutlinedTextField(
             "Aplicacion",
             passwordState.appName,
             viewModel::onAppNameChanged
         )
-        ApplicationOutlinedTextField(
+        CustomOutlinedTextField(
             "Url",
             passwordState.appUrl,
             viewModel::onUrlChanged
         )
-        ApplicationOutlinedTextField(
+        CustomOutlinedTextField(
             "Cuenta",
             passwordState.appAccount,
             viewModel::onAccountChanged
@@ -118,6 +121,19 @@ fun MetadataEditInfo(passwordState: PasswordEditUiState, passwordError: String, 
         )
         if (passwordError != "") ErrorMessage(passwordError)
         GeneratePasswordButton(viewModel)
+    }
+}
+
+@Composable
+fun NoteEditInfo(notes: String, onChangeNotesFunction: (String) -> Unit, haveChangedNotes: Boolean, enableNoteUpdateDialogFunction: ()-> Unit){
+    InfoCard {
+        CustomOutlinedTextField(
+            label = "Notas",
+            param = notes,
+            onValueChange = { onChangeNotesFunction(it) },
+            isSingleLine = false
+        )
+        if (haveChangedNotes) FullWidthButton("Actualizar nota", enableNoteUpdateDialogFunction)
     }
 }
 

@@ -24,6 +24,7 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.BasicMo
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.DetailedMode
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.EditMode
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.HeaderButtons
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.NotesSection
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.PasswordCard
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
@@ -68,7 +69,7 @@ fun PasswordDetailedCard(
                     PasswordDetailUiMode.BASIC_INFO_MODE -> {
                         BasicMode(
                             password = state.password,
-                            settings = settings,
+                            settings = settings
                         )
                     }
 
@@ -86,11 +87,15 @@ fun PasswordDetailedCard(
                             isGeneratePasswordEnabled = state.isGeneratePasswordEnabled,
                             passwordState = state.editInfo,
                             viewModel = viewModel,
-                            passwordError = state.errorMessage
+                            passwordError = state.errorMessage,
+                            notes = state.newNotes,
+                            haveChangedNotes = viewModel.checkIfNotesHasChanged()
                         )
                     }
                 }
-
+                if (state.mode != PasswordDetailUiMode.EDIT_MODE) NotesSection(
+                    state.decipheredNotes
+                )
                 if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
                     passwordPlainText = state.decipheredPassword,
                     onVisibilityToggleFunction = viewModel::onPasswordVisibilityToggle,
@@ -152,6 +157,19 @@ fun PasswordDetailedCard(
                         snackFunction("La contraseña no ha cambiado")
                         viewModel.onDisableUpdateDialog()
                     }
+                )
+
+                if(state.isUpdateNotesDialogShown) ConfirmDialog(
+                    title = "Actualización de notas",
+                    message = "¿Quiere actualizar las notas?",
+                    confirmButtonText = "Actualizar notas",
+                    onConfirm = {
+                        viewModel.onUpdateNotes()
+                        snackFunction("Notas actualizadas")
+                        viewModel.onDisableUpdateNotesDialog()
+                    },
+                    onDisable = viewModel::onDisableUpdateNotesDialog,
+                    onDismiss = viewModel::onDisableUpdateNotesDialog
                 )
             }
 
