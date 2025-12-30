@@ -1,6 +1,5 @@
 package com.cr_d.passwordmanagerapp.ui.screens.password_detail.components
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationTitle
@@ -14,10 +13,8 @@ import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 @Composable
 fun BasicMode(
     password: PasswordUiState,
-    settings: SettingsViewModel.AppSettings,
-    notes: String
+    settings: SettingsViewModel.AppSettings
 ){
-    Log.d("BasicMode:notes", notes)
     InfoCard {
         ApplicationTitle(password.appInfo.appName)
         SectionTitle("Información resumida")
@@ -26,5 +23,4 @@ fun BasicMode(
         CustomRow("Última Modificación", password.dateInfo.lastUpdate.formatAs(settings.dateFormat))
         CustomRow("Puntuación de seguridad", String.format("%.2f", password.score))
     }
-    NotesSection(notes)
 }

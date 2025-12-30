@@ -86,7 +86,8 @@ fun NotesSection(
     InfoCard {
         CardTitle("Notas")
         TextField(
-            state
+            state,
+            readOnly = true
         )
         UnderFormSpacer()
     }

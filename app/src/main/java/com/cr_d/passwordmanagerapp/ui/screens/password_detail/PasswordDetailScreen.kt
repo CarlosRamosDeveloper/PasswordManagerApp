@@ -24,6 +24,7 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.BasicMo
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.DetailedMode
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.EditMode
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.HeaderButtons
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.NotesSection
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.PasswordCard
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
@@ -68,8 +69,7 @@ fun PasswordDetailedCard(
                     PasswordDetailUiMode.BASIC_INFO_MODE -> {
                         BasicMode(
                             password = state.password,
-                            settings = settings,
-                            notes = state.decipheredNotes
+                            settings = settings
                         )
                     }
 
@@ -91,7 +91,9 @@ fun PasswordDetailedCard(
                         )
                     }
                 }
-
+                if (state.mode != PasswordDetailUiMode.EDIT_MODE) NotesSection(
+                    state.decipheredNotes
+                )
                 if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
                     passwordPlainText = state.decipheredPassword,
                     onVisibilityToggleFunction = viewModel::onPasswordVisibilityToggle,
