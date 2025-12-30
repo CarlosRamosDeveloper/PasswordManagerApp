@@ -31,6 +31,7 @@ class CreatePasswordViewModel(
         val passwordLength: Int = PasswordPolicy.MIN_GENERATED_LENGTH,
         val passwordError: String = "",
         val generatedPassword: String = "",
+        val isCopyToDialogShown: Boolean = false
     )
 
     fun onOptionChanged(option: PasswordOption, value: Boolean) {
@@ -79,6 +80,22 @@ class CreatePasswordViewModel(
     fun onPasswordLengthChanged(value: Int) {
         _uiState.update {
             it.copy(passwordLength = value)
+        }
+    }
+
+    fun onEnableCopyToDialog(){
+        _uiState.update {
+            it.copy(
+                isCopyToDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableCopyToDialog(){
+        _uiState.update {
+            it.copy(
+                isCopyToDialogShown = false
+            )
         }
     }
 

@@ -112,7 +112,7 @@ fun PasswordDetailedCard(
 
                 if (state.isCopyToDialogShown)  ConfirmDialog(
                     title = "Copiar contraseña",
-                    message = "La información copiada dejará de estar cifrada en el portapapeles, se sugiere extremar precauciones",
+                    message = "La información en el portapapeles no está cifrada, se sugiere extremar precauciones",
                     confirmButtonText = "Copiar en el portapapeles",
                     onConfirm = {
                         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
