@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.password_detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,18 +55,20 @@ class PasswordDetailViewModel(
 
     init {
         loadPassword()
+        Log.d("CreationScreen", "Detail -> $this")
     }
 
     private fun loadPassword(){
         viewModelScope.launch {
             val password = repository.findById(passwordId) ?: return@launch
             val pwdLength = decrypt(password.cipheredPassword).length
-
+            val decipheredNotes = decrypt(password.cipheredNotes)
             _uiState.update {
                 it.copy(
                     password = password.toUiState(),
                     editInfo = password.toEditUiState(pwdLength),
-                    newPassword = PlainPassword(decrypt(password.cipheredPassword))
+                    newPassword = PlainPassword(decrypt(password.cipheredPassword)),
+                    decipheredNotes = decipheredNotes
                 )
             }
         }

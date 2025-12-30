@@ -69,6 +69,7 @@ fun PasswordDetailedCard(
                         BasicMode(
                             password = state.password,
                             settings = settings,
+                            notes = state.decipheredNotes
                         )
                     }
 
