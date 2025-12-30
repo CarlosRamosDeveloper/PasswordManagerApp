@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 
 @Composable
-fun ApplicationOutlinedTextField(label: String, param: String, onValueChange: (String) -> Unit){
+fun CustomOutlinedTextField(label: String, param: String, onValueChange: (String) -> Unit){
     OutlinedTextField(
         value = param,
         onValueChange = {onValueChange(it)},
