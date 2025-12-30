@@ -71,6 +71,12 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun checkIfPasswordHasChanged(): Boolean{
+        val lastPassword = decipherPassword()
+        val newPassword = _uiState.value.newPassword.value
+        return (lastPassword != newPassword)
+    }
+
     fun decipherPassword(): String{
         return decrypt(_uiState.value.password!!.cipheredPassword)
     }
