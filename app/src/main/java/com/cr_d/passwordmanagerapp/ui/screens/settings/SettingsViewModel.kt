@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.settings
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +16,10 @@ class SettingsViewModel : ViewModel(){
     data class AppSettings(
         val dateFormat: DateFormatOption = DateFormatOption.YMD
     )
+
+    init {
+        Log.d("CreationScreen", "Settings -> $this")
+    }
 
     fun setDateFormat(option: DateFormatOption) {
         _settings.update {

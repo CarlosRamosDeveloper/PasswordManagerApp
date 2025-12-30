@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
@@ -33,6 +34,10 @@ class CreatePasswordViewModel(
         val generatedPassword: String = "",
         val isCopyToDialogShown: Boolean = false
     )
+
+    init{
+        Log.d("CreationScreen", "Create -> $this")
+    }
 
     fun onOptionChanged(option: PasswordOption, value: Boolean) {
         _uiState.update {
@@ -181,7 +186,7 @@ class CreatePasswordViewModel(
                 passwordData.appInfo.appAccount
             )
             try {
-                savePasswordUseCase.invoke(password, appInfo, passwordData.score)
+                savePasswordUseCase.invoke(password, appInfo, passwordData.score, passwordData.notes)
                 resetStatus()
             } catch (e: Exception){
                 _uiState.update {

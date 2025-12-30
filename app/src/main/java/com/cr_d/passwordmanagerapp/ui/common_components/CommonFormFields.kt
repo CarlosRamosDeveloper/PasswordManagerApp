@@ -24,12 +24,12 @@ import androidx.compose.ui.unit.dp
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 
 @Composable
-fun ApplicationOutlinedTextField(label: String, param: String, onValueChange: (String) -> Unit){
+fun CustomOutlinedTextField(label: String, param: String, onValueChange: (String) -> Unit, isSingleLine: Boolean = true){
     OutlinedTextField(
         value = param,
         onValueChange = {onValueChange(it)},
         label = { Text(label) },
-        singleLine = true,
+        singleLine = isSingleLine,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
     )
 }

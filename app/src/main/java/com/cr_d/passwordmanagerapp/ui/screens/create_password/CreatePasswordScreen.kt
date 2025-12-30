@@ -24,7 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
-import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
+import com.cr_d.passwordmanagerapp.ui.common_components.CustomOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.common_components.CopyToClipboardButton
@@ -141,9 +141,9 @@ fun PasswordButtonsSection(
 fun ApplicationSection(appInfo: ApplicationInfo, viewModel: CreatePasswordViewModel){
     InfoCard {
         CardTitle("Información de aplicación")
-        ApplicationOutlinedTextField("Nombre de aplicación", appInfo.appName, viewModel::onAppNameChanged)
-        ApplicationOutlinedTextField("Url de la aplicación", appInfo.appUrl, viewModel::onAppUrlChanged)
-        ApplicationOutlinedTextField("Cuenta", appInfo.appAccount, viewModel::onAccountChanged)
+        CustomOutlinedTextField("Nombre de aplicación", appInfo.appName, viewModel::onAppNameChanged)
+        CustomOutlinedTextField("Url de la aplicación", appInfo.appUrl, viewModel::onAppUrlChanged)
+        CustomOutlinedTextField("Cuenta", appInfo.appAccount, viewModel::onAccountChanged)
         UnderFormSpacer()
     }
 }

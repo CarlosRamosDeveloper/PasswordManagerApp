@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.password_detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreU
 import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toEditUiState
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
@@ -31,6 +33,7 @@ class PasswordDetailViewModel(
     val generatePasswordUseCase: GeneratePasswordUseCase,
     val securityScoreCalculator: CalculateSecurityScoreUseCase,
     val updatePasswordUseCase: UpdatePasswordUseCase,
+    val updateNotesUseCase: UpdateNotesUseCase,
     val deletePasswordUseCase: DeletePasswordUseCase,
     val decrypt: DecryptStringUseCase
 ): ViewModel() {
@@ -47,34 +50,57 @@ class PasswordDetailViewModel(
         val decipheredPassword: String = "",
         val decipheredNotes: String = "",
         val newPassword: PlainPassword = PlainPassword(""),
+        val newNotes: String = "",
         val isDeleteDialogShown: Boolean = false,
         val isCopyToDialogShown: Boolean = false,
-        val isUpdatePasswordDialogShown: Boolean = false
+        val isUpdatePasswordDialogShown: Boolean = false,
+        val isUpdateNotesDialogShown: Boolean = false,
     )
 
     init {
         loadPassword()
+        Log.d("CreationScreen", "Detail -> $this")
     }
 
     private fun loadPassword(){
         viewModelScope.launch {
             val password = repository.findById(passwordId) ?: return@launch
             val pwdLength = decrypt(password.cipheredPassword).length
-
+            val decipheredNotes = decrypt(password.cipheredNotes)
             _uiState.update {
                 it.copy(
                     password = password.toUiState(),
                     editInfo = password.toEditUiState(pwdLength),
-                    newPassword = PlainPassword(decrypt(password.cipheredPassword))
+                    newPassword = PlainPassword(decrypt(password.cipheredPassword)),
+                    decipheredNotes = decipheredNotes,
+                    newNotes = decipheredNotes
                 )
             }
         }
     }
 
+    fun decipherNotes():String{
+        return decrypt(_uiState.value.password!!.cipheredNotes)
+    }
+
+    fun onDeleteNote(){
+        _uiState.update {
+            it.copy(
+                newNotes = ""
+            )
+        }
+    }
     fun checkIfPasswordHasChanged(): Boolean{
         val lastPassword = decipherPassword()
         val newPassword = _uiState.value.newPassword.value
         return (lastPassword != newPassword)
+    }
+
+    fun checkIfNotesHasChanged(): Boolean {
+        val lastNotes = decipherNotes()
+        val newNotes = _uiState.value.newNotes
+
+        return (lastNotes != newNotes)
     }
 
     fun decipherPassword(): String{
@@ -162,6 +188,14 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun onNotesHasChanged(notes: String){
+        _uiState.update {
+            it.copy(
+                newNotes = notes
+            )
+        }
+    }
+
     fun onEnableEditMode() {
         _uiState.update {
             it.copy(
@@ -240,6 +274,22 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun onEnableUpdateNotesDialog(){
+        _uiState.update {
+            it.copy(
+                isUpdateNotesDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableUpdateNotesDialog(){
+        _uiState.update {
+            it.copy(
+                isUpdateNotesDialogShown = false
+            )
+        }
+    }
+
     fun onDeletePassword (){
         viewModelScope.launch {
             deletePasswordUseCase.invoke(passwordId)
@@ -259,7 +309,7 @@ class PasswordDetailViewModel(
             val updatedPassword = updatePasswordUseCase.invoke(
                 id = passwordId,
                 newPassword = _uiState.value.newPassword.value,
-                appInfo = newAppInfo
+                appInfo = newAppInfo,
             )
 
             val uiStateParsedPassword = updatedPassword.toUiState()
@@ -272,6 +322,21 @@ class PasswordDetailViewModel(
             loadPassword()
             onEnableFullInfoMode()
         }
+    }
+
+    fun onUpdateNotes(){
+        val newNotes = _uiState.value.newNotes
+
+        Log.d("NotesChange", newNotes)
+        viewModelScope.launch {
+            updateNotesUseCase(passwordId, newNotes)
+        }
+        _uiState.update {
+            it.copy(
+                decipheredNotes = newNotes
+            )
+        }
+        Log.d("NotesChange", newNotes )
     }
 
     fun onGeneratePassword(){
