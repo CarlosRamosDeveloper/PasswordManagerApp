@@ -8,6 +8,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreU
 import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 
 class PasswordDetailViewModelFactory(
@@ -16,6 +17,7 @@ class PasswordDetailViewModelFactory(
     val generatePasswordUseCase: GeneratePasswordUseCase,
     val securityScoreCalculator: CalculateSecurityScoreUseCase,
     val updatePasswordUseCase: UpdatePasswordUseCase,
+    val updateNotesUseCase: UpdateNotesUseCase,
     val deletePasswordUseCase: DeletePasswordUseCase,
     val decrypt: DecryptStringUseCase
 ): ViewModelProvider.Factory {
@@ -26,6 +28,7 @@ class PasswordDetailViewModelFactory(
             generatePasswordUseCase,
             securityScoreCalculator,
             updatePasswordUseCase,
+            updateNotesUseCase,
             deletePasswordUseCase,
             decrypt
         ) as T

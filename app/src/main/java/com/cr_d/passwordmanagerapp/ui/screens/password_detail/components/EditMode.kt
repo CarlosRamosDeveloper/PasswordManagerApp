@@ -39,7 +39,7 @@ fun EditMode(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ApplicationEditInfo(passwordState, viewModel)
-        NoteEditInfo(notes, viewModel::onNotesHasChanged, haveChangedNotes)
+        NoteEditInfo(notes, viewModel::onNotesHasChanged, haveChangedNotes, viewModel::onEnableUpdateNotesDialog)
         PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel::onGeneratePasswordSectionToggle)
         if(isGeneratePasswordEnabled) MetadataEditInfo(passwordState, passwordError, viewModel)
         NewPasswordInfoCard(
@@ -125,7 +125,7 @@ fun MetadataEditInfo(passwordState: PasswordEditUiState, passwordError: String, 
 }
 
 @Composable
-fun NoteEditInfo(notes: String, onChangeNotesFunction: (String) -> Unit, haveChangedNotes: Boolean){
+fun NoteEditInfo(notes: String, onChangeNotesFunction: (String) -> Unit, haveChangedNotes: Boolean, enableNoteUpdateDialogFunction: ()-> Unit){
     InfoCard {
         CustomOutlinedTextField(
             label = "Notes",
@@ -133,7 +133,7 @@ fun NoteEditInfo(notes: String, onChangeNotesFunction: (String) -> Unit, haveCha
             onValueChange = { onChangeNotesFunction(it) },
             isSingleLine = false
         )
-        if (haveChangedNotes) FullWidthButton("Actualizar nota", {})
+        if (haveChangedNotes) FullWidthButton("Actualizar nota", enableNoteUpdateDialogFunction)
     }
 }
 

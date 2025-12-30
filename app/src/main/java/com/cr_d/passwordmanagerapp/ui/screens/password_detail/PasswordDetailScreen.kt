@@ -158,6 +158,19 @@ fun PasswordDetailedCard(
                         viewModel.onDisableUpdateDialog()
                     }
                 )
+
+                if(state.isUpdateNotesDialogShown) ConfirmDialog(
+                    title = "Actualización de notas",
+                    message = "¿Quiere actualizar las notas?",
+                    confirmButtonText = "Actualizar notas",
+                    onConfirm = {
+                        viewModel.onUpdateNotes()
+                        snackFunction("Notas actualizadas")
+                        viewModel.onDisableUpdateNotesDialog()
+                    },
+                    onDisable = viewModel::onDisableUpdateNotesDialog,
+                    onDismiss = viewModel::onDisableUpdateNotesDialog
+                )
             }
 
         }

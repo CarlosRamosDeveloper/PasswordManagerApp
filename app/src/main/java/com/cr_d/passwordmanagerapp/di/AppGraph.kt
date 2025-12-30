@@ -4,9 +4,11 @@ import com.cr_d.passwordmanagerapp.application.database.RoomApplication
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.EncryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
@@ -23,6 +25,12 @@ object AppGraph {
     private val scoreCalculator by lazy { SecurityScoreCalculator() }
     private val calculator by lazy { CalculateSecurityScoreUseCase(scoreCalculator) }
     private val createPasswordUseCase by lazy { SavePasswordUseCase(repository) }
+    private val updatePasswordUseCase by lazy { UpdatePasswordUseCase(repository) }
+    private val updateNotesUseCase by lazy { UpdateNotesUseCase(repository) }
+    private val deletePasswordUseCase by lazy { DeletePasswordUseCase(repository) }
+    private val cryptoService by lazy { CryptoService() }
+    private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }
+    private val decryptStringUseCase by lazy { DecryptStringUseCase(cryptoService) }
 
     val mainScreenFactory by lazy {
         MainScreenViewModelFactory(repository)
@@ -44,8 +52,9 @@ object AppGraph {
         passwordId = passwordId,
         generatePasswordUseCase = generatePasswordUseCase,
         securityScoreCalculator = calculator,
-        updatePasswordUseCase = UpdatePasswordUseCase(repository),
-        deletePasswordUseCase = DeletePasswordUseCase(repository),
-        decrypt = DecryptStringUseCase(CryptoService())
+        updatePasswordUseCase = updatePasswordUseCase,
+        updateNotesUseCase = updateNotesUseCase,
+        deletePasswordUseCase = deletePasswordUseCase,
+        decrypt = decryptStringUseCase
     )
 }
