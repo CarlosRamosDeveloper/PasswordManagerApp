@@ -48,7 +48,8 @@ class PasswordDetailViewModel(
         val decipheredNotes: String = "",
         val newPassword: PlainPassword = PlainPassword(""),
         val isDeleteDialogShown: Boolean = false,
-        val isCopyToDialogShown: Boolean = false
+        val isCopyToDialogShown: Boolean = false,
+        val isUpdatePasswordDialogShown: Boolean = false
     )
 
     init {
@@ -213,6 +214,22 @@ class PasswordDetailViewModel(
         _uiState.update {
             it.copy(
                 isCopyToDialogShown = false
+            )
+        }
+    }
+
+    fun onEnableUpdateDialog(){
+        _uiState.update {
+            it.copy(
+                isUpdatePasswordDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableUpdateDialog(){
+        _uiState.update {
+            it.copy(
+                isUpdatePasswordDialogShown = false
             )
         }
     }

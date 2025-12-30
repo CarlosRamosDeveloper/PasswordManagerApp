@@ -86,10 +86,11 @@ fun PasswordDetailedCard(
                             isGeneratePasswordEnabled = state.isGeneratePasswordEnabled,
                             passwordState = state.editInfo,
                             viewModel = viewModel,
-                            snackFunction = snackFunction
+                            passwordError = state.errorMessage
                         )
                     }
                 }
+
                 if (state.mode!= PasswordDetailUiMode.EDIT_MODE) PasswordCard(
                     passwordPlainText = state.decipheredPassword,
                     onVisibilityToggleFunction = viewModel::onPasswordVisibilityToggle,
@@ -127,6 +128,19 @@ fun PasswordDetailedCard(
                     },
                     onDisable = viewModel::onDisableCopyDialog,
                     onDismiss = viewModel::onDisableCopyDialog
+                )
+
+                if(state.isUpdatePasswordDialogShown) ConfirmDialog(
+                    title = "Actualizar contraseña",
+                    message = "Esta acción actualizará la contraseña de forma permanente",
+                    confirmButtonText = "Actualizar contraseña",
+                    onConfirm = {
+                        viewModel.onUpdatePassword()
+                        snackFunction("Contraseña actualizada correctamente")
+                        viewModel.onDisableUpdateDialog()
+                    },
+                    onDisable = viewModel::onDisableUpdateDialog,
+                    onDismiss = viewModel::onDisableUpdateDialog
                 )
             }
 
