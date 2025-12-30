@@ -16,9 +16,9 @@ class SavePasswordUseCase (
     suspend operator fun invoke(
         password: String,
         appInfo: ApplicationInfo,
-        score: Double
+        score: Double,
+        notes: String
     ): PasswordData {
-        //TODO implementar notas
         val encrypt = EncryptStringUseCase(CryptoService())
         val creationDate = LocalDate.now()
         val dateInfo = DateInfo(
@@ -27,7 +27,7 @@ class SavePasswordUseCase (
         )
         val metadataInfo = PasswordAnalyzer.analyze(password)
         val encryptedPassword = encrypt(password)
-        val encryptedNotes = encrypt("")
+        val encryptedNotes = encrypt(notes)
 
         val newPassword = PasswordData(
             id = 0,

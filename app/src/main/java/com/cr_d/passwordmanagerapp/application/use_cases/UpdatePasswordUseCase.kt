@@ -28,7 +28,7 @@ class UpdatePasswordUseCase (
         )
         val metadataInfo = PasswordAnalyzer.analyze(newPassword)
         val encryptedPassword = encrypt(newPassword)
-        val encryptedNotes = encrypt("")
+        val encryptedNotes = encrypt(existing.cipheredNotes.encryptedText.toString())
 
         val updatedPassword = PasswordData(
             id = existing.id,
