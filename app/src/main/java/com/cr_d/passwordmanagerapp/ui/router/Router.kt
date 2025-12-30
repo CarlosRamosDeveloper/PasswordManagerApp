@@ -28,6 +28,7 @@ import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailScreen
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordsListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModelFactory
@@ -45,27 +46,30 @@ fun Router(
     repo: IPasswordRepository
 ){
     val context = LocalContext.current
+    val generator = PasswordGenerator()
+    val generatePasswordUseCase = GeneratePasswordUseCase(generator)
+    val scoreCalculator = SecurityScoreCalculator()
+    val createPasswordUseCase = SavePasswordUseCase(repo)
+
     val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
+    val mainViewModel: MainScreenViewModel = viewModel(
+        factory = MainScreenViewModelFactory(repo)
+    )
+    val createPasswordViewModel: CreatePasswordViewModel = viewModel(
+        factory = CreatePasswordViewModelFactory(
+            generatePasswordUseCase = generatePasswordUseCase,
+            scoreCalculator = CalculateSecurityScoreUseCase(scoreCalculator),
+            savePasswordUseCase = createPasswordUseCase)
+    )
 
     NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
-            val viewModel: MainScreenViewModel = viewModel(
-                factory = MainScreenViewModelFactory(repo)
-            )
-            MainScreen(innerPadding, viewModel)
+            MainScreen(innerPadding, mainViewModel)
         }
         composable("CreatePasswordScreen") {
-            val generator = PasswordGenerator()
-            val generatePasswordUseCase = GeneratePasswordUseCase(generator)
-            val scoreCalculator = SecurityScoreCalculator()
-            val createPasswordUseCase = SavePasswordUseCase(repo)
             CreatePasswordScreen(
                 innerPadding = innerPadding,
-                viewModel = CreatePasswordViewModel(
-                    generatePasswordUseCase,
-                    CalculateSecurityScoreUseCase(scoreCalculator),
-                    createPasswordUseCase
-                ),
+                viewModel = createPasswordViewModel,
                 context = context,
                 snackFunction = snackFunction
             )
@@ -98,7 +102,6 @@ fun Router(
                     decrypt = DecryptStringUseCase(CryptoService())
                 )
             )
-
             PasswordDetailScreen(
                 innerPadding = innerPadding,
                 context = context,
