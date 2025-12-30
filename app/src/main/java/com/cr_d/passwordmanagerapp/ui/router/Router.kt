@@ -34,6 +34,7 @@ import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFac
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsScreen
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
@@ -61,6 +62,11 @@ fun Router(
             scoreCalculator = CalculateSecurityScoreUseCase(scoreCalculator),
             savePasswordUseCase = createPasswordUseCase)
     )
+    val passwordListViewModel: PasswordListViewModel = viewModel(
+        factory = PasswordListViewModelFactory(
+            getAllPasswordsUseCase = GetAllPasswordsUseCase(repo)
+        )
+    )
 
     NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
@@ -78,9 +84,7 @@ fun Router(
             PasswordsListScreen(
                 innerPadding = innerPadding,
                 navController = navController,
-                viewModel = PasswordListViewModel(
-                    GetAllPasswordsUseCase(repo)
-                )
+                viewModel = passwordListViewModel
             )
         }
         composable("PasswordDataScreen/{passwordId}", arguments = listOf(navArgument("passwordId") {
