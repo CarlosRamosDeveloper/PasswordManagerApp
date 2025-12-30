@@ -29,7 +29,8 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailScre
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordsListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModel
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModeFactory
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsScreen
@@ -48,7 +49,10 @@ fun Router(
 
     NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
-            MainScreen(innerPadding, MainScreenViewModel(repo))
+            val viewModel: MainScreenViewModel = viewModel(
+                factory = MainScreenViewModelFactory(repo)
+            )
+            MainScreen(innerPadding, viewModel)
         }
         composable("CreatePasswordScreen") {
             val generator = PasswordGenerator()
@@ -83,8 +87,8 @@ fun Router(
             val generatePasswordUseCase = GeneratePasswordUseCase(generator)
             val scoreCalculator = SecurityScoreCalculator()
             val scoreCalculatorUseCase = CalculateSecurityScoreUseCase(scoreCalculator)
-            val viewModel:PasswordDetailViewModel = viewModel(
-                factory = PasswordDetailViewModeFactory(
+            val passwordDetailVM:PasswordDetailViewModel = viewModel(
+                factory = PasswordDetailViewModelFactory(
                     repository = repo,
                     passwordId = passwordId,
                     generatePasswordUseCase = generatePasswordUseCase,
@@ -99,7 +103,7 @@ fun Router(
                 innerPadding = innerPadding,
                 context = context,
                 snackFunction = snackFunction,
-                viewModel = viewModel,
+                viewModel = passwordDetailVM,
                 settings = settingsViewModel,
                 navController = navController
             )

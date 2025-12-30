@@ -10,7 +10,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 
-class PasswordDetailViewModeFactory(
+class PasswordDetailViewModelFactory(
     val repository: IPasswordRepository,
     val passwordId: Long,
     val generatePasswordUseCase: GeneratePasswordUseCase,
