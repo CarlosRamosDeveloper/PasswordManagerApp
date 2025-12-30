@@ -27,3 +27,12 @@ data class PasswordEntity(
     @ColumnInfo(name = "notes_iv")
     val notesIv: ByteArray
 )
+
+// TODO: Implementar notas -> PWD_Entity
+// TODO: Agregar tabla de aplicación -> APP_Entity
+// TODO: Agregar tabla de cuenta de usuario -> Account_Entity
+// TODO: Permitir la busqueda por app
+// TODO: Permtir la búsqueda por cuenta de usuario
+// TODO: Al pinchar en nombre de app, debería de aparecer un dropdown con las apps ya creadas
+// TODO: Al agregar una aplicación, debería de actualizarse el campo de url a "www.appname.com
+// TODO: Al pinchar en el campo de cuenta de usuario, debería de desplegarse un dropdown con las cuentas creadas
