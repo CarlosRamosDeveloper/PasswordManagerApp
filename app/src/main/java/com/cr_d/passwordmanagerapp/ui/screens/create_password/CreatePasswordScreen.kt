@@ -1,6 +1,10 @@
 package com.cr_d.passwordmanagerapp.ui.screens.create_password
 
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
 import android.content.Context
+import android.os.PersistableBundle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +26,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
+import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.common_components.CopyToClipboardButton
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomButton
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomCheckboxForm
@@ -54,7 +59,11 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
 
         if(state.passwordError.isNotBlank()) ErrorMessage(state.passwordError)
 
-        if(state.generatedPassword.isNotBlank()) PasswordInfoSection(state.generatedPassword, state.password.score, context, snackFunction)
+        if(state.generatedPassword.isNotBlank()) PasswordInfoSection(
+            password = state.generatedPassword,
+            passwordScore = state.password.score,
+            copyToClipboardFunction = viewModel::onEnableCopyToDialog
+        )
 
         if(state.generatedPassword.isNotBlank() &&
             password.appInfo.appUrl.isNotBlank() &&
@@ -64,6 +73,24 @@ fun CreatePasswordScreen(innerPadding: PaddingValues, viewModel: CreatePasswordV
                 { viewModel.savePassword(state.generatedPassword) })
 
         if(state.generatedPassword.isNotBlank()) ApplicationSection(password.appInfo, viewModel)
+        if(state.isCopyToDialogShown) ConfirmDialog(
+            title = "Copiar contraseña",
+            message = "La información en el portapapeles no está cifrada, se sugiere extremar precauciones",
+            confirmButtonText = "Copiar en el portapapeles",
+            onConfirm = {
+                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("Copied_Text", state.generatedPassword).apply {
+                    description.extras = PersistableBundle().apply {
+                        putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
+                    }
+                }
+                viewModel.onDisableCopyToDialog()
+                clipboard.setPrimaryClip(clip)
+                snackFunction("Contraseña copiada en el portapapeles")
+            },
+            onDisable = viewModel::onDisableCopyToDialog,
+            onDismiss = viewModel::onDisableCopyToDialog
+        )
     }
 }
 
@@ -81,14 +108,14 @@ fun MetadataInfo(metadataInfo: PasswordMetadata, passwordLength: Int, viewModel:
 }
 
 @Composable
-fun PasswordInfoSection(password: String, passwordScore: Double, context: Context, snackFunction: (String)-> Unit){
+fun PasswordInfoSection(password: String, passwordScore: Double, copyToClipboardFunction: () -> Unit){
     InfoCard {
         CardTitle("Contraseña")
         CustomRow("Puntuación de la contraseña",String.format("%.2f", passwordScore) )
         Box(Modifier.padding(10.dp)){
             Text(password)
         }
-        CopyToClipboardButton(password, context, snackFunction)
+        CopyToClipboardButton(copyToClipboardFunction)
         UnderFormSpacer()
     }
 }

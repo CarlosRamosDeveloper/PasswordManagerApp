@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.String
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
@@ -45,7 +46,10 @@ class PasswordDetailViewModel(
         val errorMessage: String = "",
         val decipheredPassword: String = "",
         val decipheredNotes: String = "",
-        val newPassword: PlainPassword = PlainPassword("")
+        val newPassword: PlainPassword = PlainPassword(""),
+        val isDeleteDialogShown: Boolean = false,
+        val isCopyToDialogShown: Boolean = false,
+        val isUpdatePasswordDialogShown: Boolean = false
     )
 
     init {
@@ -65,6 +69,16 @@ class PasswordDetailViewModel(
                 )
             }
         }
+    }
+
+    fun checkIfPasswordHasChanged(): Boolean{
+        val lastPassword = decipherPassword()
+        val newPassword = _uiState.value.newPassword.value
+        return (lastPassword != newPassword)
+    }
+
+    fun decipherPassword(): String{
+        return decrypt(_uiState.value.password!!.cipheredPassword)
     }
 
     fun onAppNameChanged(value: String){
@@ -112,24 +126,23 @@ class PasswordDetailViewModel(
 
     fun onPasswordVisibilityToggle () {
         if (_uiState.value.isPasswordShown) {
-            _uiState.update {
-                it.copy(
-                    isPasswordShown = false,
-                    decipheredPassword = "",
-                    newPassword = PlainPassword("")
-
-                )
-            }
+            onDisablePasswordVisibility()
         } else {
             _uiState.update {
-                val decryptedPassword = decrypt(_uiState.value.password!!.cipheredPassword)
-
                 it.copy(
                     isPasswordShown = true,
-                    decipheredPassword = decryptedPassword,
-                    newPassword = PlainPassword(decryptedPassword)
+                    decipheredPassword = decipherPassword(),
                 )
             }
+        }
+    }
+
+    fun onDisablePasswordVisibility(){
+        _uiState.update {
+            it.copy(
+                isPasswordShown = false,
+                decipheredPassword = "",
+            )
         }
     }
 
@@ -179,9 +192,58 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun onEnableDeleteDialog(){
+        _uiState.update {
+            it.copy(
+                isDeleteDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableDeleteDialog(){
+        _uiState.update {
+            it.copy(
+                isDeleteDialogShown = false
+            )
+        }
+    }
+
+    fun onEnableCopyDialog(){
+        _uiState.update {
+            it.copy(
+                isCopyToDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableCopyDialog(){
+        _uiState.update {
+            it.copy(
+                isCopyToDialogShown = false
+            )
+        }
+    }
+
+    fun onEnableUpdateDialog(){
+        _uiState.update {
+            it.copy(
+                isUpdatePasswordDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableUpdateDialog(){
+        _uiState.update {
+            it.copy(
+                isUpdatePasswordDialogShown = false
+            )
+        }
+    }
+
     fun onDeletePassword (){
         viewModelScope.launch {
             deletePasswordUseCase.invoke(passwordId)
+            onDisableDeleteDialog()
             loadPassword()
         }
     }

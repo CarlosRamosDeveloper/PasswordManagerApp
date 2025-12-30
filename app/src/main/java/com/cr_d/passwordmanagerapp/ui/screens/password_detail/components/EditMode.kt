@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationOutlinedTextField
@@ -17,7 +16,9 @@ import com.cr_d.passwordmanagerapp.ui.common_components.CustomCheckboxForm
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
 import com.cr_d.passwordmanagerapp.ui.common_components.DecimalFormField
 import com.cr_d.passwordmanagerapp.ui.common_components.ErrorMessage
+import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
+import com.cr_d.passwordmanagerapp.ui.common_components.PasswordTextField
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
@@ -29,23 +30,20 @@ fun EditMode(
     isGeneratePasswordEnabled: Boolean,
     passwordState: PasswordEditUiState,
     viewModel: PasswordDetailViewModel,
-    snackFunction: (String)-> Unit
+    passwordError: String
 ){
     Column(modifier = Modifier
         .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        val error = viewModel.uiState.collectAsStateWithLifecycle().value.errorMessage
-
         ApplicationEditInfo(passwordState, viewModel)
         PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel::onGeneratePasswordSectionToggle)
-        if(isGeneratePasswordEnabled) MetadataEditInfo(passwordState, error, viewModel)
+        if(isGeneratePasswordEnabled) MetadataEditInfo(passwordState, passwordError, viewModel)
         NewPasswordInfoCard(
             newPassword = newPlainPassword,
             isPasswordShown = isPasswordShown,
-            passwordState = passwordState,
+            scoreValue = String.format("%.2f", passwordState.score),
             viewModel = viewModel,
-            snackFunction = snackFunction
         )
     }
 }
@@ -74,28 +72,27 @@ fun ApplicationEditInfo(passwordState: PasswordEditUiState, viewModel: PasswordD
 }
 
 @Composable
-fun NewPasswordInfoCard(newPassword: PlainPassword, isPasswordShown: Boolean, passwordState: PasswordEditUiState, viewModel: PasswordDetailViewModel, snackFunction: (String)-> Unit){
+fun NewPasswordInfoCard(
+    newPassword: PlainPassword,
+    isPasswordShown: Boolean,
+    scoreValue: String,
+    viewModel: PasswordDetailViewModel,
+){
     InfoCard {
         CardTitle("Contraseña")
         CustomRow(
             "Puntuación de seguridad",
-            String.format("%.2f", passwordState.score),
+            scoreValue,
             false
         )
         TogglePasswordVisibilityButton(isPasswordShown, viewModel::onPasswordVisibilityToggle)
-        ApplicationOutlinedTextField(
-            "Contraseña",
-            if(isPasswordShown) newPassword.value
-            else "*******",
-            viewModel::onPlainPasswordChange
-        )
-        UpdatePasswordButton(snackFunction, viewModel::onUpdatePassword)
+        PasswordTextField(isPasswordShown, newPassword.value, viewModel::onPlainPasswordChange)
+        FullWidthButton("Actualizar contraseña",viewModel::onEnableUpdateDialog)
     }
 }
 
 @Composable
 fun MetadataEditInfo(passwordState: PasswordEditUiState, passwordError: String, viewModel: PasswordDetailViewModel){
-
     InfoCard {
         CardTitle("Nueva contraseña")
         CustomCheckboxForm(

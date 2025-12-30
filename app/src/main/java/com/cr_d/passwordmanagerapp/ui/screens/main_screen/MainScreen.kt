@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +20,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
 
+import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
@@ -47,7 +45,7 @@ fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
         FullWidthButton("Generar contraseñas de prueba", viewModel::onEnablePopulateDatabaseDialog)
         FullWidthButton("Eliminar contraseñas", viewModel::onEnableMassDeleteDialog)
 
-        if(state.isPopulateDatabaseDialogShown) ConfirmMassDeleteDialog(
+        if(state.isPopulateDatabaseDialogShown) ConfirmDialog(
             title = "Poblar la base de datos",
             message = "¿Inyectar información de prueba en la base de datos?",
             confirmButtonText = "Poblar la base de datos",
@@ -56,7 +54,7 @@ fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
             onDismiss = viewModel::onDisablePopulateDatabaseDialog
         )
 
-        if(state.isMassDeleteDialogShown) ConfirmMassDeleteDialog(
+        if(state.isMassDeleteDialogShown) ConfirmDialog(
             title = "Eliminar todas las contraseñas",
             message = "Este paso no se puede deshacer, ¿está seguro?",
             confirmButtonText = "Eliminar todas las contraseñas",
@@ -87,26 +85,4 @@ fun MainCard(title: String, value: String, icon: ImageVector, modifier: Modifier
             Text(value, fontSize = 20.sp, modifier = Modifier.padding(horizontal = 5.dp))
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ConfirmMassDeleteDialog(
-    title: String,
-    message: String,
-    confirmButtonText: String,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
-    onDisable: () -> Unit,
-    dismissButtonText: String = "Atrás"
-){
-    AlertDialog(
-        onDismissRequest = onDisable,
-        title = { Text(text = title) },
-        text = { Text(text = message) },
-        confirmButton =
-            { TextButton(onClick = onConfirm)  { Text(confirmButtonText) } },
-        dismissButton =
-            { TextButton(onClick = onDismiss)  { Text(dismissButtonText) } }
-    )
 }
