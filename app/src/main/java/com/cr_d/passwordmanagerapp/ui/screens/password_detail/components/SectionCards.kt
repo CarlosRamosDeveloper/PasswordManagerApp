@@ -74,12 +74,6 @@ fun PasswordCard(
     }
 }
 
-// TODO: Rama nueva -> Poner avisos en detailScreen
-/*
-*
-*  Actualizar contraseña -> Este paso no se puede deshacer -> Atras / Actualizar
-*
-* */
 @Composable
 fun ButtonsInPasswordSection(
     isPasswordShown: Boolean,
