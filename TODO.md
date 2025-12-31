@@ -7,22 +7,22 @@
 
 ## Bugs / Fixes
 
-- [1] El botón de actualizar contraseña solo se debería de mostrar si las contraseñas han cambiado -> Arreglar el show Dialog
+- [7] Improve Edit mode UI
 
 ## Architecture / debt tech
 
-- [2] Mejorar la inyección de dependencias. Pasar todos los UC allí.
-- [3] Integrar AppEntity
-- [3] Integrar AccountEntity
+- [1] Mejorar la inyección de dependencias. Pasar todos los UC allí.
+- [2] Integrar AppEntity
+- [2] Integrar AccountEntity
 
 ## Features
 
-- [4] Implementar biometría (deshabilitarla en desarrollo)
-- [5] Dropdown con apps ya existentes en su campo correspondiente
-- [5] Al pinchar en el campo de cuenta de usuario, debería de desplegarse un dropdown con las cuentas creadas
-- [6] Autocompletado de urls -> www.<app>.com
-- [7] Permitir la busqueda por app
-- [7] Permtir la búsqueda por cuenta de usuario
+- [3] Implementar biometría (deshabilitarla en desarrollo)
+- [4] Dropdown con apps ya existentes en su campo correspondiente
+- [4] Al pinchar en el campo de cuenta de usuario, debería de desplegarse un dropdown con las cuentas creadas
+- [5] Autocompletado de urls -> www.<app>.com
+- [6] Permitir la busqueda por app
+- [6] Permtir la búsqueda por cuenta de usuario
 
 ## Parking Lot
 

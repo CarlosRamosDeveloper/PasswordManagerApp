@@ -32,7 +32,8 @@ fun EditMode(
     viewModel: PasswordDetailViewModel,
     passwordError: String,
     notes: String,
-    haveChangedNotes: Boolean
+    haveChangedNotes: Boolean,
+    hasPasswordChanged: Boolean
 ){
     Column(modifier = Modifier
         .fillMaxWidth(),
@@ -53,6 +54,7 @@ fun EditMode(
             isPasswordShown = isPasswordShown,
             scoreValue = String.format("%.2f", passwordState.score),
             viewModel = viewModel,
+            hasPasswordChanged = hasPasswordChanged
         )
     }
 }
@@ -86,7 +88,8 @@ fun NewPasswordInfoCard(
     isPasswordShown: Boolean,
     scoreValue: String,
     viewModel: PasswordDetailViewModel,
-){
+    hasPasswordChanged: Boolean
+    ){
     InfoCard {
         CardTitle("Contraseña")
         CustomRow(
@@ -96,7 +99,7 @@ fun NewPasswordInfoCard(
         )
         TogglePasswordVisibilityButton(isPasswordShown, viewModel::onPasswordVisibilityToggle)
         PasswordTextField(isPasswordShown, newPassword.value, viewModel::onPlainPasswordChange)
-        FullWidthButton("Actualizar contraseña",viewModel::onEnableUpdateDialog)
+        if(hasPasswordChanged) FullWidthButton("Actualizar contraseña",viewModel::onEnableUpdateDialog)
     }
 }
 
