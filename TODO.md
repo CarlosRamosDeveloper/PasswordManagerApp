@@ -41,8 +41,9 @@
   - [x] MainScreen - Limpio
   - [x] PasswordList - Limpio
   - [x] Settings - Limpio
-  - [ ] PasswordDetail
+  - [x] PasswordDetail
     - 400 líneas de código -> Separar en responsabilidades
     - [x] Responsabilidad: Mostrar dialogos
-    - [ ] Responsabilidad: Editar contraseña
-    - [ ] Responsabilidad: Mostrar datos
+    - [x] Responsabilidad: Editar contraseña
+    - [x] Responsabilidad: Mostrar datos
+    - [x] Responsabilidad: Gestionar interfaz

@@ -18,8 +18,6 @@ class DialogManagerComponent : ViewModel() {
         val isDeleteNotesDialogShown: Boolean = false
     )
 
-
-    // Dialog Manager
     fun onEnableDeletePasswordDialog(){
         _uiState.update {
             it.copy(
@@ -27,7 +25,7 @@ class DialogManagerComponent : ViewModel() {
             )
         }
     }
-    // Dialog Manager
+
     fun onDisableDeletePasswordDialog(){
         _uiState.update {
             it.copy(

@@ -17,6 +17,9 @@ import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordView
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.DialogManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.EditPasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.PasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.UiManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModelFactory
 
 object AppGraph {
@@ -41,6 +44,9 @@ object AppGraph {
 
     // ViewmodelComponents
     private val dialogManagerComponent by lazy { DialogManagerComponent() }
+    private val passwordManagerComponent by lazy { PasswordManagerComponent(repository, deletePasswordUseCase, decryptStringUseCase) }
+    private val editManagerComponent by lazy { EditPasswordManagerComponent(decryptStringUseCase) }
+    private val uiManagerComponent by lazy { UiManagerComponent() }
 
     val mainScreenFactory by lazy {
         MainScreenViewModelFactory(repository)
@@ -60,8 +66,9 @@ object AppGraph {
         securityScoreCalculator = calculateSecurityScoreUseCase,
         updatePasswordUseCase = updatePasswordUseCase,
         updateNotesUseCase = updateNotesUseCase,
-        deletePasswordUseCase = deletePasswordUseCase,
-        decrypt = decryptStringUseCase,
-        dialogManager = dialogManagerComponent
+        dialogManager = dialogManagerComponent,
+        passwordManager = passwordManagerComponent,
+        editManager = editManagerComponent,
+        uiManager = uiManagerComponent
     )
 }
