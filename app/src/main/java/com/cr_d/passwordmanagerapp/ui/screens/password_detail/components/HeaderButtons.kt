@@ -28,7 +28,7 @@ fun HeaderButtons(viewModel: PasswordDetailViewModel){
         ModeButton("Info", viewModel::onEnableBasicInfoMode)
         ModeButton("Detalle", viewModel::onEnableFullInfoMode)
         ModeButton("Editar", viewModel::onEnableEditMode)
-        CustomButton("Eliminar", viewModel::onEnableDeleteDialog)
+        CustomButton("Eliminar", viewModel::onEnableDeletePasswordDialog)
     }
 }
 

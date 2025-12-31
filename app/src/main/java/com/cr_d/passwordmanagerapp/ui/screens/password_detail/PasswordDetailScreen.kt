@@ -103,7 +103,7 @@ fun PasswordDetailedCard(
                     copyToClipboardFunction = viewModel::onEnableCopyDialog
                 )
 
-                if (state.isDeleteDialogShown) ConfirmDialog(
+                if (state.isDeletePasswordDialogShown) ConfirmDialog(
                     title = "Eliminar contraseña",
                     message = "Este paso no se puede deshacer, ¿está seguro?",
                     confirmButtonText = "Eliminar contraseña",
@@ -112,8 +112,8 @@ fun PasswordDetailedCard(
                         snackFunction("Contraseña eliminada")
                         navController.navigate("ShowPasswordScreen")
                                 },
-                    onDisable = viewModel::onDisableDeleteDialog,
-                    onDismiss = viewModel::onDisableDeleteDialog
+                    onDisable = viewModel::onDisableDeletePasswordDialog,
+                    onDismiss = viewModel::onDisableDeletePasswordDialog
                 )
 
                 if (state.isCopyToDialogShown)  ConfirmDialog(
@@ -171,8 +171,21 @@ fun PasswordDetailedCard(
                     onDisable = viewModel::onDisableUpdateNotesDialog,
                     onDismiss = viewModel::onDisableUpdateNotesDialog
                 )
-            }
 
+                if(state.isDeleteNotesDialogShown) ConfirmDialog(
+                    title = "Eliminar notas",
+                    message = "¿Eliminar todas las notas de esta contraseña?",
+                    confirmButtonText = "Eliminar",
+                    onConfirm = {
+                        viewModel.onDeleteNotes()
+                        viewModel.onUpdateNotes()
+                        snackFunction("Notas eliminadas satisfactoriamente")
+                        viewModel.onDisableDeleteNotesDialog()
+                    },
+                    onDisable = viewModel::onDisableDeleteNotesDialog,
+                    onDismiss = viewModel::onDisableDeleteNotesDialog
+                )
+            }
         }
     }
 }
