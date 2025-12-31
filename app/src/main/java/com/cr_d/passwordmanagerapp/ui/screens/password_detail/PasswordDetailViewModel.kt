@@ -170,10 +170,9 @@ class PasswordDetailViewModel(
         editPasswordManager.onDeleteNotes()
     }
     fun checkIfPasswordHasChanged(): Boolean{
-        val lastPassword = passwordManager.getDecipheredPassword()
+        val lastPassword = decipherPassword()
         val newPassword = editPasswordManager.getNewPassword()
-
-        return (lastPassword != newPassword)
+        return lastPassword != newPassword
     }
 
     fun checkIfNotesHasChanged(): Boolean {
