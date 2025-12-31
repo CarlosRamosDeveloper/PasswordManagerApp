@@ -24,8 +24,8 @@ class EditPasswordManagerComponent(
 
     data class UiState(
         val editInfo: PasswordEditUiState = PasswordEditUiState(),
-        val newPassword: PlainPassword = PlainPassword(""), //editManager
-        val newNotes: String = "", // editManager
+        val newPassword: PlainPassword = PlainPassword(""),
+        val newNotes: String = ""
     )
 
     fun loadEditPassword(password: PasswordData, passwordLength: Int){
