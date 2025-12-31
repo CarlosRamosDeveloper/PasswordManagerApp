@@ -39,7 +39,13 @@ fun EditMode(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ApplicationEditInfo(passwordState, viewModel)
-        NoteEditInfo(notes, viewModel::onNotesHasChanged, haveChangedNotes, viewModel::onEnableUpdateNotesDialog)
+        NoteEditInfo(
+            notes = notes,
+            onChangeNotesFunction = viewModel::onNotesHasChanged,
+            haveNotesChanged = haveChangedNotes,
+            enableUpdateNotesDialogFunction = viewModel::onEnableUpdateNotesDialog,
+            enableDeleteNotesDialogFunction = viewModel::onEnableDeleteNotesDialog
+        )
         PasswordGenerationToggle(isGeneratePasswordEnabled, viewModel::onGeneratePasswordSectionToggle)
         if(isGeneratePasswordEnabled) MetadataEditInfo(passwordState, passwordError, viewModel)
         NewPasswordInfoCard(
@@ -125,7 +131,13 @@ fun MetadataEditInfo(passwordState: PasswordEditUiState, passwordError: String, 
 }
 
 @Composable
-fun NoteEditInfo(notes: String, onChangeNotesFunction: (String) -> Unit, haveChangedNotes: Boolean, enableNoteUpdateDialogFunction: ()-> Unit){
+fun NoteEditInfo(
+    notes: String,
+    onChangeNotesFunction: (String) -> Unit,
+    haveNotesChanged: Boolean,
+    enableUpdateNotesDialogFunction: () -> Unit,
+    enableDeleteNotesDialogFunction: () -> Unit
+){
     InfoCard {
         CustomOutlinedTextField(
             label = "Notas",
@@ -133,7 +145,8 @@ fun NoteEditInfo(notes: String, onChangeNotesFunction: (String) -> Unit, haveCha
             onValueChange = { onChangeNotesFunction(it) },
             isSingleLine = false
         )
-        if (haveChangedNotes) FullWidthButton("Actualizar nota", enableNoteUpdateDialogFunction)
+        if (notes.isNotBlank()) FullWidthButton("Eliminar notas", enableDeleteNotesDialogFunction)
+        if (haveNotesChanged) FullWidthButton("Actualizar notas", enableUpdateNotesDialogFunction)
     }
 }
 

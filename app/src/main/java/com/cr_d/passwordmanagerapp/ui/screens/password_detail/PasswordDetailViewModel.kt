@@ -51,10 +51,11 @@ class PasswordDetailViewModel(
         val decipheredNotes: String = "",
         val newPassword: PlainPassword = PlainPassword(""),
         val newNotes: String = "",
-        val isDeleteDialogShown: Boolean = false,
+        val isDeletePasswordDialogShown: Boolean = false,
         val isCopyToDialogShown: Boolean = false,
         val isUpdatePasswordDialogShown: Boolean = false,
         val isUpdateNotesDialogShown: Boolean = false,
+        val isDeleteNotesDialogShown: Boolean = false
     )
 
     init {
@@ -79,14 +80,11 @@ class PasswordDetailViewModel(
         }
     }
 
-    fun decipherNotes():String{
-        return decrypt(_uiState.value.password!!.cipheredNotes)
-    }
-
-    fun onDeleteNote(){
+    fun onDeleteNotes(){
         _uiState.update {
             it.copy(
-                newNotes = ""
+                newNotes = "",
+                decipheredNotes = ""
             )
         }
     }
@@ -97,7 +95,7 @@ class PasswordDetailViewModel(
     }
 
     fun checkIfNotesHasChanged(): Boolean {
-        val lastNotes = decipherNotes()
+        val lastNotes = _uiState.value.decipheredNotes
         val newNotes = _uiState.value.newNotes
 
         return (lastNotes != newNotes)
@@ -226,18 +224,18 @@ class PasswordDetailViewModel(
         }
     }
 
-    fun onEnableDeleteDialog(){
+    fun onEnableDeletePasswordDialog(){
         _uiState.update {
             it.copy(
-                isDeleteDialogShown = true
+                isDeletePasswordDialogShown = true
             )
         }
     }
 
-    fun onDisableDeleteDialog(){
+    fun onDisableDeletePasswordDialog(){
         _uiState.update {
             it.copy(
-                isDeleteDialogShown = false
+                isDeletePasswordDialogShown = false
             )
         }
     }
@@ -290,10 +288,26 @@ class PasswordDetailViewModel(
         }
     }
 
+    fun onEnableDeleteNotesDialog(){
+        _uiState.update {
+            it.copy(
+                isDeleteNotesDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableDeleteNotesDialog(){
+        _uiState.update {
+            it.copy(
+                isDeleteNotesDialogShown = false
+            )
+        }
+    }
+
     fun onDeletePassword (){
         viewModelScope.launch {
             deletePasswordUseCase.invoke(passwordId)
-            onDisableDeleteDialog()
+            onDisableDeletePasswordDialog()
             loadPassword()
         }
     }
