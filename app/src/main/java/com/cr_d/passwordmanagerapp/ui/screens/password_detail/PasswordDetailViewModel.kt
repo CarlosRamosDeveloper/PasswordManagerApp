@@ -3,12 +3,14 @@ package com.cr_d.passwordmanagerapp.ui.screens.password_detail
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlin.String
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.String
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
@@ -26,6 +28,7 @@ import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.DialogManagerComponent
 
 class PasswordDetailViewModel(
     val repository: IPasswordRepository,
@@ -35,10 +38,24 @@ class PasswordDetailViewModel(
     val updatePasswordUseCase: UpdatePasswordUseCase,
     val updateNotesUseCase: UpdateNotesUseCase,
     val deletePasswordUseCase: DeletePasswordUseCase,
-    val decrypt: DecryptStringUseCase
+    val decrypt: DecryptStringUseCase,
+    val dialogManager: DialogManagerComponent,
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    val uiState: StateFlow<UiState> = combine(_uiState, dialogManager.uiState) { baseState, dialogState ->
+        baseState.copy(
+            isDeletePasswordDialogShown = dialogState.isDeletePasswordDialogShown,
+            isCopyToDialogShown = dialogState.isCopyToDialogShown,
+            isUpdatePasswordDialogShown = dialogState.isUpdatePasswordDialogShown,
+            isUpdateNotesDialogShown = dialogState.isUpdateNotesDialogShown,
+            isDeleteNotesDialogShown = dialogState.isDeleteNotesDialogShown
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = UiState()
+    )
 
     data class UiState(
         val isPasswordShown: Boolean = false,
@@ -79,6 +96,18 @@ class PasswordDetailViewModel(
             }
         }
     }
+
+    //DialogManager
+    fun onEnableDeletePasswordDialog() = dialogManager.onEnableDeletePasswordDialog()
+    fun onDisableDeletePasswordDialog() = dialogManager.onDisableDeletePasswordDialog()
+    fun onEnableCopyDialog() = dialogManager.onEnableCopyDialog()
+    fun onDisableCopyDialog() = dialogManager.onDisableCopyDialog()
+    fun onEnableUpdateDialog() = dialogManager.onEnableUpdateDialog()
+    fun onDisableUpdateDialog() = dialogManager.onDisableUpdateDialog()
+    fun onEnableUpdateNotesDialog() = dialogManager.onEnableUpdateNotesDialog()
+    fun onDisableUpdateNotesDialog() = dialogManager.onDisableUpdateNotesDialog()
+    fun onEnableDeleteNotesDialog() = dialogManager.onEnableDeleteNotesDialog()
+    fun onDisableDeleteNotesDialog() = dialogManager.onDisableDeleteNotesDialog()
 
     fun onDeleteNotes(){
         _uiState.update {
@@ -224,90 +253,10 @@ class PasswordDetailViewModel(
         }
     }
 
-    fun onEnableDeletePasswordDialog(){
-        _uiState.update {
-            it.copy(
-                isDeletePasswordDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableDeletePasswordDialog(){
-        _uiState.update {
-            it.copy(
-                isDeletePasswordDialogShown = false
-            )
-        }
-    }
-
-    fun onEnableCopyDialog(){
-        _uiState.update {
-            it.copy(
-                isCopyToDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableCopyDialog(){
-        _uiState.update {
-            it.copy(
-                isCopyToDialogShown = false
-            )
-        }
-    }
-
-    fun onEnableUpdateDialog(){
-        _uiState.update {
-            it.copy(
-                isUpdatePasswordDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableUpdateDialog(){
-        _uiState.update {
-            it.copy(
-                isUpdatePasswordDialogShown = false
-            )
-        }
-    }
-
-    fun onEnableUpdateNotesDialog(){
-        _uiState.update {
-            it.copy(
-                isUpdateNotesDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableUpdateNotesDialog(){
-        _uiState.update {
-            it.copy(
-                isUpdateNotesDialogShown = false
-            )
-        }
-    }
-
-    fun onEnableDeleteNotesDialog(){
-        _uiState.update {
-            it.copy(
-                isDeleteNotesDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableDeleteNotesDialog(){
-        _uiState.update {
-            it.copy(
-                isDeleteNotesDialogShown = false
-            )
-        }
-    }
-
     fun onDeletePassword (){
         viewModelScope.launch {
             deletePasswordUseCase.invoke(passwordId)
-            onDisableDeletePasswordDialog()
+            dialogManager.onDisableDeletePasswordDialog()
             loadPassword()
         }
     }

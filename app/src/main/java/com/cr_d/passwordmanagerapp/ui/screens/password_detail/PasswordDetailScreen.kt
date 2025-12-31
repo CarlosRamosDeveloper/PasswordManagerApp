@@ -20,12 +20,12 @@ import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.BasicMode
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.DetailedMode
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.EditMode
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.HeaderButtons
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.NotesSection
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.components.PasswordCard
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.BasicMode
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.DetailedMode
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.EditMode
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.HeaderButtons
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.NotesSection
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.PasswordCard
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
 @Composable
