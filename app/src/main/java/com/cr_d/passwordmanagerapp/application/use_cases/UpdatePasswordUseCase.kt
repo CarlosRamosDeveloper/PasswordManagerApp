@@ -17,6 +17,7 @@ class UpdatePasswordUseCase (
         id: Long,
         newPassword: String,
         appInfo: ApplicationInfo,
+        notes: String = ""
     ): PasswordData {
         val existing = repository.findById(id)
             ?: throw IllegalArgumentException("Password not found")
@@ -28,7 +29,7 @@ class UpdatePasswordUseCase (
         )
         val metadataInfo = PasswordAnalyzer.analyze(newPassword)
         val encryptedPassword = encrypt(newPassword)
-        val encryptedNotes = encrypt(existing.cipheredNotes.encryptedText.toString())
+        val encryptedNotes = encrypt(notes)
 
         val updatedPassword = PasswordData(
             id = existing.id,

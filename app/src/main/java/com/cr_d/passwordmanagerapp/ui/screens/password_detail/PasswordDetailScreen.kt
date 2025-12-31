@@ -89,7 +89,8 @@ fun PasswordDetailedCard(
                             viewModel = viewModel,
                             passwordError = state.errorMessage,
                             notes = state.newNotes,
-                            haveChangedNotes = viewModel.checkIfNotesHasChanged()
+                            haveChangedNotes = viewModel.checkIfNotesHasChanged(),
+                            hasPasswordChanged = viewModel.checkIfPasswordHasChanged()
                         )
                     }
                 }
@@ -137,19 +138,12 @@ fun PasswordDetailedCard(
 
                 if(state.isUpdatePasswordDialogShown) ConfirmDialog(
                     title = "Actualizar contraseña",
-                    message =
-                        if (viewModel.checkIfPasswordHasChanged()) "Esta acción actualizará la contraseña de forma permanente"
-                        else "Atención, la contraseña no ha cambiado",
-                    confirmButtonText =
-                        if (viewModel.checkIfPasswordHasChanged())"Actualizar contraseña"
-                        else "Atrás",
+                    message = "Esta acción actualizará la contraseña de forma permanente",
+
+                    confirmButtonText = "Actualizar contraseña",
                     onConfirm = {
-                        if (viewModel.checkIfPasswordHasChanged()) {
-                            viewModel.onUpdatePassword()
-                            snackFunction("Contraseña actualizada correctamente")
-                        } else {
-                            snackFunction("La contraseña no ha cambiado")
-                        }
+                        viewModel.onUpdatePassword()
+                        snackFunction("Contraseña actualizada correctamente")
                         viewModel.onDisableUpdateDialog()
                     },
                     onDisable = viewModel::onDisableUpdateDialog,
