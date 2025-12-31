@@ -28,9 +28,9 @@ object AppGraph {
     // Password
     private val getAllPasswordsUseCase by lazy { GetAllPasswordsUseCase(repository) }
     private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(generator) }
-    private val createPasswordUseCase by lazy { SavePasswordUseCase(repository) }
-    private val updatePasswordUseCase by lazy { UpdatePasswordUseCase(repository) }
-    private val updateNotesUseCase by lazy { UpdateNotesUseCase(repository) }
+    private val createPasswordUseCase by lazy { SavePasswordUseCase(repository, encryptStringUseCase) }
+    private val updatePasswordUseCase by lazy { UpdatePasswordUseCase(repository, encryptStringUseCase) }
+    private val updateNotesUseCase by lazy { UpdateNotesUseCase(repository, encryptStringUseCase) }
     private val deletePasswordUseCase by lazy { DeletePasswordUseCase(repository) }
 
     // Crypto
