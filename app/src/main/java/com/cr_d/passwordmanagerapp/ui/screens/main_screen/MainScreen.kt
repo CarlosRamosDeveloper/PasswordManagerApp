@@ -22,12 +22,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){

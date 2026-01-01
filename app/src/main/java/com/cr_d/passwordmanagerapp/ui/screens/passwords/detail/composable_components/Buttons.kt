@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components
+package com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

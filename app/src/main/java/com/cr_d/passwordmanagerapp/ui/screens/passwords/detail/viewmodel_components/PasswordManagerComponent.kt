@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components
+package com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

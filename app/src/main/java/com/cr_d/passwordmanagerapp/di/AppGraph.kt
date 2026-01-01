@@ -13,14 +13,14 @@ import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
-import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModelFactory
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.DialogManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.EditPasswordManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.PasswordManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.UiManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.DialogManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.EditPasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.PasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.UiManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.list.PasswordListViewModelFactory
 
 object AppGraph {
     // Repositories

@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.password_detail
+package com.cr_d.passwordmanagerapp.ui.screens.passwords.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,10 +8,10 @@ import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreU
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.DialogManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.EditPasswordManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.PasswordManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.UiManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.DialogManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.EditPasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.PasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.UiManagerComponent
 
 class PasswordDetailViewModelFactory(
     val repository: IPasswordRepository,

@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components
+package com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomButton
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModel
 
 @Composable
 fun HeaderButtons(viewModel: PasswordDetailViewModel){

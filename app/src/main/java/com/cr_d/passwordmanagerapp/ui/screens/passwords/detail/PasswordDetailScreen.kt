@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.password_detail
+package com.cr_d.passwordmanagerapp.ui.screens.passwords.detail
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,13 +15,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.BasicMode
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.ConfirmDialogComponents
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.DetailedMode
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.EditMode
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.HeaderButtons
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.NotesSection
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components.PasswordCard
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.BasicMode
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.ConfirmDialogComponents
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.DetailedMode
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.EditMode
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.HeaderButtons
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.NotesSection
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.PasswordCard
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
 @Composable
