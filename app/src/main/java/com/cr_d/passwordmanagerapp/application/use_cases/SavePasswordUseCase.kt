@@ -3,7 +3,6 @@ package com.cr_d.passwordmanagerapp.application.use_cases
 import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
@@ -12,6 +11,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
 
 class SavePasswordUseCase (
     private val repository: IPasswordRepository,
+    private val encrypt: EncryptStringUseCase
 ){
     suspend operator fun invoke(
         password: String,
@@ -19,7 +19,6 @@ class SavePasswordUseCase (
         score: Double,
         notes: String
     ): PasswordData {
-        val encrypt = EncryptStringUseCase(CryptoService())
         val creationDate = LocalDate.now()
         val dateInfo = DateInfo(
             creationDate = creationDate,

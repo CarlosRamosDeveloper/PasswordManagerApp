@@ -3,42 +3,74 @@ package com.cr_d.passwordmanagerapp.ui.screens.password_detail
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlin.String
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.String
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
-import com.cr_d.passwordmanagerapp.data.mapper.toEditUiState
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
-import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
+import com.cr_d.passwordmanagerapp.ui.models.PasswordConfirmDialogData
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.DialogManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.EditPasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.PasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.UiManagerComponent
 
 class PasswordDetailViewModel(
-    val repository: IPasswordRepository,
-    val passwordId: Long,
-    val generatePasswordUseCase: GeneratePasswordUseCase,
-    val securityScoreCalculator: CalculateSecurityScoreUseCase,
-    val updatePasswordUseCase: UpdatePasswordUseCase,
-    val updateNotesUseCase: UpdateNotesUseCase,
-    val deletePasswordUseCase: DeletePasswordUseCase,
-    val decrypt: DecryptStringUseCase
+    private val repository: IPasswordRepository,
+    private val passwordId: Long,
+    private val generatePasswordUseCase: GeneratePasswordUseCase,
+    private val securityScoreCalculator: CalculateSecurityScoreUseCase,
+    private val updatePasswordUseCase: UpdatePasswordUseCase,
+    private val updateNotesUseCase: UpdateNotesUseCase,
+    private val dialogManager: DialogManagerComponent,
+    private val passwordManager: PasswordManagerComponent,
+    private val editPasswordManager: EditPasswordManagerComponent,
+    private val uiManager: UiManagerComponent
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    val uiState: StateFlow<UiState> = combine(
+        _uiState,
+        dialogManager.uiState,
+        passwordManager.uiState,
+        editPasswordManager.uiState,
+        uiManager.uiState
+    ) { baseState, dialogState, passwordManager, editManager, uiManager ->
+        baseState.copy(
+            isDeletePasswordDialogShown = dialogState.dialogData.isDeletePasswordDialogShown,
+            isCopyToDialogShown = dialogState.dialogData.isCopyToDialogShown,
+            isUpdatePasswordDialogShown = dialogState.dialogData.isUpdatePasswordDialogShown,
+            isUpdateNotesDialogShown = dialogState.dialogData.isUpdateNotesDialogShown,
+            isDeleteNotesDialogShown = dialogState.dialogData.isDeleteNotesDialogShown,
+            password = passwordManager.password,
+            decipheredPassword = passwordManager.decipheredPassword,
+            decipheredNotes = passwordManager.decipheredNotes,
+            editInfo = editManager.editInfo,
+            newPassword = editManager.newPassword,
+            newNotes = editManager.newNotes,
+            isPasswordShown = uiManager.isPasswordShown,
+            mode = uiManager.mode,
+            isGeneratePasswordEnabled = uiManager.isGeneratePasswordEnabled,
+            errorMessage = uiManager.errorMessage
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = UiState()
+    )
 
     data class UiState(
         val isPasswordShown: Boolean = false,
@@ -59,332 +91,147 @@ class PasswordDetailViewModel(
     )
 
     init {
-        loadPassword()
+        initialize()
         Log.d("CreationScreen", "Detail -> $this")
     }
 
-    private fun loadPassword(){
+    private fun initialize(){
         viewModelScope.launch {
             val password = repository.findById(passwordId) ?: return@launch
-            val pwdLength = decrypt(password.cipheredPassword).length
-            val decipheredNotes = decrypt(password.cipheredNotes)
-            _uiState.update {
-                it.copy(
-                    password = password.toUiState(),
-                    editInfo = password.toEditUiState(pwdLength),
-                    newPassword = PlainPassword(decrypt(password.cipheredPassword)),
-                    decipheredNotes = decipheredNotes,
-                    newNotes = decipheredNotes
-                )
-            }
+
+            passwordManager.loadPassword(password)
+            editPasswordManager.loadEditPassword(password, passwordManager.getLength())
+            uiManager.onLoad()
         }
     }
 
-    fun onDeleteNotes(){
-        _uiState.update {
-            it.copy(
-                newNotes = "",
-                decipheredNotes = ""
-            )
+    // Ui Methods
+    fun onPasswordVisibilityToggle () {
+        val state = uiManager.uiState.value.isPasswordShown
+
+        if (state) {
+            onDisablePasswordVisibility()
+            onResetDecipheredPassword()
+        } else {
+            onEnablePasswordVisibility()
+            updateDecipheredPassword()
         }
+    }
+
+    // UI methods
+    fun onEnablePasswordVisibility() = uiManager.onEnablePasswordVisibility()
+    fun onDisablePasswordVisibility() = uiManager.onDisablePasswordVisibility()
+    fun onGeneratePasswordSectionToggle () = uiManager.onGeneratePasswordSectionToggle()
+
+    fun onEnableEditMode() = uiManager.onEnableEditMode()
+
+    fun onEnableBasicInfoMode() = uiManager.onEnableBasicInfoMode()
+
+    fun onEnableFullInfoMode() = uiManager.onEnableFullInfoMode()
+    fun onNewErrorMessage(error:String) = uiManager.onNewErrorMessage(error)
+
+    fun onCleanError() = uiManager.onCleanError()
+
+    //DialogManager
+    fun getData(): PasswordConfirmDialogData = dialogManager.getData()
+    fun onEnableDeletePasswordDialog() = dialogManager.onEnableDeletePasswordDialog()
+    fun onDisableDeletePasswordDialog() = dialogManager.onDisableDeletePasswordDialog()
+    fun onEnableCopyDialog() = dialogManager.onEnableCopyDialog()
+    fun onDisableCopyDialog() = dialogManager.onDisableCopyDialog()
+    fun onEnableUpdateDialog() = dialogManager.onEnableUpdateDialog()
+    fun onDisableUpdateDialog() = dialogManager.onDisableUpdateDialog()
+    fun onEnableUpdateNotesDialog() = dialogManager.onEnableUpdateNotesDialog()
+    fun onDisableUpdateNotesDialog() = dialogManager.onDisableUpdateNotesDialog()
+    fun onEnableDeleteNotesDialog() = dialogManager.onEnableDeleteNotesDialog()
+    fun onDisableDeleteNotesDialog() = dialogManager.onDisableDeleteNotesDialog()
+
+    // PasswordManager
+    fun decipherPassword(): String = passwordManager.decipherPassword()
+    fun onUpdateCipheredNotes(newNotes: String) = passwordManager.onUpdateCipheredNotes(newNotes)
+    fun updateDecipheredPassword() = passwordManager.updateDecipheredPassword()
+    fun onResetDecipheredPassword() = passwordManager.onResetDecipheredPassword()
+    fun onUpdatePassword(newPassword: PasswordUiState) = passwordManager.onUpdatePassword(newPassword)
+
+    // Edit manager
+    fun onAppNameChanged(value: String) = editPasswordManager.onAppNameChanged(value)
+    fun onUrlChanged(value: String) = editPasswordManager.onUrlChanged(value)
+    fun onAccountChanged(value: String) = editPasswordManager.onAccountChanged(value)
+    fun onOptionChanged(option: PasswordOption, value: Boolean) =
+        editPasswordManager.onOptionChanged(option,value)
+    fun onPasswordLengthChanged(value: Int) = editPasswordManager.onPasswordLengthChanged(value)
+    fun onPlainPasswordChange (plainPassword: String) = editPasswordManager.onPlainPasswordChange(plainPassword)
+    fun onPlainPasswordClear() = editPasswordManager.onPlainPasswordClear()
+    fun onNotesHasChanged(notes: String) = editPasswordManager.onNotesHasChanged(notes)
+    fun onUpdateScore(score: Double) = editPasswordManager.onUpdateScore(score)
+    fun onCleanScore() = editPasswordManager.onCleanScore()
+
+
+    // Orchestra methods
+    fun onDeleteNotes(){
+        passwordManager.onDeleteNotes()
+        editPasswordManager.onDeleteNotes()
     }
     fun checkIfPasswordHasChanged(): Boolean{
         val lastPassword = decipherPassword()
-        val newPassword = _uiState.value.newPassword.value
-        return (lastPassword != newPassword)
+        val newPassword = editPasswordManager.getNewPassword()
+        return lastPassword != newPassword
     }
 
     fun checkIfNotesHasChanged(): Boolean {
-        val lastNotes = _uiState.value.decipheredNotes
-        val newNotes = _uiState.value.newNotes
+        val lastNotes = passwordManager.getNotes()
+        val newNotes = editPasswordManager.getNewNotes()
 
         return (lastNotes != newNotes)
     }
 
-    fun decipherPassword(): String{
-        return decrypt(_uiState.value.password!!.cipheredPassword)
-    }
-
-    fun onAppNameChanged(value: String){
-        _uiState.update {
-            it.copy(
-                editInfo = it.editInfo.copy(appName = value)
-            )
-        }
-    }
-
-    fun onUrlChanged(value: String){
-        _uiState.update {
-            it.copy(
-                editInfo = it.editInfo.copy(appUrl = value)
-            )
-        }
-    }
-
-    fun onAccountChanged(value: String){
-        _uiState.update {
-            it.copy(
-                editInfo = it.editInfo.copy(appAccount = value)
-            )
-        }
-    }
-
-    fun onOptionChanged(option: PasswordOption, value: Boolean) {
-        _uiState.update {
-            when (option) {
-                PasswordOption.LOWERCASE -> it.copy(editInfo = it.editInfo.copy(hasLowerCase = value))
-                PasswordOption.UPPERCASE -> it.copy(editInfo = it.editInfo.copy(hasUpperCase = value))
-                PasswordOption.NUMBERS -> it.copy(editInfo = it.editInfo.copy(hasNumbers = value))
-                PasswordOption.SPECIALS -> it.copy(editInfo = it.editInfo.copy(hasSpecials = value))
-            }
-        }
-    }
-
-    fun onPasswordLengthChanged(value: Int){
-        _uiState.update {
-            it.copy(
-                editInfo = it.editInfo.copy(passwordLength = value)
-            )
-        }
-    }
-
-    fun onPasswordVisibilityToggle () {
-        if (_uiState.value.isPasswordShown) {
-            onDisablePasswordVisibility()
-        } else {
-            _uiState.update {
-                it.copy(
-                    isPasswordShown = true,
-                    decipheredPassword = decipherPassword(),
-                )
-            }
-        }
-    }
-
-    fun onDisablePasswordVisibility(){
-        _uiState.update {
-            it.copy(
-                isPasswordShown = false,
-                decipheredPassword = "",
-            )
-        }
-    }
-
-    fun onGeneratePasswordSectionToggle () {
-        _uiState.update {
-            it.copy(
-                isGeneratePasswordEnabled = !uiState.value.isGeneratePasswordEnabled
-            )
-        }
-    }
-
-    fun onPlainPasswordChange (plainPassword: String){
-        _uiState.update {
-            it.copy(
-                newPassword = PlainPassword(plainPassword)
-            )
-        }
-    }
-
-    fun onNotesHasChanged(notes: String){
-        _uiState.update {
-            it.copy(
-                newNotes = notes
-            )
-        }
-    }
-
-    fun onEnableEditMode() {
-        _uiState.update {
-            it.copy(
-                mode = PasswordDetailUiMode.EDIT_MODE,
-                isGeneratePasswordEnabled = false,
-                isPasswordShown = false
-            )
-        }
-    }
-
-    fun onEnableBasicInfoMode(){
-        _uiState.update {
-            it.copy(
-                mode = PasswordDetailUiMode.BASIC_INFO_MODE,
-                isGeneratePasswordEnabled = false,
-                isPasswordShown = false
-            )
-        }
-    }
-
-    fun onEnableFullInfoMode(){
-        _uiState.update {
-            it.copy(
-                mode = PasswordDetailUiMode.FULL_INFO_MODE,
-                isGeneratePasswordEnabled = false,
-                isPasswordShown = false
-            )
-        }
-    }
-
-    fun onEnableDeletePasswordDialog(){
-        _uiState.update {
-            it.copy(
-                isDeletePasswordDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableDeletePasswordDialog(){
-        _uiState.update {
-            it.copy(
-                isDeletePasswordDialogShown = false
-            )
-        }
-    }
-
-    fun onEnableCopyDialog(){
-        _uiState.update {
-            it.copy(
-                isCopyToDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableCopyDialog(){
-        _uiState.update {
-            it.copy(
-                isCopyToDialogShown = false
-            )
-        }
-    }
-
-    fun onEnableUpdateDialog(){
-        _uiState.update {
-            it.copy(
-                isUpdatePasswordDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableUpdateDialog(){
-        _uiState.update {
-            it.copy(
-                isUpdatePasswordDialogShown = false
-            )
-        }
-    }
-
-    fun onEnableUpdateNotesDialog(){
-        _uiState.update {
-            it.copy(
-                isUpdateNotesDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableUpdateNotesDialog(){
-        _uiState.update {
-            it.copy(
-                isUpdateNotesDialogShown = false
-            )
-        }
-    }
-
-    fun onEnableDeleteNotesDialog(){
-        _uiState.update {
-            it.copy(
-                isDeleteNotesDialogShown = true
-            )
-        }
-    }
-
-    fun onDisableDeleteNotesDialog(){
-        _uiState.update {
-            it.copy(
-                isDeleteNotesDialogShown = false
-            )
-        }
-    }
-
-    fun onDeletePassword (){
-        viewModelScope.launch {
-            deletePasswordUseCase.invoke(passwordId)
-            onDisableDeletePasswordDialog()
-            loadPassword()
-        }
-    }
-
     fun onUpdatePassword (){
         viewModelScope.launch {
-            val newAppInfo = ApplicationInfo(
-                appName = _uiState.value.editInfo.appName,
-                appUrl = _uiState.value.editInfo.appUrl,
-                appAccount = _uiState.value.editInfo.appAccount
-            )
+            val newAppInfo = editPasswordManager.getNewAppInfo()
 
             val updatedPassword = updatePasswordUseCase.invoke(
                 id = passwordId,
-                newPassword = _uiState.value.newPassword.value,
+                newPassword = editPasswordManager.getNewPassword(),
                 appInfo = newAppInfo,
-                notes = _uiState.value.newNotes
+                notes = editPasswordManager.getNewNotes()
             )
 
             val uiStateParsedPassword = updatedPassword.toUiState()
 
-            _uiState.update {
-                it.copy(
-                    password = uiStateParsedPassword
-                )
-            }
-            loadPassword()
+            onUpdatePassword(uiStateParsedPassword)
+            initialize()
             onEnableFullInfoMode()
         }
     }
 
     fun onUpdateNotes(){
-        val newNotes = _uiState.value.newNotes
+        val newNotes = editPasswordManager.getNewNotes()
 
-        Log.d("NotesChange", newNotes)
         viewModelScope.launch {
             updateNotesUseCase(passwordId, newNotes)
         }
-        _uiState.update {
-            it.copy(
-                decipheredNotes = newNotes
-            )
-        }
-        Log.d("NotesChange", newNotes )
+
+        onUpdateCipheredNotes(newNotes)
     }
 
     fun onGeneratePassword(){
-        val passwordDataGeneration = PasswordDataGeneration(
-            _uiState.value.editInfo.hasLowerCase,
-            _uiState.value.editInfo.hasUpperCase,
-            _uiState.value.editInfo.hasNumbers,
-            _uiState.value.editInfo.hasSpecials,
-            _uiState.value.editInfo.passwordLength
-        )
+        val passwordDataGeneration = editPasswordManager.getMetadataInfo()
         try {
             val password = generatePasswordUseCase(passwordDataGeneration)
-
-            _uiState.update {
-                it.copy(
-                    isPasswordShown = true,
-                    errorMessage = "",
-                    newPassword = PlainPassword(password),
-                    editInfo = it.editInfo.copy(
-                        score = securityScoreCalculator(password),
-                    )
-                )
-            }
+            onEnablePasswordVisibility()
+            onCleanError()
+            onPlainPasswordChange(password)
+            onUpdateScore(securityScoreCalculator(password))
         } catch (e: Exception){
-            _uiState.update {
-                it.copy(
-                    errorMessage = e.message ?: "Error al generar contraseña",
-                    newPassword = PlainPassword(""),
-                    editInfo = it.editInfo.copy(
-                        score = 0.0,
-                    )
-                )
-            }
+            onNewErrorMessage(e.message ?: "Error al generar contraseña")
+            onPlainPasswordClear()
+            onCleanScore()
+        }
+    }
+
+    fun onDeletePassword (){
+        viewModelScope.launch {
+            passwordManager.onDeletePassword(passwordId)
+            dialogManager.onDisableDeletePasswordDialog()
         }
     }
 }
