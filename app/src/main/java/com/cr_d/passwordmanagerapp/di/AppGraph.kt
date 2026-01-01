@@ -23,19 +23,21 @@ import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_componen
 import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModelFactory
 
 object AppGraph {
+    // Repositories
+    private val passwordRepository by lazy { RoomApplication.getPasswordRepository() }
+    private val accountRepository by lazy { RoomApplication.getAccountRepository() }
     // Core
-    private val repository by lazy { RoomApplication.getRepository() }
     private val generator by lazy { PasswordGenerator() }
     private val scoreCalculator by lazy { SecurityScoreCalculator() }
     private val calculateSecurityScoreUseCase by lazy { CalculateSecurityScoreUseCase(scoreCalculator) }
 
     // Password
-    private val getAllPasswordsUseCase by lazy { GetAllPasswordsUseCase(repository) }
+    private val getAllPasswordsUseCase by lazy { GetAllPasswordsUseCase(passwordRepository) }
     private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(generator) }
-    private val createPasswordUseCase by lazy { SavePasswordUseCase(repository, encryptStringUseCase) }
-    private val updatePasswordUseCase by lazy { UpdatePasswordUseCase(repository, encryptStringUseCase) }
-    private val updateNotesUseCase by lazy { UpdateNotesUseCase(repository, encryptStringUseCase) }
-    private val deletePasswordUseCase by lazy { DeletePasswordUseCase(repository) }
+    private val createPasswordUseCase by lazy { SavePasswordUseCase(passwordRepository, encryptStringUseCase) }
+    private val updatePasswordUseCase by lazy { UpdatePasswordUseCase(passwordRepository, encryptStringUseCase) }
+    private val updateNotesUseCase by lazy { UpdateNotesUseCase(passwordRepository, encryptStringUseCase) }
+    private val deletePasswordUseCase by lazy { DeletePasswordUseCase(passwordRepository) }
 
     // Crypto
     private val cryptoService by lazy { CryptoService() }
@@ -44,12 +46,12 @@ object AppGraph {
 
     // ViewmodelComponents
     private val dialogManagerComponent by lazy { DialogManagerComponent() }
-    private val passwordManagerComponent by lazy { PasswordManagerComponent(repository, deletePasswordUseCase, decryptStringUseCase) }
+    private val passwordManagerComponent by lazy { PasswordManagerComponent(passwordRepository, deletePasswordUseCase, decryptStringUseCase) }
     private val editManagerComponent by lazy { EditPasswordManagerComponent(decryptStringUseCase) }
     private val uiManagerComponent by lazy { UiManagerComponent() }
 
     val mainScreenFactory by lazy {
-        MainScreenViewModelFactory(repository)
+        MainScreenViewModelFactory(passwordRepository)
     }
     val createPasswordFactory by lazy {
         CreatePasswordViewModelFactory(
@@ -60,7 +62,7 @@ object AppGraph {
     }
     val listPasswordFactory by lazy { PasswordListViewModelFactory(getAllPasswordsUseCase) }
     fun detailPasswordFactory(passwordId: Long) = PasswordDetailViewModelFactory(
-        repository = repository,
+        repository = passwordRepository,
         passwordId = passwordId,
         generatePasswordUseCase = generatePasswordUseCase,
         securityScoreCalculator = calculateSecurityScoreUseCase,
