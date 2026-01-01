@@ -45,13 +45,13 @@ fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
             .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PasswordSection(
-            totalPasswordsStored = state.totalPasswords,
+            totalStoredPasswords = state.totalPasswords,
             totalWarnings = state.totalWarnings,
             viewModel = viewModel
         )
 
         AccountSection(
-            totalAccountsStored = state.totalAccounts,
+            totalStoredAccounts = state.totalAccounts,
             viewModel = viewModel
         )
 
@@ -89,33 +89,33 @@ fun MainCard(title: String, value: String, icon: ImageVector, modifier: Modifier
 
 @Composable
 fun PasswordSection(
-    totalPasswordsStored: Int,
+    totalStoredPasswords: Int,
     totalWarnings: Int,
     viewModel: MainScreenViewModel
 ){
     Row (Modifier
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-        MainCard("Contraseñas",totalPasswordsStored.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
+        MainCard("Contraseñas",totalStoredPasswords.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
         MainCard("Alertas",totalWarnings.toString(), Icons.Default.Warning, modifier = Modifier.weight(0.45f))
     }
 
     FullWidthButton("Generar contraseñas de prueba", viewModel::onEnablePopulatePasswordDatabaseDialog)
-    FullWidthButton("Eliminar todas las contraseñas", viewModel::onEnableMassDeletePasswordDialog)
+    if(totalStoredPasswords > 0) FullWidthButton("Eliminar todas las contraseñas", viewModel::onEnableMassDeletePasswordDialog)
 }
 
 @Composable
 fun AccountSection(
-    totalAccountsStored: Int,
+    totalStoredAccounts: Int,
     viewModel: MainScreenViewModel
 ) {
     Row (Modifier
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-        MainCard("Cuentas",totalAccountsStored.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
+        MainCard("Cuentas",totalStoredAccounts.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
         //MainCard("Alertas",totalWarnings.toString(), Icons.Default.Warning, modifier = Modifier.weight(0.45f))
     }
 
     FullWidthButton("Generar cuentas de prueba", viewModel::onEnablePopulateAccountDatabaseDialog)
-    FullWidthButton("Eliminar todas las cuentas", viewModel::onEnableMassDeleteAccountDialog)
+    if(totalStoredAccounts > 0) FullWidthButton("Eliminar todas las cuentas", viewModel::onEnableMassDeleteAccountDialog)
 }

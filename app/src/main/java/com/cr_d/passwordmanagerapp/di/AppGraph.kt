@@ -15,6 +15,7 @@ import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainPasswordManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModelFactory
@@ -28,12 +29,14 @@ object AppGraph {
     // Repositories
     private val passwordRepository by lazy { RoomApplication.getPasswordRepository() }
     private val accountRepository by lazy { RoomApplication.getAccountRepository() }
+
     // Core
     private val generator by lazy { PasswordGenerator() }
     private val scoreCalculator by lazy { SecurityScoreCalculator() }
     private val calculateSecurityScoreUseCase by lazy { CalculateSecurityScoreUseCase(scoreCalculator) }
+    private val cryptoService by lazy { CryptoService() }
 
-    // Password
+    // Password UseCases
     private val getAllPasswordsUseCase by lazy { GetAllPasswordsUseCase(passwordRepository) }
     private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(generator) }
     private val createPasswordUseCase by lazy { SavePasswordUseCase(passwordRepository, encryptStringUseCase) }
@@ -41,8 +44,7 @@ object AppGraph {
     private val updateNotesUseCase by lazy { UpdateNotesUseCase(passwordRepository, encryptStringUseCase) }
     private val deletePasswordUseCase by lazy { DeletePasswordUseCase(passwordRepository) }
 
-    // Crypto
-    private val cryptoService by lazy { CryptoService() }
+    // Crypto UseCases
     private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }
     private val decryptStringUseCase by lazy { DecryptStringUseCase(cryptoService) }
 
@@ -52,13 +54,14 @@ object AppGraph {
     private val editManagerComponent by lazy { EditPasswordManagerComponent(decryptStringUseCase) }
     private val passwordUiManagerComponent by lazy { UiManagerComponent() }
     private val mainDialogManagerComponent by lazy { MainDialogManagerComponent() }
-    private val mainPasswordManager by lazy { MainPasswordManagerComponent(passwordRepository) }
+    private val mainPasswordManagerComponent by lazy { MainPasswordManagerComponent(passwordRepository) }
+    private val mainAccountManagerComponent by lazy { MainAccountManagerComponent(accountRepository) }
 
     val mainScreenFactory by lazy {
         MainScreenViewModelFactory(
-            accountRepository = accountRepository,
             dialogManager = mainDialogManagerComponent,
-            passwordManager = mainPasswordManager
+            passwordManager = mainPasswordManagerComponent,
+            accountManager = mainAccountManagerComponent
         )
     }
     val createPasswordFactory by lazy {
