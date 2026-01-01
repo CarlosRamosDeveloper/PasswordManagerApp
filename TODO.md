@@ -11,9 +11,8 @@
 
 ## Architecture / debt tech
 
-- [1] Mejorar la inyección de dependencias. Pasar todos los UC allí.
 - [2] Integrar AppEntity
-- [2] Integrar AccountEntity
+- [1] Integrar AccountEntity
 
 ## Features
 
@@ -28,3 +27,5 @@
 
 - [8] Mostrar el logo de la app si coincide con la url
 - [9] Migrar a Hilt
+
+## Actual

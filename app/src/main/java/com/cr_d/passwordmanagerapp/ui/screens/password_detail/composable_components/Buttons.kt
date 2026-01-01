@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.password_detail.components
+package com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -20,7 +20,6 @@ import kotlin.math.max
 
 import com.cr_d.passwordmanagerapp.R
 import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
 
 @Composable
 fun TogglePasswordVisibilityButton(isPasswordShown: Boolean, onclick: () -> Unit){
@@ -69,17 +68,4 @@ fun PasswordGenerationToggle(isGeneratePasswordEnabled: Boolean, onclick: () -> 
         { onclick() },
         40
     )
-}
-
-@Composable
-fun UpdatePasswordButton(snackFunction: (String)-> Unit, updateMethod: () -> Unit){
-    FullWidthButton("Actualizar contraseña", {
-        snackFunction("Contraseña actualizada correctamente")
-        updateMethod()
-    })
-}
-
-@Composable
-fun GeneratePasswordButton(viewModel: PasswordDetailViewModel){
-    FullWidthButton("Generar contraseña", viewModel::onGeneratePassword)
 }
