@@ -30,6 +30,7 @@ object AppGraph {
     // Repositories
     private val passwordRepository by lazy { RoomApplication.getPasswordRepository() }
     private val accountRepository by lazy { RoomApplication.getAccountRepository() }
+    private val applicationRepository by lazy { RoomApplication.getApplicationRepository() }
 
     // Core
     private val generator by lazy { PasswordGenerator() }
@@ -57,7 +58,7 @@ object AppGraph {
     private val mainDialogManagerComponent by lazy { MainDialogManagerComponent() }
     private val mainPasswordManagerComponent by lazy { MainPasswordManagerComponent(passwordRepository) }
     private val mainAccountManagerComponent by lazy { MainAccountManagerComponent(accountRepository) }
-    private val mainApplicationManagerComponent by lazy { MainApplicationManagerComponent() }
+    private val mainApplicationManagerComponent by lazy { MainApplicationManagerComponent(applicationRepository) }
 
     val mainScreenFactory by lazy {
         MainScreenViewModelFactory(

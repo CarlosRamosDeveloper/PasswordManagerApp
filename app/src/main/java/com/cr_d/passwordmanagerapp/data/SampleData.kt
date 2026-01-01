@@ -5,6 +5,7 @@ import java.time.LocalDate
 import com.cr_d.passwordmanagerapp.application.use_cases.EncryptStringUseCase
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
+import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toDomainCalculated
@@ -46,6 +47,21 @@ private fun fakeAccount(
     return AccountEntity(
         cipheredAccount = account.encryptedText,
         accountIv = account.iv,
+        cipheredNotes = notes.encryptedText,
+        notesIv = notes.iv
+    )
+}
+
+private fun fakeApplication(
+    appName: String,
+    appUrl: String = "",
+    notes: String = ""
+) : ApplicationEntity {
+    val notes = encrypt(notes)
+
+    return ApplicationEntity(
+        appName = appName,
+        appUrl = appUrl,
         cipheredNotes = notes.encryptedText,
         notesIv = notes.iv
     )
@@ -155,6 +171,37 @@ object SampleData {
         ).toDomain(),
         fakeAccount(
             account = "maria98"
+        ).toDomain(),
+    )
+
+    val applications = mutableListOf(
+        fakeApplication(
+            appName = "Amazon.es",
+            appUrl = "www.amazon.es"
+        ).toDomain(),
+        fakeApplication(
+            appName = "Netflix",
+            appUrl = "www.netflix.com"
+        ).toDomain(),
+        fakeApplication(
+            appName = "Google",
+            appUrl = "www.google.com"
+        ).toDomain(),
+        fakeApplication(
+            appName = "ChatGPT",
+            appUrl = "www.chatgpt.com"
+        ).toDomain(),
+        fakeApplication(
+            appName = "Github",
+            appUrl = "www.github.com"
+        ).toDomain(),
+        fakeApplication(
+            appName = "Spotify",
+            appUrl = "https://open.spotify.com/intl-es"
+        ).toDomain(),
+        fakeApplication(
+            appName = "LinkedIn.es",
+            appUrl = "https://www.linkedin.com"
         ).toDomain(),
     )
 }

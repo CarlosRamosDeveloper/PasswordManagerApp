@@ -21,12 +21,16 @@ class MainDialogManagerComponent : ViewModel() {
         val isPasswordPopulateDatabaseDialogShown = _uiState.value.dialogData.isPasswordPopulateDatabaseDialogShown
         val isAccountsMassDeleteDialogShown = _uiState.value.dialogData.isAccountsMassDeleteDialogShown
         val isAccountsPopulateDatabaseDialogShown = _uiState.value.dialogData.isAccountsPopulateDatabaseDialogShown
+        val isApplicationMassDeleteDialogShown = _uiState.value.dialogData.isApplicationMassDeleteDialogShown
+        val isApplicationPopulateDatabaseDialogShown = _uiState.value.dialogData.isApplicationPopulateDatabaseDialogShown
 
         return MainConfirmDialogData(
             isPasswordMassDeleteDialogShown,
             isPasswordPopulateDatabaseDialogShown,
             isAccountsMassDeleteDialogShown,
-            isAccountsPopulateDatabaseDialogShown
+            isAccountsPopulateDatabaseDialogShown,
+            isApplicationMassDeleteDialogShown,
+            isApplicationPopulateDatabaseDialogShown
         )
     }
 
@@ -105,6 +109,46 @@ class MainDialogManagerComponent : ViewModel() {
             it.copy(
                 dialogData = it.dialogData.copy(
                     isAccountsPopulateDatabaseDialogShown = false
+                ),
+            )
+        }
+    }
+
+    fun onEnableMassDeleteApplicationDialog(){
+        _uiState.update {
+            it.copy(
+                dialogData = it.dialogData.copy(
+                    isApplicationMassDeleteDialogShown = true
+                ),
+            )
+        }
+    }
+
+    fun onDisableMassDeleteApplicationDialog(){
+        _uiState.update {
+            it.copy(
+                dialogData = it.dialogData.copy(
+                    isApplicationMassDeleteDialogShown = false
+                ),
+            )
+        }
+    }
+
+    fun onEnablePopulateApplicationDatabaseDialog(){
+        _uiState.update {
+            it.copy(
+                dialogData = it.dialogData.copy(
+                    isApplicationPopulateDatabaseDialogShown = true
+                ),
+            )
+        }
+    }
+
+    fun onDisablePopulateApplicationDatabaseDialog(){
+        _uiState.update {
+            it.copy(
+                dialogData = it.dialogData.copy(
+                    isApplicationPopulateDatabaseDialogShown = false
                 ),
             )
         }

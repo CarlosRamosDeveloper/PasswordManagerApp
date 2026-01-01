@@ -5,4 +5,6 @@ data class MainConfirmDialogData (
     val isPasswordPopulateDatabaseDialogShown: Boolean = false,
     val isAccountsMassDeleteDialogShown: Boolean = false,
     val isAccountsPopulateDatabaseDialogShown: Boolean = false,
+    val isApplicationMassDeleteDialogShown: Boolean = false,
+    val isApplicationPopulateDatabaseDialogShown: Boolean = false
 )
