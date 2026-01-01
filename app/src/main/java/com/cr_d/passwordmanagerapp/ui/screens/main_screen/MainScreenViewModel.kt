@@ -3,6 +3,7 @@ package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cr_d.passwordmanagerapp.ui.models.MainConfirmDialogData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,10 +31,7 @@ class MainScreenViewModel (
         appManager.uiState
     ) { baseState, dialogManager, passwordManager, accountManager, appManager ->
         baseState.copy(
-            isPasswordMassDeleteDialogShown = dialogManager.dialogData.isPasswordMassDeleteDialogShown,
-            isPasswordPopulateDatabaseDialogShown = dialogManager.dialogData.isPasswordPopulateDatabaseDialogShown,
-            isAccountsMassDeleteDialogShown = dialogManager.dialogData.isAccountsMassDeleteDialogShown,
-            isAccountsPopulateDatabaseDialogShown = dialogManager.dialogData.isAccountsPopulateDatabaseDialogShown,
+            dialogData = dialogManager.dialogData,
             totalPasswords = passwordManager.totalPasswords,
             totalWarnings = passwordManager.totalWarnings,
             totalAccounts = accountManager.totalAccounts,
@@ -46,10 +44,7 @@ class MainScreenViewModel (
     )
 
     data class UiState(
-        val isPasswordMassDeleteDialogShown: Boolean = false,
-        val isPasswordPopulateDatabaseDialogShown: Boolean = false,
-        val isAccountsMassDeleteDialogShown: Boolean = false,
-        val isAccountsPopulateDatabaseDialogShown: Boolean = false,
+        val dialogData: MainConfirmDialogData = MainConfirmDialogData(),
         val totalPasswords: Int = 0,
         val totalWarnings: Int = 0,
         val totalAccounts: Int = 0,
@@ -88,6 +83,10 @@ class MainScreenViewModel (
     fun onDisableMassDeleteAccountDialog() = dialogManager.onDisableMassDeleteAccountDialog()
     fun onEnablePopulateAccountDatabaseDialog() = dialogManager.onEnablePopulateAccountDatabaseDialog()
     fun onDisablePopulateAccountDatabaseDialog() = dialogManager.onDisablePopulateAccountDatabaseDialog()
+    fun onEnableMassDeleteApplicationDialog() = dialogManager.onEnableMassDeleteApplicationDialog()
+    fun onDisableMassDeleteApplicationDialog() = dialogManager.onDisableMassDeleteApplicationDialog()
+    fun onEnablePopulateApplicationDatabaseDialog() = dialogManager.onEnablePopulateApplicationDatabaseDialog()
+    fun onDisablePopulateApplicationDatabaseDialog() = dialogManager.onDisablePopulateApplicationDatabaseDialog()
 
     // ApplicationManager
     fun onTotalAppsChange() = appManager.onTotalAppsChange()

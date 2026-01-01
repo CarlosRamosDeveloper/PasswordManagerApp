@@ -56,10 +56,10 @@ fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
         )
 
         MainConfirmDialogs(
-            isPopulateDatabasePasswordDialogShown = state.isPasswordPopulateDatabaseDialogShown,
-            isMassDeletePasswordDialogShown = state.isPasswordMassDeleteDialogShown,
-            isPopulateDatabaseAccountDialogShown = state.isAccountsPopulateDatabaseDialogShown,
-            isMassDeleteAccountDialogShown = state.isAccountsMassDeleteDialogShown,
+            isPopulateDatabasePasswordDialogShown = state.dialogData.isPasswordPopulateDatabaseDialogShown,
+            isMassDeletePasswordDialogShown = state.dialogData.isPasswordMassDeleteDialogShown,
+            isPopulateDatabaseAccountDialogShown = state.dialogData.isAccountsPopulateDatabaseDialogShown,
+            isMassDeleteAccountDialogShown = state.dialogData.isAccountsMassDeleteDialogShown,
             viewModel = viewModel
         )
     }
