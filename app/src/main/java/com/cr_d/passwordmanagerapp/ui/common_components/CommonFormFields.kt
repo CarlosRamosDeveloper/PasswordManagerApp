@@ -6,19 +6,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.TextObfuscationMode
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SecureTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
@@ -56,20 +54,13 @@ fun DecimalFormField(value: Int, onValueChange: (Int) -> Unit) {
 
 @Composable
 fun PasswordTextField(isPasswordShown: Boolean, plainPassword: String, onUpdateMethod: (String) -> Unit){
-    val state = rememberTextFieldState(initialText = plainPassword)
-
-    LaunchedEffect(state) {
-        snapshotFlow { state.text.toString() }.collect { newValue ->
-            onUpdateMethod(newValue)
-        }
-    }
-
-    SecureTextField(
-        state = state,
+    TextField(
+        value = plainPassword,
+        onValueChange = onUpdateMethod,
         label = { Text("Contraseña") },
-        textObfuscationMode =
-            if (isPasswordShown) TextObfuscationMode.Visible
-            else TextObfuscationMode.RevealLastTyped,
+        visualTransformation =
+            if (isPasswordShown) VisualTransformation.None
+            else PasswordVisualTransformation()
     )
 }
 

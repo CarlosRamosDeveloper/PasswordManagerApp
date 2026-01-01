@@ -18,6 +18,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
+import com.cr_d.passwordmanagerapp.ui.models.PasswordConfirmDialogData
 import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
@@ -72,21 +73,21 @@ class PasswordDetailViewModel(
     )
 
     data class UiState(
-        val isPasswordShown: Boolean = false, // gestion
-        val mode: PasswordDetailUiMode = PasswordDetailUiMode.BASIC_INFO_MODE, // gestión
-        val password: PasswordUiState? = null, // passwordManager //
-        val editInfo: PasswordEditUiState = PasswordEditUiState(), //editManager //
-        val isGeneratePasswordEnabled: Boolean = false, // gestión
-        val errorMessage: String = "", // gestión
-        val decipheredPassword: String = "", // passwordmanager //
-        val decipheredNotes: String = "", // passwordmanager //
-        val newPassword: PlainPassword = PlainPassword(""), //editManager //
-        val newNotes: String = "", // editManager //
-        val isDeletePasswordDialogShown: Boolean = false, // dialog //
-        val isCopyToDialogShown: Boolean = false, // dialog //
-        val isUpdatePasswordDialogShown: Boolean = false, // dialog //
-        val isUpdateNotesDialogShown: Boolean = false,// dialog //
-        val isDeleteNotesDialogShown: Boolean = false// dialog //
+        val isPasswordShown: Boolean = false,
+        val mode: PasswordDetailUiMode = PasswordDetailUiMode.BASIC_INFO_MODE,
+        val password: PasswordUiState? = null,
+        val editInfo: PasswordEditUiState = PasswordEditUiState(),
+        val isGeneratePasswordEnabled: Boolean = false,
+        val errorMessage: String = "",
+        val decipheredPassword: String = "",
+        val decipheredNotes: String = "",
+        val newPassword: PlainPassword = PlainPassword(""),
+        val newNotes: String = "",
+        val isDeletePasswordDialogShown: Boolean = false,
+        val isCopyToDialogShown: Boolean = false,
+        val isUpdatePasswordDialogShown: Boolean = false,
+        val isUpdateNotesDialogShown: Boolean = false,
+        val isDeleteNotesDialogShown: Boolean = false
     )
 
     init {
@@ -132,6 +133,7 @@ class PasswordDetailViewModel(
     fun onCleanError() = uiManager.onCleanError()
 
     //DialogManager
+    fun getData(): PasswordConfirmDialogData = dialogManager.getData()
     fun onEnableDeletePasswordDialog() = dialogManager.onEnableDeletePasswordDialog()
     fun onDisableDeletePasswordDialog() = dialogManager.onDisableDeletePasswordDialog()
     fun onEnableCopyDialog() = dialogManager.onEnableCopyDialog()
@@ -215,7 +217,6 @@ class PasswordDetailViewModel(
         val passwordDataGeneration = editPasswordManager.getMetadataInfo()
         try {
             val password = generatePasswordUseCase(passwordDataGeneration)
-            Log.d("Generated", password)
             onEnablePasswordVisibility()
             onCleanError()
             onPlainPasswordChange(password)

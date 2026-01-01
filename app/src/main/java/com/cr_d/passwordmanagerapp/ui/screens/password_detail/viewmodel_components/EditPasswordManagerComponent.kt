@@ -15,7 +15,6 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 
-
 class EditPasswordManagerComponent(
     private val decrypt: DecryptStringUseCase,
 ): ViewModel() {

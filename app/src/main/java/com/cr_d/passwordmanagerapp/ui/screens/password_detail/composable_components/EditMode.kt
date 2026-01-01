@@ -129,7 +129,7 @@ fun MetadataEditInfo(passwordState: PasswordEditUiState, passwordError: String, 
             viewModel::onPasswordLengthChanged
         )
         if (passwordError != "") ErrorMessage(passwordError)
-        GeneratePasswordButton(viewModel)
+        FullWidthButton("Generar Contraseña", viewModel::onGeneratePassword)
     }
 }
 

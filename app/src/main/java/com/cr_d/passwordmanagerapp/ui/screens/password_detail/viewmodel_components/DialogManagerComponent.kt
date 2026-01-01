@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+import com.cr_d.passwordmanagerapp.ui.models.PasswordConfirmDialogData
+
 class DialogManagerComponent : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -17,6 +19,22 @@ class DialogManagerComponent : ViewModel() {
         val isUpdateNotesDialogShown: Boolean = false,
         val isDeleteNotesDialogShown: Boolean = false
     )
+
+    fun getData(): PasswordConfirmDialogData{
+        val isDeletePasswordShown = _uiState.value.isDeletePasswordDialogShown
+        val isCopyToDialogShown = _uiState.value.isCopyToDialogShown
+        val isUpdatePasswordDialogShown = _uiState.value.isUpdatePasswordDialogShown
+        val isUpdateNotesDialogShown = _uiState.value.isUpdateNotesDialogShown
+        val isDeleteNotesDialogShown = _uiState.value.isDeleteNotesDialogShown
+
+        return PasswordConfirmDialogData(
+            isDeletePasswordShown,
+            isCopyToDialogShown,
+            isUpdatePasswordDialogShown,
+            isUpdateNotesDialogShown,
+            isDeleteNotesDialogShown
+        )
+    }
 
     fun onEnableDeletePasswordDialog(){
         _uiState.update {
