@@ -16,6 +16,7 @@ import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainPasswordManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.DialogManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.EditPasswordManagerComponent
@@ -51,12 +52,13 @@ object AppGraph {
     private val editManagerComponent by lazy { EditPasswordManagerComponent(decryptStringUseCase) }
     private val passwordUiManagerComponent by lazy { UiManagerComponent() }
     private val mainDialogManagerComponent by lazy { MainDialogManagerComponent() }
+    private val mainPasswordManager by lazy { MainPasswordManagerComponent(passwordRepository) }
 
     val mainScreenFactory by lazy {
         MainScreenViewModelFactory(
-            passwordRepository = passwordRepository,
             accountRepository = accountRepository,
-            dialogManager = mainDialogManagerComponent
+            dialogManager = mainDialogManagerComponent,
+            passwordManager = mainPasswordManager
         )
     }
     val createPasswordFactory by lazy {

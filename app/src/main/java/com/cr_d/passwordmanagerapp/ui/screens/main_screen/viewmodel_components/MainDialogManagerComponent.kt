@@ -1,15 +1,14 @@
 package com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components
 
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-
-import com.cr_d.passwordmanagerapp.ui.models.MainConfirmDialogData
 import kotlinx.coroutines.flow.update
 
-class MainDialogManagerComponent (
+import com.cr_d.passwordmanagerapp.ui.models.MainConfirmDialogData
 
-) {
+class MainDialogManagerComponent : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 

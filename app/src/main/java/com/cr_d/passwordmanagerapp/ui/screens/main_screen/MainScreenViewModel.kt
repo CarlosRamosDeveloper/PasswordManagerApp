@@ -12,26 +12,29 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.SampleData
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainPasswordManagerComponent
 
 class MainScreenViewModel (
-    private val passwordRepository: IPasswordRepository,
     private val accountRepository: IAccountRepository,
     private val dialogManager: MainDialogManagerComponent,
+    private val passwordManager: MainPasswordManagerComponent
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
 
     val uiState: StateFlow<UiState> = combine(
         _uiState,
-        dialogManager.uiState
-    ) { baseState, dialogManager ->
+        dialogManager.uiState,
+        passwordManager.uiState
+    ) { baseState, dialogManager, passwordManager ->
         baseState.copy(
             isPasswordMassDeleteDialogShown = dialogManager.dialogData.isPasswordMassDeleteDialogShown,
             isPasswordPopulateDatabaseDialogShown = dialogManager.dialogData.isPasswordPopulateDatabaseDialogShown,
             isAccountsMassDeleteDialogShown = dialogManager.dialogData.isAccountsMassDeleteDialogShown,
-            isAccountsPopulateDatabaseDialogShown = dialogManager.dialogData.isAccountsPopulateDatabaseDialogShown
+            isAccountsPopulateDatabaseDialogShown = dialogManager.dialogData.isAccountsPopulateDatabaseDialogShown,
+            totalPasswords = passwordManager.totalPasswords,
+            totalWarnings = passwordManager.totalWarnings
         )
     }.stateIn(
         scope = viewModelScope,
@@ -62,36 +65,13 @@ class MainScreenViewModel (
         getData()
     }
 
-    fun onTotalPasswordsChange(){
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    totalPasswords = passwordRepository.findAll().count()
-                )
-            }
-        }
-    }
 
-
-
-    fun onPopulatePasswords(){
-        viewModelScope.launch {
-            passwordRepository.massSave(SampleData.passwords)
-            onTotalPasswordsChange()
-            onDisablePopulatePasswordDatabaseDialog()
-        }
-    }
-
-    fun onMassDeletePasswords(){
-        viewModelScope.launch {
-            passwordRepository.massDelete()
-            onTotalPasswordsChange()
-            onDisableMassDeletePasswordDialog()
-        }
-    }
+    // Passwords
+    fun onTotalPasswordsChange() = passwordManager.onTotalPasswordsChange()
+    fun onPopulatePasswords() = passwordManager.onPopulatePasswords()
+    fun onMassDeletePasswords() = passwordManager.onMassDeletePasswords()
 
     // Accounts
-
     fun onTotalAccountsChange(){
         viewModelScope.launch {
             _uiState.update {
@@ -101,8 +81,6 @@ class MainScreenViewModel (
             }
         }
     }
-
-
 
     fun onPopulateAccounts(){
         viewModelScope.launch {
