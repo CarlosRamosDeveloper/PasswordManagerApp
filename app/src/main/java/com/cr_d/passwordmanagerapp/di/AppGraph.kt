@@ -15,6 +15,7 @@ import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.DialogManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.EditPasswordManagerComponent
@@ -45,15 +46,17 @@ object AppGraph {
     private val decryptStringUseCase by lazy { DecryptStringUseCase(cryptoService) }
 
     // ViewmodelComponents
-    private val dialogManagerComponent by lazy { DialogManagerComponent() }
+    private val passwordDialogManagerComponent by lazy { DialogManagerComponent() }
     private val passwordManagerComponent by lazy { PasswordManagerComponent(passwordRepository, deletePasswordUseCase, decryptStringUseCase) }
     private val editManagerComponent by lazy { EditPasswordManagerComponent(decryptStringUseCase) }
-    private val uiManagerComponent by lazy { UiManagerComponent() }
+    private val passwordUiManagerComponent by lazy { UiManagerComponent() }
+    private val mainDialogManagerComponent by lazy { MainDialogManagerComponent() }
 
     val mainScreenFactory by lazy {
         MainScreenViewModelFactory(
             passwordRepository = passwordRepository,
             accountRepository = accountRepository,
+            dialogManager = mainDialogManagerComponent
         )
     }
     val createPasswordFactory by lazy {
@@ -71,9 +74,9 @@ object AppGraph {
         securityScoreCalculator = calculateSecurityScoreUseCase,
         updatePasswordUseCase = updatePasswordUseCase,
         updateNotesUseCase = updateNotesUseCase,
-        dialogManager = dialogManagerComponent,
+        dialogManager = passwordDialogManagerComponent,
         passwordManager = passwordManagerComponent,
         editManager = editManagerComponent,
-        uiManager = uiManagerComponent
+        uiManager = passwordUiManagerComponent
     )
 }

@@ -6,19 +6,38 @@ import androidx.lifecycle.viewModelScope
 import com.cr_d.passwordmanagerapp.application.interfaces.IAccountRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.SampleData
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
 
 class MainScreenViewModel (
     private val passwordRepository: IPasswordRepository,
     private val accountRepository: IAccountRepository,
+    private val dialogManager: MainDialogManagerComponent,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    val uiState: StateFlow<UiState> = combine(
+        _uiState,
+        dialogManager.uiState
+    ) { baseState, dialogManager ->
+        baseState.copy(
+            isPasswordMassDeleteDialogShown = dialogManager.dialogData.isPasswordMassDeleteDialogShown,
+            isPasswordPopulateDatabaseDialogShown = dialogManager.dialogData.isPasswordPopulateDatabaseDialogShown,
+            isAccountsMassDeleteDialogShown = dialogManager.dialogData.isAccountsMassDeleteDialogShown,
+            isAccountsPopulateDatabaseDialogShown = dialogManager.dialogData.isAccountsPopulateDatabaseDialogShown
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = UiState()
+    )
 
     data class UiState(
         val isPasswordMassDeleteDialogShown: Boolean = false,
@@ -40,6 +59,7 @@ class MainScreenViewModel (
     fun onRefresh() {
         onTotalPasswordsChange()
         onTotalAccountsChange()
+        getData()
     }
 
     fun onTotalPasswordsChange(){
@@ -52,37 +72,7 @@ class MainScreenViewModel (
         }
     }
 
-    fun onEnableMassDeletePasswordDialog(){
-        _uiState.update {
-            it.copy(
-                isPasswordMassDeleteDialogShown = true
-            )
-        }
-    }
 
-    fun onDisableMassDeletePasswordDialog(){
-        _uiState.update {
-            it.copy(
-                isPasswordMassDeleteDialogShown = false
-            )
-        }
-    }
-
-    fun onEnablePopulatePasswordDatabaseDialog(){
-        _uiState.update {
-            it.copy(
-                isPasswordPopulateDatabaseDialogShown = true
-            )
-        }
-    }
-
-    fun onDisablePopulatePasswordDatabaseDialog(){
-        _uiState.update {
-            it.copy(
-                isPasswordPopulateDatabaseDialogShown = false
-            )
-        }
-    }
 
     fun onPopulatePasswords(){
         viewModelScope.launch {
@@ -112,37 +102,7 @@ class MainScreenViewModel (
         }
     }
 
-    fun onEnableMassDeleteAccountDialog(){
-        _uiState.update {
-            it.copy(
-                isAccountsMassDeleteDialogShown = true
-            )
-        }
-    }
 
-    fun onDisableMassDeleteAccountDialog(){
-        _uiState.update {
-            it.copy(
-                isAccountsMassDeleteDialogShown = false
-            )
-        }
-    }
-
-    fun onEnablePopulateAccountDatabaseDialog(){
-        _uiState.update {
-            it.copy(
-                isAccountsPopulateDatabaseDialogShown = true
-            )
-        }
-    }
-
-    fun onDisablePopulateAccountDatabaseDialog(){
-        _uiState.update {
-            it.copy(
-                isAccountsPopulateDatabaseDialogShown = false
-            )
-        }
-    }
 
     fun onPopulateAccounts(){
         viewModelScope.launch {
@@ -159,4 +119,22 @@ class MainScreenViewModel (
             onDisableMassDeleteAccountDialog()
         }
     }
+
+    // DialogManager
+    fun getData() = dialogManager.getData()
+    fun onEnableMassDeletePasswordDialog() = dialogManager.onEnableMassDeletePasswordDialog()
+
+    fun onDisableMassDeletePasswordDialog() = dialogManager.onDisableMassDeletePasswordDialog()
+
+    fun onEnablePopulatePasswordDatabaseDialog() = dialogManager.onEnablePopulatePasswordDatabaseDialog()
+
+    fun onDisablePopulatePasswordDatabaseDialog() = dialogManager.onDisablePopulatePasswordDatabaseDialog()
+
+    fun onEnableMassDeleteAccountDialog() = dialogManager.onEnableMassDeleteAccountDialog()
+
+    fun onDisableMassDeleteAccountDialog() = dialogManager.onDisableMassDeleteAccountDialog()
+
+    fun onEnablePopulateAccountDatabaseDialog() = dialogManager.onEnablePopulateAccountDatabaseDialog()
+
+    fun onDisablePopulateAccountDatabaseDialog() = dialogManager.onDisablePopulateAccountDatabaseDialog()
 }
