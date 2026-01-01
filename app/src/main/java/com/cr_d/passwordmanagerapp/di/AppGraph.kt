@@ -58,7 +58,7 @@ object AppGraph {
     private val mainDialogManagerComponent by lazy { MainDialogManagerComponent() }
     private val mainPasswordManagerComponent by lazy { MainPasswordManagerComponent(passwordRepository) }
     private val mainAccountManagerComponent by lazy { MainAccountManagerComponent(accountRepository) }
-    private val mainApplicationManagerComponent by lazy { MainApplicationManagerComponent() }
+    private val mainApplicationManagerComponent by lazy { MainApplicationManagerComponent(applicationRepository) }
 
     val mainScreenFactory by lazy {
         MainScreenViewModelFactory(

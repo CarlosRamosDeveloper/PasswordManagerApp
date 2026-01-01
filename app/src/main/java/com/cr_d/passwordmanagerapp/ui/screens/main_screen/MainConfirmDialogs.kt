@@ -3,16 +3,14 @@ package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 import androidx.compose.runtime.Composable
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
+import com.cr_d.passwordmanagerapp.ui.models.MainConfirmDialogData
 
 @Composable
 fun MainConfirmDialogs(
-    isPopulateDatabasePasswordDialogShown: Boolean,
-    isMassDeletePasswordDialogShown: Boolean,
-    isPopulateDatabaseAccountDialogShown: Boolean,
-    isMassDeleteAccountDialogShown: Boolean,
+    dialogData: MainConfirmDialogData,
     viewModel: MainScreenViewModel
 ){
-    if(isPopulateDatabasePasswordDialogShown) ConfirmDialog(
+    if(dialogData.isPasswordPopulateDatabaseDialogShown) ConfirmDialog(
         title = "Generar contraseñas de prueba",
         message = "¿Inyectar información de prueba en la base de datos?",
         confirmButtonText = "Poblar la base de datos",
@@ -24,10 +22,10 @@ fun MainConfirmDialogs(
         onDismiss = viewModel::onDisablePopulatePasswordDatabaseDialog
     )
 
-    if(isMassDeletePasswordDialogShown) ConfirmDialog(
+    if(dialogData.isPasswordMassDeleteDialogShown) ConfirmDialog(
         title = "Eliminar todas las contraseñas",
         message = "Este paso no se puede deshacer, ¿está seguro?",
-        confirmButtonText = "Eliminar todas las contraseñas",
+        confirmButtonText = "Eliminar",
         onConfirm = {
             viewModel.onMassDeletePasswords()
             viewModel.onDisableMassDeletePasswordDialog()
@@ -36,7 +34,7 @@ fun MainConfirmDialogs(
         onDismiss = viewModel::onDisableMassDeletePasswordDialog
     )
 
-    if(isPopulateDatabaseAccountDialogShown) ConfirmDialog(
+    if(dialogData.isAccountsPopulateDatabaseDialogShown) ConfirmDialog(
         title = "Generar cuentas de prueba",
         message = "¿Inyectar información de prueba en la base de datos?",
         confirmButtonText = "Poblar la base de datos",
@@ -47,15 +45,37 @@ fun MainConfirmDialogs(
         onDisable = viewModel::onDisablePopulateAccountDatabaseDialog,
         onDismiss = viewModel::onDisablePopulateAccountDatabaseDialog
     )
-    if(isMassDeleteAccountDialogShown) ConfirmDialog(
+    if(dialogData.isAccountsMassDeleteDialogShown) ConfirmDialog(
         title = "Eliminar todas las cuentas",
         message = "Este paso no se puede deshacer, ¿está seguro?",
-        confirmButtonText = "Eliminar todas las cuentas",
+        confirmButtonText = "Eliminar",
         onConfirm = {
             viewModel.onMassDeleteAccounts()
             viewModel.onDisableMassDeleteAccountDialog()
         },
         onDisable = viewModel::onDisableMassDeleteAccountDialog,
         onDismiss = viewModel::onDisableMassDeleteAccountDialog
+    )
+    if(dialogData.isApplicationPopulateDatabaseDialogShown) ConfirmDialog(
+        title = "Generación de aplicaciones de prueba",
+        message = "¿Inyectar información de prueba en la base de datos?",
+        confirmButtonText = "Poblar la base de datos",
+        onConfirm = {
+            viewModel.onPopulateApps()
+            viewModel.onDisablePopulateApplicationDatabaseDialog()
+        },
+        onDisable = viewModel::onDisablePopulateApplicationDatabaseDialog,
+        onDismiss = viewModel::onDisablePopulateApplicationDatabaseDialog
+    )
+    if(dialogData.isApplicationMassDeleteDialogShown) ConfirmDialog(
+        title = "Eliminar todas las aplicaciones",
+        message = "Este paso no se puede deshacer, ¿está seguro?",
+        confirmButtonText = "Eliminar",
+        onConfirm = {
+            viewModel.onMassDeleteApps()
+            viewModel.onDisableMassDeleteApplicationDialog()
+        },
+        onDisable = viewModel::onDisableMassDeleteApplicationDialog,
+        onDismiss = viewModel::onDisableMassDeleteApplicationDialog
     )
 }

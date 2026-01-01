@@ -55,11 +55,13 @@ fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
             viewModel = viewModel
         )
 
+        ApplicationSection(
+            totalStoredApps = state.totalApps,
+            viewModel = viewModel
+        )
+
         MainConfirmDialogs(
-            isPopulateDatabasePasswordDialogShown = state.dialogData.isPasswordPopulateDatabaseDialogShown,
-            isMassDeletePasswordDialogShown = state.dialogData.isPasswordMassDeleteDialogShown,
-            isPopulateDatabaseAccountDialogShown = state.dialogData.isAccountsPopulateDatabaseDialogShown,
-            isMassDeleteAccountDialogShown = state.dialogData.isAccountsMassDeleteDialogShown,
+            dialogData = state.dialogData,
             viewModel = viewModel
         )
     }
@@ -113,9 +115,23 @@ fun AccountSection(
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
         MainCard("Cuentas",totalStoredAccounts.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
-        //MainCard("Alertas",totalWarnings.toString(), Icons.Default.Warning, modifier = Modifier.weight(0.45f))
     }
 
     FullWidthButton("Generar cuentas de prueba", viewModel::onEnablePopulateAccountDatabaseDialog)
     if(totalStoredAccounts > 0) FullWidthButton("Eliminar todas las cuentas", viewModel::onEnableMassDeleteAccountDialog)
+}
+
+@Composable
+fun ApplicationSection(
+    totalStoredApps: Int,
+    viewModel: MainScreenViewModel
+){
+    Row (Modifier
+        .fillMaxWidth()
+        .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
+        MainCard("Aplicaciones",totalStoredApps.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
+    }
+
+    FullWidthButton("Generar aplicaciones de prueba", viewModel::onEnablePopulateApplicationDatabaseDialog)
+    if(totalStoredApps > 0) FullWidthButton("Eliminar todas las aplicaciones", viewModel::onEnableMassDeleteApplicationDialog)
 }

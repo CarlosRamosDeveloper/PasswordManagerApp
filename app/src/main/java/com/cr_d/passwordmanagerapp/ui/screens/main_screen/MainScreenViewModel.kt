@@ -3,13 +3,13 @@ package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cr_d.passwordmanagerapp.ui.models.MainConfirmDialogData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
+import com.cr_d.passwordmanagerapp.ui.models.MainConfirmDialogData
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainApplicationManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
@@ -90,4 +90,6 @@ class MainScreenViewModel (
 
     // ApplicationManager
     fun onTotalAppsChange() = appManager.onTotalAppsChange()
+    fun onPopulateApps() = appManager.onPopulateApps()
+    fun onMassDeleteApps() = appManager.onMassDeleteApps()
 }
