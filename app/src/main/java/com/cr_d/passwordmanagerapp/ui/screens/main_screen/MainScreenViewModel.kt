@@ -10,13 +10,15 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainApplicationManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainPasswordManagerComponent
 
 class MainScreenViewModel (
     private val dialogManager: MainDialogManagerComponent,
     private val passwordManager: MainPasswordManagerComponent,
-    private val accountManager: MainAccountManagerComponent
+    private val accountManager: MainAccountManagerComponent,
+    private val appManager: MainApplicationManagerComponent
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
 
@@ -24,8 +26,9 @@ class MainScreenViewModel (
         _uiState,
         dialogManager.uiState,
         passwordManager.uiState,
-        accountManager.uiState
-    ) { baseState, dialogManager, passwordManager, accountManager ->
+        accountManager.uiState,
+        appManager.uiState
+    ) { baseState, dialogManager, passwordManager, accountManager, appManager ->
         baseState.copy(
             isPasswordMassDeleteDialogShown = dialogManager.dialogData.isPasswordMassDeleteDialogShown,
             isPasswordPopulateDatabaseDialogShown = dialogManager.dialogData.isPasswordPopulateDatabaseDialogShown,
@@ -33,8 +36,8 @@ class MainScreenViewModel (
             isAccountsPopulateDatabaseDialogShown = dialogManager.dialogData.isAccountsPopulateDatabaseDialogShown,
             totalPasswords = passwordManager.totalPasswords,
             totalWarnings = passwordManager.totalWarnings,
-            totalAccounts = accountManager.totalAccounts
-
+            totalAccounts = accountManager.totalAccounts,
+            totalApps = appManager.totalApps
         )
     }.stateIn(
         scope = viewModelScope,
@@ -49,10 +52,9 @@ class MainScreenViewModel (
         val isAccountsPopulateDatabaseDialogShown: Boolean = false,
         val totalPasswords: Int = 0,
         val totalWarnings: Int = 0,
-        val totalAccounts: Int = 0
+        val totalAccounts: Int = 0,
+        val totalApps: Int = 0
     )
-
-    // TODO: Convertir a orquestador -> Separar en account, application, passwords y dialog managers
 
     init {
         onRefresh()
@@ -63,6 +65,7 @@ class MainScreenViewModel (
         onTotalPasswordsChange()
         onTotalAccountsChange()
         getData()
+        onTotalAppsChange()
     }
 
     // Passwords
@@ -85,4 +88,7 @@ class MainScreenViewModel (
     fun onDisableMassDeleteAccountDialog() = dialogManager.onDisableMassDeleteAccountDialog()
     fun onEnablePopulateAccountDatabaseDialog() = dialogManager.onEnablePopulateAccountDatabaseDialog()
     fun onDisablePopulateAccountDatabaseDialog() = dialogManager.onDisablePopulateAccountDatabaseDialog()
+
+    // ApplicationManager
+    fun onTotalAppsChange() = appManager.onTotalAppsChange()
 }
