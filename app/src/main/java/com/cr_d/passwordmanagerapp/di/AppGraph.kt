@@ -30,6 +30,7 @@ object AppGraph {
     // Repositories
     private val passwordRepository by lazy { RoomApplication.getPasswordRepository() }
     private val accountRepository by lazy { RoomApplication.getAccountRepository() }
+    private val applicationRepository by lazy { RoomApplication.getApplicationRepository() }
 
     // Core
     private val generator by lazy { PasswordGenerator() }

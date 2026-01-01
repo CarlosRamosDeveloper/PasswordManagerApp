@@ -2,12 +2,15 @@ package com.cr_d.passwordmanagerapp.application.database
 
 import android.app.Application
 import androidx.room.Room
-import com.cr_d.passwordmanagerapp.application.interfaces.IAccountRepository
 
+import com.cr_d.passwordmanagerapp.application.interfaces.IAccountRepository
+import com.cr_d.passwordmanagerapp.application.interfaces.IApplicationRepository
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.interfaces.RoomAccountRepository
+import com.cr_d.passwordmanagerapp.application.interfaces.RoomApplicationRepository
 import com.cr_d.passwordmanagerapp.application.interfaces.RoomPasswordRepository
 import com.cr_d.passwordmanagerapp.data.daos.AccountDao
+import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.database.AppDatabase
 
@@ -17,8 +20,10 @@ class RoomApplication : Application(){
         fun getDatabase(): AppDatabase = db
         fun passwordDao(): PasswordDao = db.passwordDao()
         fun accountDao(): AccountDao = db.accountDao()
+        fun appDao(): ApplicationDao = db.appDao()
         fun getPasswordRepository(): IPasswordRepository = RoomPasswordRepository(passwordDao())
         fun getAccountRepository(): IAccountRepository = RoomAccountRepository(accountDao())
+        fun getApplicationRepository(): IApplicationRepository = RoomApplicationRepository(appDao())
     }
 
 
