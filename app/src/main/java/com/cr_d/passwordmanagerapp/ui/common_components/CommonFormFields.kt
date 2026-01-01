@@ -60,7 +60,8 @@ fun PasswordTextField(isPasswordShown: Boolean, plainPassword: String, onUpdateM
         label = { Text("Contraseña") },
         visualTransformation =
             if (isPasswordShown) VisualTransformation.None
-            else PasswordVisualTransformation()
+            else PasswordVisualTransformation(),
+        singleLine = true
     )
 }
 

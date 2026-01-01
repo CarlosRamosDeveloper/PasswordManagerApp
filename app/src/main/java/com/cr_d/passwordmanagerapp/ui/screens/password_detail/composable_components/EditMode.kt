@@ -19,6 +19,7 @@ import com.cr_d.passwordmanagerapp.ui.common_components.ErrorMessage
 import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
 import com.cr_d.passwordmanagerapp.ui.common_components.PasswordTextField
+import com.cr_d.passwordmanagerapp.ui.common_components.UnderFormSpacer
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
@@ -100,6 +101,7 @@ fun NewPasswordInfoCard(
         TogglePasswordVisibilityButton(isPasswordShown, viewModel::onPasswordVisibilityToggle)
         PasswordTextField(isPasswordShown, newPassword.value, viewModel::onPlainPasswordChange)
         if(hasPasswordChanged) FullWidthButton("Actualizar contraseña",viewModel::onEnableUpdateDialog)
+        else UnderFormSpacer()
     }
 }
 
@@ -142,6 +144,8 @@ fun NoteEditInfo(
     enableDeleteNotesDialogFunction: () -> Unit
 ){
     InfoCard {
+        val areButtonsDisabled = (!notes.isNotBlank() && !haveNotesChanged)
+        CardTitle("Notas")
         CustomOutlinedTextField(
             label = "Notas",
             param = notes,
@@ -150,6 +154,7 @@ fun NoteEditInfo(
         )
         if (notes.isNotBlank()) FullWidthButton("Eliminar notas", enableDeleteNotesDialogFunction)
         if (haveNotesChanged) FullWidthButton("Actualizar notas", enableUpdateNotesDialogFunction)
+        if (areButtonsDisabled) UnderFormSpacer()
     }
 }
 

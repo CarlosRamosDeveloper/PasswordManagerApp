@@ -50,11 +50,11 @@ class PasswordDetailViewModel(
         uiManager.uiState
     ) { baseState, dialogState, passwordManager, editManager, uiManager ->
         baseState.copy(
-            isDeletePasswordDialogShown = dialogState.isDeletePasswordDialogShown,
-            isCopyToDialogShown = dialogState.isCopyToDialogShown,
-            isUpdatePasswordDialogShown = dialogState.isUpdatePasswordDialogShown,
-            isUpdateNotesDialogShown = dialogState.isUpdateNotesDialogShown,
-            isDeleteNotesDialogShown = dialogState.isDeleteNotesDialogShown,
+            isDeletePasswordDialogShown = dialogState.dialogData.isDeletePasswordDialogShown,
+            isCopyToDialogShown = dialogState.dialogData.isCopyToDialogShown,
+            isUpdatePasswordDialogShown = dialogState.dialogData.isUpdatePasswordDialogShown,
+            isUpdateNotesDialogShown = dialogState.dialogData.isUpdateNotesDialogShown,
+            isDeleteNotesDialogShown = dialogState.dialogData.isDeleteNotesDialogShown,
             password = passwordManager.password,
             decipheredPassword = passwordManager.decipheredPassword,
             decipheredNotes = passwordManager.decipheredNotes,

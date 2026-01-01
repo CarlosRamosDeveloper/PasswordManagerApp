@@ -8,13 +8,11 @@
 ## Bugs / Fixes
 
 - [7] Improve Edit mode UI
-- [2] Edit Mode: El botón de generar contraseñas no actualiza el textfield
 
 ## Architecture / debt tech
 
-- [1] Mejorar la inyección de dependencias. Pasar todos los UC allí.
 - [2] Integrar AppEntity
-- [2] Integrar AccountEntity
+- [1] Integrar AccountEntity
 
 ## Features
 
@@ -31,19 +29,3 @@
 - [9] Migrar a Hilt
 
 ## Actual
-
-- [x] Revisión de AppGraph -> Comentarios para claridad
-- [x] Revisión de usecases ->
-  - Ahora múltiples UC piden otros UC como parametro
-  - Inyectado en AppGraph
-- [x] Revisión de VM ->
-  - [x] CreatePassword - Limpio
-  - [x] MainScreen - Limpio
-  - [x] PasswordList - Limpio
-  - [x] Settings - Limpio
-  - [x] PasswordDetail
-    - 400 líneas de código -> Separar en responsabilidades
-    - [x] Responsabilidad: Mostrar dialogos
-    - [x] Responsabilidad: Editar contraseña
-    - [x] Responsabilidad: Mostrar datos
-    - [x] Responsabilidad: Gestionar interfaz
