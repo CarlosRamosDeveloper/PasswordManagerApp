@@ -22,12 +22,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.models.AppConfig
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
@@ -45,32 +44,23 @@ fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
             .padding(innerPadding)
             .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row (Modifier
-            .fillMaxWidth()
-            .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-            MainCard("Contraseñas",state.totalPasswords.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
-            MainCard("Alertas",state.totalWarnings.toString(), Icons.Default.Warning, modifier = Modifier.weight(0.45f))
-        }
-
-        FullWidthButton("Generar contraseñas de prueba", viewModel::onEnablePopulateDatabaseDialog)
-        FullWidthButton("Eliminar contraseñas", viewModel::onEnableMassDeleteDialog)
-
-        if(state.isPopulateDatabaseDialogShown) ConfirmDialog(
-            title = "Poblar la base de datos",
-            message = "¿Inyectar información de prueba en la base de datos?",
-            confirmButtonText = "Poblar la base de datos",
-            onConfirm = viewModel::onPopulate,
-            onDisable = viewModel::onDisablePopulateDatabaseDialog,
-            onDismiss = viewModel::onDisablePopulateDatabaseDialog
+        PasswordSection(
+            totalStoredPasswords = state.totalPasswords,
+            totalWarnings = state.totalWarnings,
+            viewModel = viewModel
         )
 
-        if(state.isMassDeleteDialogShown) ConfirmDialog(
-            title = "Eliminar todas las contraseñas",
-            message = "Este paso no se puede deshacer, ¿está seguro?",
-            confirmButtonText = "Eliminar todas las contraseñas",
-            onConfirm = viewModel::onMassDelete,
-            onDisable = viewModel::onDisableMassDeleteDialog,
-            onDismiss = viewModel::onDisableMassDeleteDialog
+        AccountSection(
+            totalStoredAccounts = state.totalAccounts,
+            viewModel = viewModel
+        )
+
+        MainConfirmDialogs(
+            isPopulateDatabasePasswordDialogShown = state.isPasswordPopulateDatabaseDialogShown,
+            isMassDeletePasswordDialogShown = state.isPasswordMassDeleteDialogShown,
+            isPopulateDatabaseAccountDialogShown = state.isAccountsPopulateDatabaseDialogShown,
+            isMassDeleteAccountDialogShown = state.isAccountsMassDeleteDialogShown,
+            viewModel = viewModel
         )
     }
 }
@@ -95,4 +85,37 @@ fun MainCard(title: String, value: String, icon: ImageVector, modifier: Modifier
             Text(value, fontSize = 20.sp, modifier = Modifier.padding(horizontal = 5.dp))
         }
     }
+}
+
+@Composable
+fun PasswordSection(
+    totalStoredPasswords: Int,
+    totalWarnings: Int,
+    viewModel: MainScreenViewModel
+){
+    Row (Modifier
+        .fillMaxWidth()
+        .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
+        MainCard("Contraseñas",totalStoredPasswords.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
+        MainCard("Alertas",totalWarnings.toString(), Icons.Default.Warning, modifier = Modifier.weight(0.45f))
+    }
+
+    FullWidthButton("Generar contraseñas de prueba", viewModel::onEnablePopulatePasswordDatabaseDialog)
+    if(totalStoredPasswords > 0) FullWidthButton("Eliminar todas las contraseñas", viewModel::onEnableMassDeletePasswordDialog)
+}
+
+@Composable
+fun AccountSection(
+    totalStoredAccounts: Int,
+    viewModel: MainScreenViewModel
+) {
+    Row (Modifier
+        .fillMaxWidth()
+        .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
+        MainCard("Cuentas",totalStoredAccounts.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
+        //MainCard("Alertas",totalWarnings.toString(), Icons.Default.Warning, modifier = Modifier.weight(0.45f))
+    }
+
+    FullWidthButton("Generar cuentas de prueba", viewModel::onEnablePopulateAccountDatabaseDialog)
+    if(totalStoredAccounts > 0) FullWidthButton("Eliminar todas las cuentas", viewModel::onEnableMassDeleteAccountDialog)
 }

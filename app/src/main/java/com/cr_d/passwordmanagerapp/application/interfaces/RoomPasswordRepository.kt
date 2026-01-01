@@ -19,7 +19,7 @@ class RoomPasswordRepository (private val dao: PasswordDao): IPasswordRepository
     }
 
     override suspend fun findById(id: Long): PasswordData? {
-        return dao.getUserById(id.toInt())?.toDomainCalculated()
+        return dao.getUserById(id)?.toDomainCalculated()
     }
 
     override suspend fun save(passwordData: PasswordData) {

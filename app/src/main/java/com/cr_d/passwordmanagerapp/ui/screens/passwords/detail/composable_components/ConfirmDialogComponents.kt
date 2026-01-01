@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.password_detail.composable_components
+package com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components
 
 import android.content.ClipData
 import android.content.ClipDescription
@@ -10,7 +10,7 @@ import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.models.PasswordConfirmDialogData
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModel
 
 @Composable
 fun ConfirmDialogComponents(

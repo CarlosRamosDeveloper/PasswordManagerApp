@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.passwords_list
+package com.cr_d.passwordmanagerapp.ui.screens.passwords.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.screens.create_password
+package com.cr_d.passwordmanagerapp.ui.screens.passwords.create
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

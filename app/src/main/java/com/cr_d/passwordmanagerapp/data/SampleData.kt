@@ -4,12 +4,14 @@ import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.application.use_cases.EncryptStringUseCase
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
+import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
+import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toDomainCalculated
 
 val encrypt = EncryptStringUseCase(CryptoService())
 
-private fun fake(
+private fun fakePassword(
     plainPassword: String,
     appName: String,
     appUrl: String,
@@ -34,9 +36,24 @@ private fun fake(
     )
 }
 
+private fun fakeAccount(
+    account: String,
+    notes: String = ""
+) : AccountEntity {
+    val account = encrypt(account)
+    val notes = encrypt(notes)
+
+    return AccountEntity(
+        cipheredAccount = account.encryptedText,
+        accountIv = account.iv,
+        cipheredNotes = notes.encryptedText,
+        notesIv = notes.iv
+    )
+}
+
 object SampleData {
     val passwords = mutableListOf(
-        fake(
+        fakePassword(
             plainPassword = "Abcdef123!",
             appName = "Gmail",
             appUrl = "https://mail.google.com",
@@ -45,7 +62,7 @@ object SampleData {
             lastUpdate = LocalDate.of(2023, 12, 1).toString(),
             notes = "contraseñaSegura!"
         ).toDomainCalculated(),
-        fake(
+        fakePassword(
             plainPassword = "contraseñaSegura!!",
             appName = "Work Mail",
             appUrl = "https://mail.empresa.com",
@@ -53,7 +70,7 @@ object SampleData {
             creationDate = LocalDate.of(2021, 11, 1).toString(),
             lastUpdate = LocalDate.of(2021, 11, 1).toString(),
         ).toDomainCalculated(),
-        fake(
+        fakePassword(
             plainPassword = "onlylowercase",
             appName = "LocalApp",
             appUrl = "http://localhost:8080",
@@ -61,7 +78,7 @@ object SampleData {
             creationDate = LocalDate.of(2020, 2, 20).toString(),
             lastUpdate = LocalDate.of(2022, 2, 20).toString(),
         ).toDomainCalculated(),
-        fake(
+        fakePassword(
             plainPassword = "MARIA2020",
             appName = "BankPortal",
             appUrl = "https://bank.example.com",
@@ -70,7 +87,7 @@ object SampleData {
             lastUpdate = LocalDate.of(2024, 1, 10).toString(),
             notes = "La app no acepta símbolos"
         ).toDomainCalculated(),
-        fake(
+        fakePassword(
             plainPassword = "SuperS4f3AtW0rK!",
             appName = "ChatApp",
             appUrl = "https://chat.example.com",
@@ -78,7 +95,7 @@ object SampleData {
             creationDate = LocalDate.of(2023, 3, 30).toString(),
             lastUpdate = LocalDate.of(2023, 9, 5).toString(),
         ).toDomainCalculated(),
-        fake(
+        fakePassword(
             plainPassword = "JavA_Dev#2024",
             appName = "DevForge",
             appUrl = "https://devforge.io",
@@ -87,7 +104,7 @@ object SampleData {
             lastUpdate = LocalDate.of(2024, 2, 2).toString(),
             notes = "Cuenta usada para pruebas internas"
         ).toDomainCalculated(),
-        fake(
+        fakePassword(
             plainPassword = "PizzaLover99",
             appName = "FoodRush",
             appUrl = "https://foodrush.es",
@@ -96,7 +113,7 @@ object SampleData {
             lastUpdate = LocalDate.of(2023, 4, 1).toString(),
             notes = "La app no acepta símbolos"
         ).toDomainCalculated(),
-        fake(
+        fakePassword(
             plainPassword = "F1_RedBull@Max",
             appName = "SportsLive",
             appUrl = "https://sportslive.net",
@@ -105,7 +122,7 @@ object SampleData {
             lastUpdate = LocalDate.of(2023, 11, 30).toString(),
             notes = "Renovar suscripción en marzo"
         ).toDomainCalculated(),
-        fake(
+        fakePassword(
             plainPassword = "Sunset*Photo_2023",
             appName = "PicNest",
             appUrl = "https://picnest.app",
@@ -114,7 +131,7 @@ object SampleData {
             lastUpdate = LocalDate.of(2023, 2, 1).toString(),
             notes = "Fotografiar el año al amanecer"
         ).toDomainCalculated(),
-        fake(
+        fakePassword(
             plainPassword = "NoNumbers!!!",
             appName = "MindControl",
             appUrl = "https://mind-control.ai",
@@ -123,5 +140,21 @@ object SampleData {
             lastUpdate = LocalDate.of(2024, 1, 5).toString(),
             notes = "Grupos de meditación"
         ).toDomainCalculated(),
+    )
+    val accounts = mutableListOf(
+        fakeAccount(
+            account = "juan.perez@gmail.com",
+        ).toDomain(),
+        fakeAccount(
+            account = "ana@empresa.com",
+            notes = "No usar en otra aplicación"
+        ).toDomain(),
+        fakeAccount(
+            account = "usuario123",
+            notes = "Cuenta comprometida, cambiar cuanto antes"
+        ).toDomain(),
+        fakeAccount(
+            account = "maria98"
+        ).toDomain(),
     )
 }

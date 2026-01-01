@@ -13,43 +13,59 @@ import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
-import com.cr_d.passwordmanagerapp.ui.screens.create_password.CreatePasswordViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.PasswordDetailViewModelFactory
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.DialogManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.EditPasswordManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.PasswordManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.password_detail.viewmodel_components.UiManagerComponent
-import com.cr_d.passwordmanagerapp.ui.screens.passwords_list.PasswordListViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainApplicationManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainPasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.DialogManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.EditPasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.PasswordManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.UiManagerComponent
+import com.cr_d.passwordmanagerapp.ui.screens.passwords.list.PasswordListViewModelFactory
 
 object AppGraph {
+    // Repositories
+    private val passwordRepository by lazy { RoomApplication.getPasswordRepository() }
+    private val accountRepository by lazy { RoomApplication.getAccountRepository() }
+
     // Core
-    private val repository by lazy { RoomApplication.getRepository() }
     private val generator by lazy { PasswordGenerator() }
     private val scoreCalculator by lazy { SecurityScoreCalculator() }
     private val calculateSecurityScoreUseCase by lazy { CalculateSecurityScoreUseCase(scoreCalculator) }
-
-    // Password
-    private val getAllPasswordsUseCase by lazy { GetAllPasswordsUseCase(repository) }
-    private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(generator) }
-    private val createPasswordUseCase by lazy { SavePasswordUseCase(repository, encryptStringUseCase) }
-    private val updatePasswordUseCase by lazy { UpdatePasswordUseCase(repository, encryptStringUseCase) }
-    private val updateNotesUseCase by lazy { UpdateNotesUseCase(repository, encryptStringUseCase) }
-    private val deletePasswordUseCase by lazy { DeletePasswordUseCase(repository) }
-
-    // Crypto
     private val cryptoService by lazy { CryptoService() }
+
+    // Password UseCases
+    private val getAllPasswordsUseCase by lazy { GetAllPasswordsUseCase(passwordRepository) }
+    private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(generator) }
+    private val createPasswordUseCase by lazy { SavePasswordUseCase(passwordRepository, encryptStringUseCase) }
+    private val updatePasswordUseCase by lazy { UpdatePasswordUseCase(passwordRepository, encryptStringUseCase) }
+    private val updateNotesUseCase by lazy { UpdateNotesUseCase(passwordRepository, encryptStringUseCase) }
+    private val deletePasswordUseCase by lazy { DeletePasswordUseCase(passwordRepository) }
+
+    // Crypto UseCases
     private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }
     private val decryptStringUseCase by lazy { DecryptStringUseCase(cryptoService) }
 
     // ViewmodelComponents
-    private val dialogManagerComponent by lazy { DialogManagerComponent() }
-    private val passwordManagerComponent by lazy { PasswordManagerComponent(repository, deletePasswordUseCase, decryptStringUseCase) }
+    private val passwordDialogManagerComponent by lazy { DialogManagerComponent() }
+    private val passwordManagerComponent by lazy { PasswordManagerComponent(passwordRepository, deletePasswordUseCase, decryptStringUseCase) }
     private val editManagerComponent by lazy { EditPasswordManagerComponent(decryptStringUseCase) }
-    private val uiManagerComponent by lazy { UiManagerComponent() }
+    private val passwordUiManagerComponent by lazy { UiManagerComponent() }
+    private val mainDialogManagerComponent by lazy { MainDialogManagerComponent() }
+    private val mainPasswordManagerComponent by lazy { MainPasswordManagerComponent(passwordRepository) }
+    private val mainAccountManagerComponent by lazy { MainAccountManagerComponent(accountRepository) }
+    private val mainApplicationManagerComponent by lazy { MainApplicationManagerComponent() }
 
     val mainScreenFactory by lazy {
-        MainScreenViewModelFactory(repository)
+        MainScreenViewModelFactory(
+            dialogManager = mainDialogManagerComponent,
+            passwordManager = mainPasswordManagerComponent,
+            accountManager = mainAccountManagerComponent,
+            appManager = mainApplicationManagerComponent
+        )
     }
     val createPasswordFactory by lazy {
         CreatePasswordViewModelFactory(
@@ -60,15 +76,15 @@ object AppGraph {
     }
     val listPasswordFactory by lazy { PasswordListViewModelFactory(getAllPasswordsUseCase) }
     fun detailPasswordFactory(passwordId: Long) = PasswordDetailViewModelFactory(
-        repository = repository,
+        repository = passwordRepository,
         passwordId = passwordId,
         generatePasswordUseCase = generatePasswordUseCase,
         securityScoreCalculator = calculateSecurityScoreUseCase,
         updatePasswordUseCase = updatePasswordUseCase,
         updateNotesUseCase = updateNotesUseCase,
-        dialogManager = dialogManagerComponent,
+        dialogManager = passwordDialogManagerComponent,
         passwordManager = passwordManagerComponent,
         editManager = editManagerComponent,
-        uiManager = uiManagerComponent
+        uiManager = passwordUiManagerComponent
     )
 }
