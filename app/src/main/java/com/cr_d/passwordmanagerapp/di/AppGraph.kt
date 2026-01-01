@@ -51,7 +51,10 @@ object AppGraph {
     private val uiManagerComponent by lazy { UiManagerComponent() }
 
     val mainScreenFactory by lazy {
-        MainScreenViewModelFactory(passwordRepository)
+        MainScreenViewModelFactory(
+            passwordRepository = passwordRepository,
+            accountRepository = accountRepository,
+        )
     }
     val createPasswordFactory by lazy {
         CreatePasswordViewModelFactory(

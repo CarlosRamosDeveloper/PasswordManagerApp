@@ -6,6 +6,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.EncryptStringUseCase
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
+import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toDomainCalculated
 
 val encrypt = EncryptStringUseCase(CryptoService())
@@ -143,18 +144,17 @@ object SampleData {
     val accounts = mutableListOf(
         fakeAccount(
             account = "juan.perez@gmail.com",
-
-        ),
+        ).toDomain(),
         fakeAccount(
             account = "ana@empresa.com",
             notes = "No usar en otra aplicación"
-        ),
+        ).toDomain(),
         fakeAccount(
             account = "usuario123",
             notes = "Cuenta comprometida, cambiar cuanto antes"
-        ),
+        ).toDomain(),
         fakeAccount(
             account = "maria98"
-        )
+        ).toDomain(),
     )
 }

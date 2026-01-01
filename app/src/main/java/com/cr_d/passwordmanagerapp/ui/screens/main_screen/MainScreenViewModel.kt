@@ -3,6 +3,7 @@ package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cr_d.passwordmanagerapp.application.interfaces.IAccountRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,17 +14,23 @@ import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.SampleData
 
 class MainScreenViewModel (
-    val repository: IPasswordRepository
+    private val passwordRepository: IPasswordRepository,
+    private val accountRepository: IAccountRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     data class UiState(
-        val isMassDeleteDialogShown: Boolean = false,
-        val isPopulateDatabaseDialogShown: Boolean = false,
+        val isPasswordMassDeleteDialogShown: Boolean = false,
+        val isPasswordPopulateDatabaseDialogShown: Boolean = false,
+        val isAccountsMassDeleteDialogShown: Boolean = false,
+        val isAccountsPopulateDatabaseDialogShown: Boolean = false,
         val totalPasswords: Int = 0,
-        val totalWarnings: Int = 0
+        val totalWarnings: Int = 0,
+        val totalAccounts: Int = 0
     )
+
+    // TODO: Convertir a orquestador -> Separar en account, application, passwords y dialog managers
 
     init {
         onTotalPasswordsChange()
@@ -32,63 +39,124 @@ class MainScreenViewModel (
 
     fun onRefresh() {
         onTotalPasswordsChange()
+        onTotalAccountsChange()
     }
 
     fun onTotalPasswordsChange(){
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    totalPasswords = repository.findAll().count()
+                    totalPasswords = passwordRepository.findAll().count()
                 )
             }
         }
     }
 
-    fun onEnableMassDeleteDialog(){
+    fun onEnableMassDeletePasswordDialog(){
         _uiState.update {
             it.copy(
-                isMassDeleteDialogShown = true
+                isPasswordMassDeleteDialogShown = true
             )
         }
     }
 
-    fun onDisableMassDeleteDialog(){
+    fun onDisableMassDeletePasswordDialog(){
         _uiState.update {
             it.copy(
-                isMassDeleteDialogShown = false
+                isPasswordMassDeleteDialogShown = false
             )
         }
     }
 
-    fun onEnablePopulateDatabaseDialog(){
+    fun onEnablePopulatePasswordDatabaseDialog(){
         _uiState.update {
             it.copy(
-                isPopulateDatabaseDialogShown = true
+                isPasswordPopulateDatabaseDialogShown = true
             )
         }
     }
 
-    fun onDisablePopulateDatabaseDialog(){
+    fun onDisablePopulatePasswordDatabaseDialog(){
         _uiState.update {
             it.copy(
-                isPopulateDatabaseDialogShown = false
+                isPasswordPopulateDatabaseDialogShown = false
             )
         }
     }
 
-    fun onPopulate(){
+    fun onPopulatePasswords(){
         viewModelScope.launch {
-            repository.massSave(SampleData.passwords)
+            passwordRepository.massSave(SampleData.passwords)
             onTotalPasswordsChange()
-            onDisablePopulateDatabaseDialog()
+            onDisablePopulatePasswordDatabaseDialog()
         }
     }
 
-    fun onMassDelete(){
+    fun onMassDeletePasswords(){
         viewModelScope.launch {
-            repository.massDelete()
+            passwordRepository.massDelete()
             onTotalPasswordsChange()
-            onDisableMassDeleteDialog()
+            onDisableMassDeletePasswordDialog()
+        }
+    }
+
+    // Accounts
+
+    fun onTotalAccountsChange(){
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    totalAccounts = accountRepository.findAll().count()
+                )
+            }
+        }
+    }
+
+    fun onEnableMassDeleteAccountDialog(){
+        _uiState.update {
+            it.copy(
+                isAccountsMassDeleteDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableMassDeleteAccountDialog(){
+        _uiState.update {
+            it.copy(
+                isAccountsMassDeleteDialogShown = false
+            )
+        }
+    }
+
+    fun onEnablePopulateAccountDatabaseDialog(){
+        _uiState.update {
+            it.copy(
+                isAccountsPopulateDatabaseDialogShown = true
+            )
+        }
+    }
+
+    fun onDisablePopulateAccountDatabaseDialog(){
+        _uiState.update {
+            it.copy(
+                isAccountsPopulateDatabaseDialogShown = false
+            )
+        }
+    }
+
+    fun onPopulateAccounts(){
+        viewModelScope.launch {
+            accountRepository.massSave(SampleData.accounts)
+            onTotalAccountsChange()
+            onDisablePopulateAccountDatabaseDialog()
+        }
+    }
+
+    fun onMassDeleteAccounts(){
+        viewModelScope.launch {
+            accountRepository.massDelete()
+            onTotalAccountsChange()
+            onDisableMassDeleteAccountDialog()
         }
     }
 }
