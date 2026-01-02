@@ -12,12 +12,10 @@ data class PasswordEntity(
     val cipheredPassword: ByteArray,
     @ColumnInfo(name = "password_iv")
     val passwordIv: ByteArray,
-    @ColumnInfo(name = "app_name")
-    val appName: String,
-    @ColumnInfo(name = "app_url")
-    val appUrl: String,
-    @ColumnInfo(name = "account")
-    val account: String,
+    @ColumnInfo(name = "app_id")
+    val appId: Long,
+    @ColumnInfo(name = "account_id")
+    val accountId: Long,
     @ColumnInfo(name = "creation_date")
     val creationDate: String,
     @ColumnInfo(name = "last_update")

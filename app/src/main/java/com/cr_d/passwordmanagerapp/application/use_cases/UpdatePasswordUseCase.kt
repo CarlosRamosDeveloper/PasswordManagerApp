@@ -3,11 +3,14 @@ package com.cr_d.passwordmanagerapp.application.use_cases
 import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
+import com.cr_d.passwordmanagerapp.ui.dto.PasswordAccountInfoDto
+import com.cr_d.passwordmanagerapp.ui.dto.PasswordAppInfoDto
 
 class UpdatePasswordUseCase (
     private val repository: IPasswordRepository,
@@ -18,7 +21,7 @@ class UpdatePasswordUseCase (
         newPassword: String,
         appInfo: ApplicationInfo,
         notes: String = ""
-    ): PasswordData {
+    ): PasswordDetail {
         val existing = repository.findById(id)
             ?: throw IllegalArgumentException("Password not found")
 
@@ -29,18 +32,26 @@ class UpdatePasswordUseCase (
         val metadataInfo = PasswordAnalyzer.analyze(newPassword)
         val encryptedPassword = encrypt(newPassword)
         val encryptedNotes = encrypt(notes)
+        val parsedAppData = PasswordAppInfoDto(
+            appName = appInfo.appName,
+            appUrl = appInfo.appUrl
+        )
+        val parsedAccountData = PasswordAccountInfoDto(
+            account = appInfo.appAccount
+        )
 
-        val updatedPassword = PasswordData(
+        val updatedPassword = PasswordDetail(
             id = existing.id,
             cipheredPassword = encryptedPassword,
-            appInfo = appInfo,
+            appData = parsedAppData,
+            accountData = parsedAccountData,
             dateInfo = dateInfo,
             score = SecurityScoreCalculator().calculate(newPassword),
             metadata = metadataInfo,
             cipheredNotes = encryptedNotes
         )
 
-        repository.update(updatedPassword)
+        repository.update(updatedPassword.toDomain())
 
         return updatedPassword
     }

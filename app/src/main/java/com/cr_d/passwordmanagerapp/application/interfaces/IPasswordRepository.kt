@@ -1,15 +1,16 @@
 package com.cr_d.passwordmanagerapp.application.interfaces
 
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.Password
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 
 interface IPasswordRepository {
-    suspend fun findAll(): List<PasswordData>
-    suspend fun findByApplication(app: String): List<PasswordData>
-    suspend fun findByAccount(account: String): List<PasswordData>
-    suspend fun findById(id: Long): PasswordData?
-    suspend fun save(passwordData: PasswordData)
-    suspend fun massSave(passwords: List<PasswordData>)
-    suspend fun update(passwordData: PasswordData)
+    suspend fun findAll(): List<PasswordDetail>
+    suspend fun findByApplication(app: String): List<PasswordDetail>
+    suspend fun findByAccount(account: String): List<PasswordDetail>
+    suspend fun findById(id: Long): PasswordDetail?
+    suspend fun save(password: Password)
+    suspend fun massSave(passwords: List<Password>)
+    suspend fun update(password: Password)
     suspend fun delete(id: Long)
     suspend fun massDelete()
 }

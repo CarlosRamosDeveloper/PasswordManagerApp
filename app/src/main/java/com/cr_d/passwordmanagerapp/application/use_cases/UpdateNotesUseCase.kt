@@ -4,14 +4,15 @@ import android.util.Log
 import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 
 class UpdateNotesUseCase (
     private val repository: IPasswordRepository,
     private val encrypt: EncryptStringUseCase
 ) {
-    suspend operator fun invoke(id: Long, newNotes: String) : PasswordData{
+    suspend operator fun invoke(id: Long, newNotes: String) : PasswordDetail{
         val existing = repository.findById(id)
             ?: throw IllegalArgumentException("Password not found")
 
@@ -20,17 +21,19 @@ class UpdateNotesUseCase (
             lastUpdate = LocalDate.now()
         )
         val encryptedNotes = encrypt(newNotes)
-        val updatedPassword = PasswordData(
+        val updatedPassword = PasswordDetail(
             id = existing.id,
             cipheredPassword = existing.cipheredPassword,
-            appInfo = existing.appInfo,
+            appData = existing.appData,
+            accountData = existing.accountData,
             dateInfo = dateInfo,
             score = existing.score,
             metadata = existing.metadata,
             cipheredNotes = encryptedNotes
         )
 
-        repository.update(updatedPassword)
+        //TODO: Check
+        repository.update(updatedPassword.toDomain())
 
         Log.d("NotesChange",
             "Update notes->\n$newNotes"
