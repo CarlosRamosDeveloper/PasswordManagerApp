@@ -50,7 +50,8 @@ object AppGraph {
         ObtainPasswordDetailInfoUseCase(
             appRepository = applicationRepository,
             accRepository = accountRepository,
-            decrypt = decryptStringUseCase
+            decrypt = decryptStringUseCase,
+            scoreCalculator = calculateSecurityScoreUseCase
         )
     }
 

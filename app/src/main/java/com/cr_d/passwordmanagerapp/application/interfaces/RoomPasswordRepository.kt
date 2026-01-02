@@ -15,7 +15,7 @@ class RoomPasswordRepository (
     //TODO: Check all methods
     override suspend fun findAll(): List<PasswordDetail> {
         val list = dao.getAll().map { it.toDomain() }.map {
-            val extraData = obtainDetail.invoke(it.cipheredPassword)
+            val extraData = obtainDetail.invoke(it)
                 it.toDetail(extraData)
         }
 
@@ -32,7 +32,7 @@ class RoomPasswordRepository (
 
     override suspend fun findById(id: Long): PasswordDetail? {
         val password = dao.getPasswordById(id)?.toDomain()
-        val extraData = obtainDetail.invoke(password!!.cipheredPassword)
+        val extraData = obtainDetail.invoke(password!!)
 
         return password.toDetail(extraData)
         //return dao.getPasswordById(id)?.toDomain()?.toDetail()

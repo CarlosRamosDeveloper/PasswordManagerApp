@@ -7,7 +7,6 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.Password
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 
 class InMemoryPasswordRepository : IPasswordRepository {
-
     private val passwords = mutableListOf<PasswordDetail>()
 
     override suspend fun findAll(): List<PasswordDetail> {
@@ -29,7 +28,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
 
     override suspend fun save(password: Password) {
         // TODO: Fix
-        val extraInfo = AppGraph.obtainPasswordDetailInfoUseCase.invoke(password.cipheredPassword)
+        val extraInfo = AppGraph.obtainPasswordDetailInfoUseCase.invoke(password)
         passwords.add(password.toDetail(extraInfo))
     }
 
@@ -42,7 +41,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
     override suspend fun update(password: Password) {
         val index = passwords.indexOfFirst { it.id == password.id }
                 // TODO: Fix
-        val extraInfo = AppGraph.obtainPasswordDetailInfoUseCase.invoke(password.cipheredPassword)
+        val extraInfo = AppGraph.obtainPasswordDetailInfoUseCase.invoke(password)
         if (index != -1) passwords[index] = password.toDetail(extraInfo)
     }
 
