@@ -1,14 +1,10 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
-import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
-import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.Password
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
-
-val decrypt = DecryptStringUseCase(CryptoService())
 
 fun PasswordDetail.toDomain(): Password = Password(
     id = id,
@@ -27,7 +23,7 @@ fun PasswordDetail.toUiState(): PasswordUiState  {
         appInfo = ApplicationInfo(
             appName = appData.appName,
             appUrl = appData.appUrl!!,
-            appAccount = "a"
+            appAccount = accountData.account
         ),
         metadata = metadata,
         dateInfo = dateInfo,
@@ -42,7 +38,7 @@ fun PasswordDetail.toEditUiState(passwordLength: Int): PasswordEditUiState  {
     return PasswordEditUiState(
         appName = appData.appName,
         appUrl = appData.appUrl!!,
-        appAccount = "decryptedAccount",
+        appAccount = accountData.account,
         hasLowerCase = metadata.hasLowerCase,
         hasUpperCase = metadata.hasUpperCase,
         hasNumbers = metadata.hasNumbers,
