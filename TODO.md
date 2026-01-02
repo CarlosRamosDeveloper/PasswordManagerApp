@@ -14,7 +14,7 @@
 
 ## Features
 
-- [2] Implementar biometría (deshabilitarla en desarrollo)
+- [1] Implementar biometría (deshabilitarla en desarrollo)
 - [6] Mover Settings al TopBar
 - [4] Pantalla de Aplicaciones
   - [6] Permitir la busqueda por app
@@ -26,8 +26,8 @@
 - [5] Cambiar el navBar a Aplicaciones -> Contraseñas -> Cuentas
 - [7] Crear los warnings y aplicarlos en el PasswordDetail
 - [x] Main: Agregar campos
-  - [x] Cuentas sin asociar
-  - [x] Aplicaciones sin contraseñas
+    - [x] Cuentas sin asociar
+    - [x] Aplicaciones sin contraseñas
 
 ## Parking Lot
 
@@ -35,5 +35,3 @@
 - [9] Migrar a Hilt
 
 ## Actual
-
-- [1] Separar domain en Domain de lectura y escritura -> ASAP
