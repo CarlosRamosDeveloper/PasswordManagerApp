@@ -2,9 +2,13 @@ package com.cr_d.passwordmanagerapp.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(
+    tableName = "accounts",
+    indices = [Index(value =["ciphered_account"], unique = true)]
+)
 data class AccountEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
