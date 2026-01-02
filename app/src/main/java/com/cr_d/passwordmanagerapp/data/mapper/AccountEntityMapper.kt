@@ -2,9 +2,9 @@ package com.cr_d.passwordmanagerapp.data.mapper
 
 import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
-import com.cr_d.passwordmanagerapp.domain.value_objects.AccountData
+import com.cr_d.passwordmanagerapp.domain.value_objects.Account
 
-fun AccountEntity.toDomain(): AccountData {
+fun AccountEntity.toDomain(): Account {
     val cipheredAccount = EncryptedPayload(
         this@toDomain.cipheredAccount, accountIv
     )
@@ -12,7 +12,7 @@ fun AccountEntity.toDomain(): AccountData {
         this.cipheredNotes, this.notesIv
     )
 
-    return AccountData(
+    return Account(
         id = id,
         cipheredAccount = cipheredAccount,
         cipheredNotes = cipheredNotes

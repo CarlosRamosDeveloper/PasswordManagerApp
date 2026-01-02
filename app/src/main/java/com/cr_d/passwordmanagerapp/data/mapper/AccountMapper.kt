@@ -1,9 +1,9 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
-import com.cr_d.passwordmanagerapp.domain.value_objects.AccountData
+import com.cr_d.passwordmanagerapp.domain.value_objects.Account
 
-fun AccountData.toEntity(): AccountEntity = AccountEntity (
+fun Account.toEntity(): AccountEntity = AccountEntity (
     id = id,
     cipheredAccount = cipheredAccount.encryptedText,
     accountIv = cipheredAccount.iv,

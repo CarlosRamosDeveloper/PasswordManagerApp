@@ -1,13 +1,13 @@
 package com.cr_d.passwordmanagerapp.application.interfaces
 
-import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationData
+import com.cr_d.passwordmanagerapp.domain.value_objects.Application
 
 interface IApplicationRepository {
-    suspend fun findAll(): List<ApplicationData>
-    suspend fun findById(id: Long): ApplicationData?
-    suspend fun save(appData: ApplicationData)
-    suspend fun massSave(applications: List<ApplicationData>)
-    suspend fun update(appData: ApplicationData)
+    suspend fun findAll(): List<Application>
+    suspend fun findById(id: Long): Application?
+    suspend fun save(appData: Application)
+    suspend fun massSave(applications: List<Application>)
+    suspend fun update(appData: Application)
     suspend fun delete(id: Long)
     suspend fun massDelete()
 }
