@@ -16,13 +16,12 @@ fun PasswordDetail.toDomain(): Password = Password(
 )
 
 fun PasswordDetail.toUiState(): PasswordUiState  {
-    //TODO: FIX
     return PasswordUiState(
         id = id,
         cipheredPassword = cipheredPassword,
         appInfo = ApplicationInfo(
             appName = appData.appName,
-            appUrl = appData.appUrl!!,
+            appUrl = appData.appUrl,
             appAccount = accountData.account
         ),
         metadata = metadata,
@@ -33,11 +32,9 @@ fun PasswordDetail.toUiState(): PasswordUiState  {
 }
 
 fun PasswordDetail.toEditUiState(passwordLength: Int): PasswordEditUiState  {
-
-    //TODO: FIX
     return PasswordEditUiState(
         appName = appData.appName,
-        appUrl = appData.appUrl!!,
+        appUrl = appData.appUrl,
         appAccount = accountData.account,
         hasLowerCase = metadata.hasLowerCase,
         hasUpperCase = metadata.hasUpperCase,
