@@ -7,6 +7,7 @@ import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.EncryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.GetAllPasswordsUseCase
+import com.cr_d.passwordmanagerapp.application.use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.UpdatePasswordUseCase
@@ -45,6 +46,13 @@ object AppGraph {
     private val updatePasswordUseCase by lazy { UpdatePasswordUseCase(passwordRepository, encryptStringUseCase) }
     private val updateNotesUseCase by lazy { UpdateNotesUseCase(passwordRepository, encryptStringUseCase) }
     private val deletePasswordUseCase by lazy { DeletePasswordUseCase(passwordRepository) }
+    val obtainPasswordDetailInfoUseCase by lazy {
+        ObtainPasswordDetailInfoUseCase(
+            appRepository = applicationRepository,
+            accRepository = accountRepository,
+            decrypt = decryptStringUseCase
+        )
+    }
 
     // Crypto UseCases
     private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }

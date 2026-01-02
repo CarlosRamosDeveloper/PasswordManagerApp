@@ -14,7 +14,7 @@ interface PasswordDao {
     suspend fun getAll(): List<PasswordEntity>
 
     @Query("SELECT * FROM PasswordEntity where id in (:userId)")
-    suspend fun getUserById(userId: Long): PasswordEntity?
+    suspend fun getPasswordById(userId: Long): PasswordEntity?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPassword(password: PasswordEntity): Long

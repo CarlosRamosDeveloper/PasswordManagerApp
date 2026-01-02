@@ -1,15 +1,9 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
-import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
-import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
-import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.value_objects.Password
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetailInfo
-import com.cr_d.passwordmanagerapp.ui.dto.PasswordAccountInfoDto
-import com.cr_d.passwordmanagerapp.ui.dto.PasswordAppInfoDto
 
 fun Password.toEntity(): PasswordEntity {
     return PasswordEntity(
@@ -25,21 +19,7 @@ fun Password.toEntity(): PasswordEntity {
     )
 }
 
-fun Password.toDetail(): PasswordDetail {
-    //TODO: Fix
-    val decrypt = DecryptStringUseCase(CryptoService())
-    val decryptedPassword = decrypt(cipheredPassword)
-    val extraInfo = PasswordDetailInfo(
-        appData = PasswordAppInfoDto(
-            appName = "Test",
-            appUrl = "Test.com"
-        ),
-        accountData = PasswordAccountInfoDto(
-            account = "asd"
-        ),
-        metadata = PasswordAnalyzer.analyze(decryptedPassword),
-        score = 1.0
-    )
+fun Password.toDetail(extraInfo: PasswordDetailInfo): PasswordDetail {
     return PasswordDetail(
         id = id,
         cipheredPassword = cipheredPassword,

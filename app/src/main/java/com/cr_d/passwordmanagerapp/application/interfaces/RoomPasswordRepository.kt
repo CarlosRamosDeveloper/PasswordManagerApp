@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.application.interfaces
 
+import com.cr_d.passwordmanagerapp.application.use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.mapper.toDetail
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
@@ -7,10 +8,18 @@ import com.cr_d.passwordmanagerapp.data.mapper.toEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.Password
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 
-class RoomPasswordRepository (private val dao: PasswordDao): IPasswordRepository {
+class RoomPasswordRepository (
+    private val dao: PasswordDao,
+    private val obtainDetail: ObtainPasswordDetailInfoUseCase
+): IPasswordRepository {
     //TODO: Check all methods
     override suspend fun findAll(): List<PasswordDetail> {
-        return dao.getAll().map { it.toDomain().toDetail() }
+        val list = dao.getAll().map { it.toDomain() }.map {
+            val extraData = obtainDetail.invoke(it.cipheredPassword)
+                it.toDetail(extraData)
+        }
+
+        return list
     }
 
     override suspend fun findByApplication(app: String): List<PasswordDetail> {
@@ -22,7 +31,11 @@ class RoomPasswordRepository (private val dao: PasswordDao): IPasswordRepository
     }
 
     override suspend fun findById(id: Long): PasswordDetail? {
-        return dao.getUserById(id)?.toDomain()?.toDetail()
+        val password = dao.getPasswordById(id)?.toDomain()
+        val extraData = obtainDetail.invoke(password!!.cipheredPassword)
+
+        return password.toDetail(extraData)
+        //return dao.getPasswordById(id)?.toDomain()?.toDetail()
     }
 
     override suspend fun save(password: Password) {

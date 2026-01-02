@@ -2,7 +2,7 @@ package com.cr_d.passwordmanagerapp.application.repositories
 
 import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.mapper.toDetail
-import com.cr_d.passwordmanagerapp.data.mapper.toEntity
+import com.cr_d.passwordmanagerapp.di.AppGraph
 import com.cr_d.passwordmanagerapp.domain.value_objects.Password
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 
@@ -29,7 +29,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
 
     override suspend fun save(password: Password) {
         // TODO: Fix
-        passwords.add(password.toDetail())
+        val extraInfo = AppGraph.obtainPasswordDetailInfoUseCase.invoke(password.cipheredPassword)
+        passwords.add(password.toDetail(extraInfo))
     }
 
     override suspend fun massSave(passwords: List<Password>) {
@@ -41,7 +42,8 @@ class InMemoryPasswordRepository : IPasswordRepository {
     override suspend fun update(password: Password) {
         val index = passwords.indexOfFirst { it.id == password.id }
                 // TODO: Fix
-        if (index != -1) passwords[index] = password.toDetail()
+        val extraInfo = AppGraph.obtainPasswordDetailInfoUseCase.invoke(password.cipheredPassword)
+        if (index != -1) passwords[index] = password.toDetail(extraInfo)
     }
 
     override suspend fun delete(id: Long) {
