@@ -12,9 +12,11 @@ import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.application.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
 
+
+// TODO: Check and fix
 class PasswordManagerComponent (
     val repository: IPasswordRepository,
     val deletePassword: DeletePasswordUseCase,
@@ -29,12 +31,12 @@ class PasswordManagerComponent (
         val decipheredNotes: String = "",
     )
 
-    fun loadPassword(passwordData: PasswordData){
-        val decipheredNotes = decrypt(passwordData.cipheredNotes)
+    fun loadPassword(passwordDetail: PasswordDetail){
+        val decipheredNotes = decrypt(passwordDetail.cipheredNotes)
 
         _uiState.update {
             it.copy(
-                password = passwordData.toUiState(),
+                password = passwordDetail.toUiState(),
                 decipheredPassword = "",
                 decipheredNotes = decipheredNotes
             )

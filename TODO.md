@@ -11,12 +11,13 @@
 
 ## Architecture / debt tech
 
-- [2] Integrar AppEntity
-- [1] Integrar AccountEntity
+- [1] Separar domain en Domain de lectura y escritura -> ASAP
 
 ## Features
 
-- [3] Implementar biometría (deshabilitarla en desarrollo)
+- [2] Implementar biometría (deshabilitarla en desarrollo)
+- [3] Pantalla de Aplicaciones
+- [3] Pantalla de Cuentas
 - [4] Dropdown con apps ya existentes en su campo correspondiente
 - [4] Al pinchar en el campo de cuenta de usuario, debería de desplegarse un dropdown con las cuentas creadas
 - [5] Autocompletado de urls -> www.<app>.com

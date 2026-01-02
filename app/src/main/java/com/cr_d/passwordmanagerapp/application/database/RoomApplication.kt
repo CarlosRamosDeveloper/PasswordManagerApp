@@ -13,6 +13,7 @@ import com.cr_d.passwordmanagerapp.data.daos.AccountDao
 import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.database.AppDatabase
+import com.cr_d.passwordmanagerapp.di.AppGraph
 
 class RoomApplication : Application(){
     companion object{
@@ -21,7 +22,10 @@ class RoomApplication : Application(){
         fun passwordDao(): PasswordDao = db.passwordDao()
         fun accountDao(): AccountDao = db.accountDao()
         fun appDao(): ApplicationDao = db.appDao()
-        fun getPasswordRepository(): IPasswordRepository = RoomPasswordRepository(passwordDao())
+        fun getPasswordRepository(): IPasswordRepository = RoomPasswordRepository(
+            dao = passwordDao(),
+            obtainDetail = AppGraph.obtainPasswordDetailInfoUseCase,
+        )
         fun getAccountRepository(): IAccountRepository = RoomAccountRepository(accountDao())
         fun getApplicationRepository(): IApplicationRepository = RoomApplicationRepository(appDao())
     }
@@ -39,6 +43,6 @@ class RoomApplication : Application(){
             .build()
 
         val dao = db.passwordDao()
-        val repo = RoomPasswordRepository(dao)
+        val repo = RoomPasswordRepository(dao, AppGraph.obtainPasswordDetailInfoUseCase)
     }
 }

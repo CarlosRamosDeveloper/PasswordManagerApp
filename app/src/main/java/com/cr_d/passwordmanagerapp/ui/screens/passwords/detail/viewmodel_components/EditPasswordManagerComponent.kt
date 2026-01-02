@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 import com.cr_d.passwordmanagerapp.application.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toEditUiState
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordData
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
@@ -27,7 +27,7 @@ class EditPasswordManagerComponent(
         val newNotes: String = ""
     )
 
-    fun loadEditPassword(password: PasswordData, passwordLength: Int){
+    fun loadEditPassword(password: PasswordDetail, passwordLength: Int){
         val newPassword = decrypt(password.cipheredPassword)
         val newNotes = decrypt(password.cipheredNotes)
         _uiState.update {
