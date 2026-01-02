@@ -10,21 +10,24 @@ import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 
 @Dao
 interface PasswordDao {
-    @Query("SELECT * FROM PasswordEntity")
+    @Query("SELECT * FROM passwords")
     suspend fun getAll(): List<PasswordEntity>
 
-    @Query("SELECT * FROM PasswordEntity where id in (:userId)")
+    @Query("SELECT * FROM passwords where id in (:userId)")
     suspend fun getPasswordById(userId: Long): PasswordEntity?
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Query("SELECT * FROM passwords WHERE app_id = :appId AND account_id = :accountId LIMIT 1")
+    suspend fun findByAppIdAndAccountId(appId: Long, accountId: Long): PasswordEntity?
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPassword(password: PasswordEntity): Long
 
     @Update
     suspend fun updatePassword(password: PasswordEntity): Int
 
-    @Query("DELETE FROM PasswordEntity WHERE id = :passwordId")
+    @Query("DELETE FROM passwords WHERE id = :passwordId")
     suspend fun deletePassword(passwordId: Long): Int
 
-    @Query("DELETE FROM PasswordEntity")
+    @Query("DELETE FROM passwords")
     suspend fun deleteAll()
 }

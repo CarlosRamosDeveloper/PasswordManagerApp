@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.application.interfaces
 
+import android.util.Log
 import com.cr_d.passwordmanagerapp.application.use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.mapper.toDetail
@@ -10,7 +11,7 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 
 class RoomPasswordRepository (
     private val dao: PasswordDao,
-    private val obtainDetail: ObtainPasswordDetailInfoUseCase
+    private val obtainDetail: ObtainPasswordDetailInfoUseCase,
 ): IPasswordRepository {
     //TODO: Check all methods
     override suspend fun findAll(): List<PasswordDetail> {
@@ -30,21 +31,24 @@ class RoomPasswordRepository (
         return findAll().filter { it.accountData.account == account }
     }
 
-    override suspend fun findById(id: Long): PasswordDetail? {
+    override suspend fun findById(id: Long): PasswordDetail {
         val password = dao.getPasswordById(id)?.toDomain()
         val extraData = obtainDetail.invoke(password!!)
 
         return password.toDetail(extraData)
-        //return dao.getPasswordById(id)?.toDomain()?.toDetail()
     }
 
     override suspend fun save(password: Password) {
-        dao.insertPassword(password.toEntity())
+        val existing = dao.findByAppIdAndAccountId(password.appId, password.accountId)
+
+        if (existing == null) {
+            dao.insertPassword(password.toEntity())
+        }
     }
 
     override suspend fun massSave(passwords: List<Password>) {
         passwords.forEach { pwd ->
-            dao.insertPassword(pwd.toEntity())
+            save(pwd)
         }
     }
 

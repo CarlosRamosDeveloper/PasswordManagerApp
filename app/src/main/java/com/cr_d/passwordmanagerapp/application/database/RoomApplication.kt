@@ -24,7 +24,7 @@ class RoomApplication : Application(){
         fun appDao(): ApplicationDao = db.appDao()
         fun getPasswordRepository(): IPasswordRepository = RoomPasswordRepository(
             dao = passwordDao(),
-            obtainDetail = AppGraph.obtainPasswordDetailInfoUseCase
+            obtainDetail = AppGraph.obtainPasswordDetailInfoUseCase,
         )
         fun getAccountRepository(): IAccountRepository = RoomAccountRepository(accountDao())
         fun getApplicationRepository(): IApplicationRepository = RoomApplicationRepository(appDao())
