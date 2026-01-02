@@ -2,14 +2,14 @@ package com.cr_d.passwordmanagerapp.data.mapper
 
 import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity
-import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationData
+import com.cr_d.passwordmanagerapp.domain.value_objects.Application
 
-fun ApplicationEntity.toDomain(): ApplicationData {
+fun ApplicationEntity.toDomain(): Application {
     val cipheredNotes = EncryptedPayload(
         this.cipheredNotes, this.notesIv
     )
 
-    return ApplicationData(
+    return Application(
         id = id,
         appName = appName,
         appUrl = appUrl,
