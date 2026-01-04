@@ -2,7 +2,7 @@ package com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_compo
 
 import androidx.compose.runtime.Composable
 
-import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
 @Composable

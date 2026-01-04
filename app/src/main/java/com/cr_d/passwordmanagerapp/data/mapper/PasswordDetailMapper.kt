@@ -1,10 +1,10 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
-import com.cr_d.passwordmanagerapp.ui.models.moved.ApplicationInfo
+import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.entities.Password
 import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
-import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
-import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordEditUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 
 fun PasswordDetail.toDomain(): Password = Password(
     id = id,

@@ -6,7 +6,7 @@ import com.cr_d.passwordmanagerapp.data.repository.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.domain.services.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
-import com.cr_d.passwordmanagerapp.ui.models.moved.ApplicationInfo
+import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
 import com.cr_d.passwordmanagerapp.data.dto.PasswordAccountInfoDto

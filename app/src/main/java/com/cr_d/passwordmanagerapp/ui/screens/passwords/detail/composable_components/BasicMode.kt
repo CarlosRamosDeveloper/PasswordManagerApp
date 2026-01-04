@@ -6,8 +6,8 @@ import com.cr_d.passwordmanagerapp.ui.common_components.ApplicationTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomRow
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
-import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
-import com.cr_d.passwordmanagerapp.ui.models.formatAs
+import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
+import com.cr_d.passwordmanagerapp.ui.model.formatAs
 import com.cr_d.passwordmanagerapp.ui.screens.settings.SettingsViewModel
 
 @Composable

@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.update
 
 import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toEditUiState
-import com.cr_d.passwordmanagerapp.ui.models.moved.ApplicationInfo
+import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
 import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
-import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
-import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
+import com.cr_d.passwordmanagerapp.ui.model.PasswordEditUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordOption
 
 class EditPasswordManagerComponent(
     private val decrypt: DecryptStringUseCase,

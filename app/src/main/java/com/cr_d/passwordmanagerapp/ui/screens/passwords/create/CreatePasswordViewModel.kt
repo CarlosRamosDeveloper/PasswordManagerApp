@@ -13,10 +13,10 @@ import kotlinx.coroutines.launch
 import com.cr_d.passwordmanagerapp.domain.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
-import com.cr_d.passwordmanagerapp.ui.models.moved.ApplicationInfo
+import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
-import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
-import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordOption
+import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 
 class CreatePasswordViewModel(
     val generatePasswordUseCase: GeneratePasswordUseCase,

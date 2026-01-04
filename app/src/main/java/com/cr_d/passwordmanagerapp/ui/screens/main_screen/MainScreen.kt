@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
-import com.cr_d.passwordmanagerapp.ui.models.AppConfig
+import com.cr_d.passwordmanagerapp.ui.model.AppConfig
 
 @Composable
 fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){

@@ -13,7 +13,7 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
 import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
-import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 
 // TODO: Check and fix
 class PasswordManagerComponent (

@@ -33,7 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 
 @Composable
 fun PasswordsListScreen(innerPadding: PaddingValues, navController: NavController, viewModel: PasswordListViewModel){

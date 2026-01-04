@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
-import com.cr_d.passwordmanagerapp.ui.models.PasswordConfirmDialogData
+import com.cr_d.passwordmanagerapp.ui.model.PasswordConfirmDialogData
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModel
 
 @Composable

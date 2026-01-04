@@ -18,11 +18,11 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
-import com.cr_d.passwordmanagerapp.ui.models.PasswordConfirmDialogData
-import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
-import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
-import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
-import com.cr_d.passwordmanagerapp.ui.models.PasswordUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordConfirmDialogData
+import com.cr_d.passwordmanagerapp.ui.model.PasswordDetailUiMode
+import com.cr_d.passwordmanagerapp.ui.model.PasswordEditUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordOption
+import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.DialogManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.EditPasswordManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.PasswordManagerComponent

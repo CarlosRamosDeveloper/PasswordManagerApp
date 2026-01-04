@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.models
+package com.cr_d.passwordmanagerapp.ui.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

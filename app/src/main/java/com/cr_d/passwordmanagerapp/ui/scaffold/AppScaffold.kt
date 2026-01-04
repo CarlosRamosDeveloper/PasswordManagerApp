@@ -32,7 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.cr_d.passwordmanagerapp.application.AppGraph
 import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.ui.models.CustomNavigationItem
+import com.cr_d.passwordmanagerapp.ui.model.CustomNavigationItem
 import com.cr_d.passwordmanagerapp.ui.router.Router
 
 @Composable

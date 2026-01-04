@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.models
+package com.cr_d.passwordmanagerapp.ui.model
 
 data class MainConfirmDialogData (
     val isPasswordMassDeleteDialogShown: Boolean = false,
