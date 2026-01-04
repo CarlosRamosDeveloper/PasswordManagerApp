@@ -1,7 +1,7 @@
 package com.cr_d.passwordmanagerapp.data.repository
 
-import com.cr_d.passwordmanagerapp.domain.value_objects.Password
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
+import com.cr_d.passwordmanagerapp.domain.entities.Password
+import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
 
 interface IPasswordRepository {
     suspend fun findAll(): List<PasswordDetail>

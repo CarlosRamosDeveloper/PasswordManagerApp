@@ -1,7 +1,7 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
-import com.cr_d.passwordmanagerapp.domain.value_objects.Account
+import com.cr_d.passwordmanagerapp.domain.entities.Account
 
 fun Account.toEntity(): AccountEntity = AccountEntity (
     id = id,

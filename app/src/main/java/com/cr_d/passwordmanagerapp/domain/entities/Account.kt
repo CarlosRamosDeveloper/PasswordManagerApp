@@ -1,10 +1,9 @@
-package com.cr_d.passwordmanagerapp.domain.value_objects
+package com.cr_d.passwordmanagerapp.domain.entities
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 
-data class Application(
+data class Account (
     val id: Long,
-    val appName: String,
-    val appUrl: String?,
+    val cipheredAccount: EncryptedPayload,
     val cipheredNotes: EncryptedPayload
 )

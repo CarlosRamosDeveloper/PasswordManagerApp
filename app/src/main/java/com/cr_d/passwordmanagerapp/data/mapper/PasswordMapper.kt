@@ -1,9 +1,9 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
-import com.cr_d.passwordmanagerapp.domain.value_objects.Password
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetailInfo
+import com.cr_d.passwordmanagerapp.domain.entities.Password
+import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
+import com.cr_d.passwordmanagerapp.data.dto.PasswordDetailInfo
 
 fun Password.toEntity(): PasswordEntity {
     return PasswordEntity(

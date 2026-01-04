@@ -2,7 +2,7 @@ package com.cr_d.passwordmanagerapp.data.mapper
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
-import com.cr_d.passwordmanagerapp.domain.value_objects.Account
+import com.cr_d.passwordmanagerapp.domain.entities.Account
 
 fun AccountEntity.toDomain(): Account {
     val cipheredAccount = EncryptedPayload(

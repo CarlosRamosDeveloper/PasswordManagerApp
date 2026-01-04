@@ -1,6 +1,6 @@
 package com.cr_d.passwordmanagerapp.data.repository
 
-import com.cr_d.passwordmanagerapp.domain.value_objects.Application
+import com.cr_d.passwordmanagerapp.domain.entities.Application
 
 interface IApplicationRepository {
     suspend fun findAll(): List<Application>

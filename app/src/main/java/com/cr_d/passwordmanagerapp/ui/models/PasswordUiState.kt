@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.ui.models
 import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
-import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
+import com.cr_d.passwordmanagerapp.ui.models.moved.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 

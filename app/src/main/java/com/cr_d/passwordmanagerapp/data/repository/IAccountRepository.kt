@@ -1,6 +1,6 @@
 package com.cr_d.passwordmanagerapp.data.repository
 
-import com.cr_d.passwordmanagerapp.domain.value_objects.Account
+import com.cr_d.passwordmanagerapp.domain.entities.Account
 
 interface IAccountRepository {
     suspend fun findAll(): List<Account>

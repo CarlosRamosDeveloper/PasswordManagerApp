@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.domain.value_objects
+package com.cr_d.passwordmanagerapp.ui.models.moved
 
 data class ApplicationInfo(
     val appName: String,

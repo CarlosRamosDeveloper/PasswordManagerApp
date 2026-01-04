@@ -1,5 +1,6 @@
-package com.cr_d.passwordmanagerapp.domain.value_objects
+package com.cr_d.passwordmanagerapp.domain.entities
 
+import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 
 data class Password (

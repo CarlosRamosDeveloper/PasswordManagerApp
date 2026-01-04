@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.data.repository
 import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toEntity
-import com.cr_d.passwordmanagerapp.domain.value_objects.Application
+import com.cr_d.passwordmanagerapp.domain.entities.Application
 
 class RoomApplicationRepository (private val dao: ApplicationDao): IApplicationRepository {
     override suspend fun findAll(): List<Application> {
