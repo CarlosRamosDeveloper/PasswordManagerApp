@@ -1,7 +1,7 @@
 package com.cr_d.passwordmanagerapp.ui.model
 
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
 fun LocalDate.formatAs(dateFormat: DateFormatOption): String {
     return when(dateFormat) {

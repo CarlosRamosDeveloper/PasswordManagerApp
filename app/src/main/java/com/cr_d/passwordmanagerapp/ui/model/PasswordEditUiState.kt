@@ -1,7 +1,7 @@
 package com.cr_d.passwordmanagerapp.ui.model
 
-import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
+import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 
 data class PasswordEditUiState (
     val appName: String = "",

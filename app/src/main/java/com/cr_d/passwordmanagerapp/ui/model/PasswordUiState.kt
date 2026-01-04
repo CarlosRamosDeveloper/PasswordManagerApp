@@ -2,9 +2,8 @@ package com.cr_d.passwordmanagerapp.ui.model
 
 import java.time.LocalDate
 
-import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
-import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 
 data class PasswordUiState(
