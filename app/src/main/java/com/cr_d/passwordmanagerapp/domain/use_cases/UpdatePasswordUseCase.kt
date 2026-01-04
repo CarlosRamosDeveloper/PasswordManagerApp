@@ -14,7 +14,9 @@ import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
 
 class UpdatePasswordUseCase (
     private val repository: IPasswordRepository,
-    private val encrypt: EncryptStringUseCase
+    private val encrypt: EncryptStringUseCase,
+    private val analyzer: AnalyzePasswordUseCase,
+    private val scoreCalculator: CalculateSecurityScoreUseCase
 ){
     suspend operator fun invoke(
         id: Long,
@@ -29,7 +31,7 @@ class UpdatePasswordUseCase (
             creationDate = existing.dateInfo.creationDate,
             lastUpdate = LocalDate.now()
         )
-        val metadataInfo = PasswordAnalyzer.analyze(newPassword)
+        val metadataInfo = analyzer(newPassword)
         val encryptedPassword = encrypt(newPassword)
         val encryptedNotes = encrypt(notes)
         val parsedAppData = PasswordAppInfoDto(
@@ -39,6 +41,7 @@ class UpdatePasswordUseCase (
         val parsedAccountData = PasswordAccountInfoDto(
             account = appInfo.appAccount
         )
+        val score = scoreCalculator(newPassword)
 
         val updatedPassword = PasswordDetail(
             id = existing.id,
@@ -46,7 +49,7 @@ class UpdatePasswordUseCase (
             appData = parsedAppData,
             accountData = parsedAccountData,
             dateInfo = dateInfo,
-            score = SecurityScoreCalculator().calculate(newPassword),
+            score = score,
             metadata = metadataInfo,
             cipheredNotes = encryptedNotes
         )

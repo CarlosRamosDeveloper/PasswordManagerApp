@@ -12,6 +12,7 @@ import com.cr_d.passwordmanagerapp.data.repository.in_memory.InMemoryPasswordRep
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomAccountRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomApplicationRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomPasswordRepository
+import com.cr_d.passwordmanagerapp.domain.services.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DeletePasswordUseCase
@@ -24,6 +25,7 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.services.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
+import com.cr_d.passwordmanagerapp.domain.use_cases.AnalyzePasswordUseCase
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainApplicationManagerComponent
@@ -62,8 +64,9 @@ class AppGraph(
     private val applicationRepository by lazy { RoomApplicationRepository(applicationDao) }
 
     // Core
+    private val passwordAnalyzer by lazy { PasswordAnalyzer() }
     private val generator by lazy { PasswordGenerator() }
-    private val scoreCalculator by lazy { SecurityScoreCalculator() }
+    private val scoreCalculator by lazy { SecurityScoreCalculator(analyzePasswordUseCase) }
     private val calculateSecurityScoreUseCase by lazy {
         CalculateSecurityScoreUseCase(
             scoreCalculator
@@ -72,18 +75,23 @@ class AppGraph(
     private val cryptoService by lazy { CryptoService() }
 
     // Password UseCases
+    private val analyzePasswordUseCase by lazy { AnalyzePasswordUseCase(passwordAnalyzer) }
     private val getAllPasswordsUseCase by lazy { GetAllPasswordsUseCase(passwordRepository) }
     private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(generator) }
     private val createPasswordUseCase by lazy {
         SavePasswordUseCase(
-            passwordRepository,
-            encryptStringUseCase
+            repository = passwordRepository,
+            encrypt = encryptStringUseCase,
+            analyzer = analyzePasswordUseCase,
+            scoreCalculator = calculateSecurityScoreUseCase
         )
     }
     private val updatePasswordUseCase by lazy {
         UpdatePasswordUseCase(
-            passwordRepository,
-            encryptStringUseCase
+            repository = passwordRepository,
+            encrypt = encryptStringUseCase,
+            analyzer = analyzePasswordUseCase,
+            scoreCalculator = calculateSecurityScoreUseCase
         )
     }
     private val updateNotesUseCase by lazy {
@@ -98,7 +106,8 @@ class AppGraph(
             appRepository = applicationRepository,
             accRepository = accountRepository,
             decrypt = decryptStringUseCase,
-            scoreCalculator = calculateSecurityScoreUseCase
+            scoreCalculator = calculateSecurityScoreUseCase,
+            analyzer = analyzePasswordUseCase
         )
     }
 

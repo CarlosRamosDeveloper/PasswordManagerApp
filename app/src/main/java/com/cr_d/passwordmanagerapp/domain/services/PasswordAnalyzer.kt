@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.domain.services
 import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 
-object PasswordAnalyzer {
+class PasswordAnalyzer () {
     fun analyze(password: String): PasswordMetadata {
         val hasLower = password.any { it.isLowerCase() }
         val hasUpper = password.any { it.isUpperCase() }

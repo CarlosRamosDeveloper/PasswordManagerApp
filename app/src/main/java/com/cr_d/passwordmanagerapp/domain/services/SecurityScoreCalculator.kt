@@ -3,11 +3,13 @@ package com.cr_d.passwordmanagerapp.domain.services
 import kotlin.math.log2
 
 import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
+import com.cr_d.passwordmanagerapp.domain.use_cases.AnalyzePasswordUseCase
 
-class SecurityScoreCalculator() {
-
+class SecurityScoreCalculator(
+    val analyzer: AnalyzePasswordUseCase
+) {
     fun calculate(password: String): Double {
-        val info = PasswordAnalyzer.analyze(password)
+        val info = analyzer(password)
         var score = 0.0
         val length = password.length
 

@@ -6,13 +6,13 @@ import com.cr_d.passwordmanagerapp.data.dto.PasswordAppInfoDto
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IAccountRepository
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IApplicationRepository
 import com.cr_d.passwordmanagerapp.domain.entities.Password
-import com.cr_d.passwordmanagerapp.domain.services.PasswordAnalyzer
 
 class ObtainPasswordDetailInfoUseCase (
     private val appRepository: IApplicationRepository,
     private val accRepository: IAccountRepository,
     private val decrypt: DecryptStringUseCase,
-    private val scoreCalculator: CalculateSecurityScoreUseCase
+    private val scoreCalculator: CalculateSecurityScoreUseCase,
+    private val analyzer: AnalyzePasswordUseCase
 ) {
     suspend fun invoke(password: Password) : PasswordDetailInfo {
         val plainPassword = decrypt(password.cipheredPassword)
@@ -29,7 +29,7 @@ class ObtainPasswordDetailInfoUseCase (
             accountData = PasswordAccountInfoDto(
                 account = accountName
             ),
-            metadata = PasswordAnalyzer.analyze(plainPassword),
+            metadata = analyzer(plainPassword),
             score = score
         )
 
