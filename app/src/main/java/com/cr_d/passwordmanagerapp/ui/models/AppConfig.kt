@@ -2,7 +2,7 @@ package com.cr_d.passwordmanagerapp.ui.models
 
 import androidx.compose.ui.unit.dp
 
-import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
+import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 
 object AppConfig {
     val HORIZONTAL_FRAME_PADDING = 20.dp

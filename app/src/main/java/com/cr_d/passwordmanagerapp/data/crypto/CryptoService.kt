@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.data.crypto
 
+import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec

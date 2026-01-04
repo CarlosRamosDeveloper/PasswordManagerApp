@@ -1,6 +1,6 @@
 package com.cr_d.passwordmanagerapp.domain.value_objects
 
-import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
+import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 import com.cr_d.passwordmanagerapp.ui.dto.PasswordAccountInfoDto
 import com.cr_d.passwordmanagerapp.ui.dto.PasswordAppInfoDto
 

@@ -1,6 +1,6 @@
 package com.cr_d.passwordmanagerapp.domain.value_objects
 
-import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
+import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 
 data class Password (
     val id: Long,

@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.data.crypto
+package com.cr_d.passwordmanagerapp.domain.value_objects
 
 data class EncryptedPayload(
     val encryptedText: ByteArray,
