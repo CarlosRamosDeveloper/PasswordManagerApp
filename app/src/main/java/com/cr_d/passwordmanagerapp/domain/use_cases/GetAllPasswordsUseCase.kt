@@ -1,7 +1,7 @@
 package com.cr_d.passwordmanagerapp.domain.use_cases
 
 import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
-import com.cr_d.passwordmanagerapp.data.repository.IPasswordRepository
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
 
 class GetAllPasswordsUseCase (
     private val repository: IPasswordRepository

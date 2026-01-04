@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.ui.screens.passwords.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-import com.cr_d.passwordmanagerapp.data.repository.IPasswordRepository
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.UpdateNotesUseCase

@@ -8,9 +8,9 @@ import com.cr_d.passwordmanagerapp.data.daos.AccountDao
 import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.database.AppDatabase
-import com.cr_d.passwordmanagerapp.data.repository.RoomAccountRepository
-import com.cr_d.passwordmanagerapp.data.repository.RoomApplicationRepository
-import com.cr_d.passwordmanagerapp.data.repository.RoomPasswordRepository
+import com.cr_d.passwordmanagerapp.data.repository.room.RoomAccountRepository
+import com.cr_d.passwordmanagerapp.data.repository.room.RoomApplicationRepository
+import com.cr_d.passwordmanagerapp.data.repository.room.RoomPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DeletePasswordUseCase

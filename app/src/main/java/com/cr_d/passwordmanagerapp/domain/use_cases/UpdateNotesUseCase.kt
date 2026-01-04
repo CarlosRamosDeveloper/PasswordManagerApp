@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
-import com.cr_d.passwordmanagerapp.data.repository.IPasswordRepository
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 
 class UpdateNotesUseCase (

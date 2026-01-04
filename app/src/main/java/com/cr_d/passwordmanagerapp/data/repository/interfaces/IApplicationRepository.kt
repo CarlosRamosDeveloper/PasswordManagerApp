@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.data.repository
+package com.cr_d.passwordmanagerapp.data.repository.interfaces
 
 import com.cr_d.passwordmanagerapp.domain.entities.Application
 

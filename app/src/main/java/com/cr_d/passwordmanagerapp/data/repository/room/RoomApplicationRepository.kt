@@ -1,8 +1,9 @@
-package com.cr_d.passwordmanagerapp.data.repository
+package com.cr_d.passwordmanagerapp.data.repository.room
 
 import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toEntity
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IApplicationRepository
 import com.cr_d.passwordmanagerapp.domain.entities.Application
 
 class RoomApplicationRepository (private val dao: ApplicationDao): IApplicationRepository {
