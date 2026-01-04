@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.ui.dto
+package com.cr_d.passwordmanagerapp.data.dto
 
 data class PasswordAppInfoDto (
     val appName: String,

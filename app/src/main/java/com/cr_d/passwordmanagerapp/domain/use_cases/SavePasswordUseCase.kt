@@ -10,8 +10,8 @@ import com.cr_d.passwordmanagerapp.ui.models.moved.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.entities.Password
 import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
-import com.cr_d.passwordmanagerapp.ui.dto.PasswordAccountInfoDto
-import com.cr_d.passwordmanagerapp.ui.dto.PasswordAppInfoDto
+import com.cr_d.passwordmanagerapp.data.dto.PasswordAccountInfoDto
+import com.cr_d.passwordmanagerapp.data.dto.PasswordAppInfoDto
 
 class SavePasswordUseCase (
     private val repository: IPasswordRepository,
