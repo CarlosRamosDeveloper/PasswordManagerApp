@@ -1,7 +1,8 @@
 package com.cr_d.passwordmanagerapp.domain.services
 
-import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
 import kotlin.math.log2
+
+import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
 
 class SecurityScoreCalculator() {
 
