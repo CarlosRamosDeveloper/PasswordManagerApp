@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.data
+package com.cr_d.passwordmanagerapp.data.seed
 
 import java.time.LocalDate
 
