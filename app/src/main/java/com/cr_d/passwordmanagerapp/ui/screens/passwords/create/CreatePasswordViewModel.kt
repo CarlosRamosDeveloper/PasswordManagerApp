@@ -3,15 +3,15 @@ package com.cr_d.passwordmanagerapp.ui.screens.passwords.create
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cr_d.passwordmanagerapp.application.use_cases.CalculateSecurityScoreUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.CalculateSecurityScoreUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.application.use_cases.SavePasswordUseCase
-import com.cr_d.passwordmanagerapp.application.use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.SavePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.value_objects.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration

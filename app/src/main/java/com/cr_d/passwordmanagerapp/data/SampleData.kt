@@ -2,7 +2,7 @@ package com.cr_d.passwordmanagerapp.data
 
 import java.time.LocalDate
 
-import com.cr_d.passwordmanagerapp.application.use_cases.EncryptStringUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.EncryptStringUseCase
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity

@@ -1,7 +1,6 @@
 package com.cr_d.passwordmanagerapp.application.interfaces
 
-import android.util.Log
-import com.cr_d.passwordmanagerapp.application.use_cases.ObtainPasswordDetailInfoUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.mapper.toDetail
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
