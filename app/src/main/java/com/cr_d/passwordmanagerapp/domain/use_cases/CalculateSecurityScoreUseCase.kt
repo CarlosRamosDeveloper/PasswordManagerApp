@@ -1,6 +1,6 @@
 package com.cr_d.passwordmanagerapp.domain.use_cases
 
-import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator
+import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
 
 class CalculateSecurityScoreUseCase (
     private val securityScoreCalculator: SecurityScoreCalculator

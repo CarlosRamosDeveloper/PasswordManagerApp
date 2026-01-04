@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.domain.entities
 
+import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

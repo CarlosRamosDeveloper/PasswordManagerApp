@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.domain.entities
+package com.cr_d.passwordmanagerapp.domain.policy
 
 object PasswordPolicy {
     const val MIN_LENGTH = 8

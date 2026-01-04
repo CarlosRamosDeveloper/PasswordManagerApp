@@ -1,5 +1,6 @@
-package com.cr_d.passwordmanagerapp.domain.entities
+package com.cr_d.passwordmanagerapp.domain.services
 
+import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
 
 object PasswordAnalyzer {
