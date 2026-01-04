@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.domain.repository.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState

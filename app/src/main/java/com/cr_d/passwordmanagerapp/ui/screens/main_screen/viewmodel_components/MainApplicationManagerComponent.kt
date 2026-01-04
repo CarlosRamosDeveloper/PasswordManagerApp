@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.application.interfaces.IApplicationRepository
+import com.cr_d.passwordmanagerapp.domain.repository.IApplicationRepository
 import com.cr_d.passwordmanagerapp.data.SampleData
 
 class MainApplicationManagerComponent(

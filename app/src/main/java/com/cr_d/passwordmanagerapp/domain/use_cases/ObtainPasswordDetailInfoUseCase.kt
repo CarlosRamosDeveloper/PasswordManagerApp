@@ -1,7 +1,7 @@
 package com.cr_d.passwordmanagerapp.domain.use_cases
 
-import com.cr_d.passwordmanagerapp.application.interfaces.IAccountRepository
-import com.cr_d.passwordmanagerapp.application.interfaces.IApplicationRepository
+import com.cr_d.passwordmanagerapp.domain.repository.IAccountRepository
+import com.cr_d.passwordmanagerapp.domain.repository.IApplicationRepository
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.value_objects.Password
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetailInfo

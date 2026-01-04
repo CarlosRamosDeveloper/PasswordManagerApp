@@ -1,10 +1,5 @@
-package com.cr_d.passwordmanagerapp.application.repositories
+package com.cr_d.passwordmanagerapp.data.repositories
 
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.data.mapper.toDetail
-import com.cr_d.passwordmanagerapp.application.AppGraph
-import com.cr_d.passwordmanagerapp.domain.value_objects.Password
-import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDetail
 /*
 class InMemoryPasswordRepository : IPasswordRepository {
     private val passwords = mutableListOf<PasswordDetail>()

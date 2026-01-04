@@ -1,6 +1,6 @@
 package com.cr_d.passwordmanagerapp.domain.use_cases
 
-import com.cr_d.passwordmanagerapp.application.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.domain.repository.IPasswordRepository
 
 class DeletePasswordUseCase (
     private val repository: IPasswordRepository

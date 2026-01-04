@@ -1,11 +1,12 @@
-package com.cr_d.passwordmanagerapp.application.interfaces
+package com.cr_d.passwordmanagerapp.data.repositories
 
+import com.cr_d.passwordmanagerapp.domain.repository.IApplicationRepository
 import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toEntity
 import com.cr_d.passwordmanagerapp.domain.value_objects.Application
 
-class RoomApplicationRepository (private val dao: ApplicationDao): IApplicationRepository{
+class RoomApplicationRepository (private val dao: ApplicationDao): IApplicationRepository {
     override suspend fun findAll(): List<Application> {
         return dao.getAll().map { it.toDomain() }
     }
