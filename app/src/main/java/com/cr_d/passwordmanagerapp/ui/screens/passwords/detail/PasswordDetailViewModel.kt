@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-import com.cr_d.passwordmanagerapp.domain.repository.IPasswordRepository
+import com.cr_d.passwordmanagerapp.data.repository.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.UpdateNotesUseCase

@@ -1,6 +1,5 @@
-package com.cr_d.passwordmanagerapp.data.repositories
+package com.cr_d.passwordmanagerapp.data.repository
 
-import com.cr_d.passwordmanagerapp.domain.repository.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.mapper.toDetail

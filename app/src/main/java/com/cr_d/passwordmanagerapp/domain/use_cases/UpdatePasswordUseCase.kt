@@ -2,7 +2,7 @@ package com.cr_d.passwordmanagerapp.domain.use_cases
 
 import java.time.LocalDate
 
-import com.cr_d.passwordmanagerapp.domain.repository.IPasswordRepository
+import com.cr_d.passwordmanagerapp.data.repository.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.domain.entities.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.entities.SecurityScoreCalculator

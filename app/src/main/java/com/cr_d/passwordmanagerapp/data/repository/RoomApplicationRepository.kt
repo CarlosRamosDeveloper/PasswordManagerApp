@@ -1,6 +1,5 @@
-package com.cr_d.passwordmanagerapp.data.repositories
+package com.cr_d.passwordmanagerapp.data.repository
 
-import com.cr_d.passwordmanagerapp.domain.repository.IApplicationRepository
 import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toEntity

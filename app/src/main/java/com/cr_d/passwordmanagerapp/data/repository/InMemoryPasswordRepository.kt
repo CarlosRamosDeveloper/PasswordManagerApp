@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.data.repositories
+package com.cr_d.passwordmanagerapp.data.repository
 
 /*
 class InMemoryPasswordRepository : IPasswordRepository {

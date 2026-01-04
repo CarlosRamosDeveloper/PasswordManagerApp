@@ -2,9 +2,9 @@ package com.cr_d.passwordmanagerapp.application
 
 import android.content.Context
 import androidx.room.Room
-import com.cr_d.passwordmanagerapp.data.repositories.RoomAccountRepository
-import com.cr_d.passwordmanagerapp.data.repositories.RoomApplicationRepository
-import com.cr_d.passwordmanagerapp.data.repositories.RoomPasswordRepository
+import com.cr_d.passwordmanagerapp.data.repository.RoomAccountRepository
+import com.cr_d.passwordmanagerapp.data.repository.RoomApplicationRepository
+import com.cr_d.passwordmanagerapp.data.repository.RoomPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DeletePasswordUseCase
