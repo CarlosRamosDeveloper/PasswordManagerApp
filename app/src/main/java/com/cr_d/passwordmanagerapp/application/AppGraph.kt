@@ -8,6 +8,7 @@ import com.cr_d.passwordmanagerapp.data.daos.AccountDao
 import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.database.AppDatabase
+import com.cr_d.passwordmanagerapp.data.repository.in_memory.InMemoryPasswordRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomAccountRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomApplicationRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomPasswordRepository
@@ -55,6 +56,7 @@ class AppGraph(
     val applicationDao: ApplicationDao by lazy { database.appDao() }
 
     // Repositories
+    private val inMemoryPasswordRepository by lazy { InMemoryPasswordRepository(obtainPasswordDetailInfoUseCase) }
     private val passwordRepository by lazy { RoomPasswordRepository(passwordDao, obtainPasswordDetailInfoUseCase) }
     private val accountRepository by lazy { RoomAccountRepository(accountDao) }
     private val applicationRepository by lazy { RoomApplicationRepository(applicationDao) }

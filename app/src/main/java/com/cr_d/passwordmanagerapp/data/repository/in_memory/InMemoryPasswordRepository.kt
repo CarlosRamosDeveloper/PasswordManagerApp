@@ -1,7 +1,14 @@
 package com.cr_d.passwordmanagerapp.data.repository.in_memory
 
-/*
-class InMemoryPasswordRepository : IPasswordRepository {
+import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
+import com.cr_d.passwordmanagerapp.data.mapper.toDetail
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.domain.entities.Password
+import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseCase
+
+class InMemoryPasswordRepository (
+    private val obtainInfo: ObtainPasswordDetailInfoUseCase
+): IPasswordRepository {
     private val passwords = mutableListOf<PasswordDetail>()
 
     override suspend fun findAll(): List<PasswordDetail> {
@@ -13,7 +20,6 @@ class InMemoryPasswordRepository : IPasswordRepository {
     }
 
     override suspend fun findByAccount(account: String): List<PasswordDetail> {
-        //return findAll().filter { it.appInfo.appAccount == account }
         return findAll().filter { it.appData.appName == account }
     }
 
@@ -23,7 +29,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
 
     override suspend fun save(password: Password) {
         // TODO: Fix
-        val extraInfo = AppGraph.obtainPasswordDetailInfoUseCase.invoke(password)
+        val extraInfo = obtainInfo.invoke(password)
         passwords.add(password.toDetail(extraInfo))
     }
 
@@ -36,7 +42,7 @@ class InMemoryPasswordRepository : IPasswordRepository {
     override suspend fun update(password: Password) {
         val index = passwords.indexOfFirst { it.id == password.id }
                 // TODO: Fix
-        val extraInfo = AppGraph.obtainPasswordDetailInfoUseCase.invoke(password)
+        val extraInfo = obtainInfo.invoke(password)
         if (index != -1) passwords[index] = password.toDetail(extraInfo)
     }
 
@@ -47,8 +53,4 @@ class InMemoryPasswordRepository : IPasswordRepository {
     override suspend fun massDelete() {
         passwords.clear()
     }
-
-
 }
-
- */
