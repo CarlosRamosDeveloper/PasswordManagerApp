@@ -2,6 +2,12 @@ package com.cr_d.passwordmanagerapp.application
 
 import android.content.Context
 import androidx.room.Room
+
+import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
+import com.cr_d.passwordmanagerapp.data.daos.AccountDao
+import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
+import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
+import com.cr_d.passwordmanagerapp.data.database.AppDatabase
 import com.cr_d.passwordmanagerapp.data.repository.RoomAccountRepository
 import com.cr_d.passwordmanagerapp.data.repository.RoomApplicationRepository
 import com.cr_d.passwordmanagerapp.data.repository.RoomPasswordRepository
@@ -15,11 +21,6 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseC
 import com.cr_d.passwordmanagerapp.domain.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.UpdateNotesUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.UpdatePasswordUseCase
-import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
-import com.cr_d.passwordmanagerapp.data.daos.AccountDao
-import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
-import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
-import com.cr_d.passwordmanagerapp.data.database.AppDatabase
 import com.cr_d.passwordmanagerapp.domain.services.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
