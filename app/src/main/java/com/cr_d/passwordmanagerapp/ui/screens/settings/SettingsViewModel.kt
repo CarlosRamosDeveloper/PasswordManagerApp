@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-import com.cr_d.passwordmanagerapp.ui.models.DateFormatOption
+import com.cr_d.passwordmanagerapp.ui.model.DateFormatOption
 
 class SettingsViewModel : ViewModel(){
     private val _settings = MutableStateFlow(AppSettings())

@@ -2,10 +2,10 @@ package com.cr_d.passwordmanagerapp.data.mapper
 
 import java.time.LocalDate
 
-import com.cr_d.passwordmanagerapp.data.crypto.EncryptedPayload
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
+import com.cr_d.passwordmanagerapp.domain.entities.Password
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
-import com.cr_d.passwordmanagerapp.domain.value_objects.Password
+import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
 
 fun PasswordEntity.toDomain(): Password {
     val cipheredPassword = EncryptedPayload(

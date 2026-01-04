@@ -20,8 +20,8 @@ import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
 import com.cr_d.passwordmanagerapp.ui.common_components.PasswordTextField
 import com.cr_d.passwordmanagerapp.ui.common_components.UnderFormSpacer
-import com.cr_d.passwordmanagerapp.ui.models.PasswordEditUiState
-import com.cr_d.passwordmanagerapp.ui.models.PasswordOption
+import com.cr_d.passwordmanagerapp.ui.model.PasswordEditUiState
+import com.cr_d.passwordmanagerapp.ui.model.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModel
 
 @Composable

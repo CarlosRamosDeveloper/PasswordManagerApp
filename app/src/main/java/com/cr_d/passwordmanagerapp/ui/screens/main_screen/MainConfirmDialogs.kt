@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 import androidx.compose.runtime.Composable
 
 import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
-import com.cr_d.passwordmanagerapp.ui.models.MainConfirmDialogData
+import com.cr_d.passwordmanagerapp.ui.model.MainConfirmDialogData
 
 @Composable
 fun MainConfirmDialogs(

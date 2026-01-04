@@ -1,5 +1,7 @@
 package com.cr_d.passwordmanagerapp.domain.entities
 
+import com.cr_d.passwordmanagerapp.domain.services.PasswordGenerator
+import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

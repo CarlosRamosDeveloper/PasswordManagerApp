@@ -29,13 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.cr_d.passwordmanagerapp.application.AppGraph
 import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.ui.models.CustomNavigationItem
+import com.cr_d.passwordmanagerapp.ui.model.CustomNavigationItem
 import com.cr_d.passwordmanagerapp.ui.router.Router
 
 @Composable
-fun AppScaffold(){
+fun AppScaffold(appGraph: AppGraph){
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutine = rememberCoroutineScope()
@@ -47,9 +48,10 @@ fun AppScaffold(){
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { innerPadding ->
         Router(
-            innerPadding,
-            navController,
-            { coroutine.launch { snackbarHostState.showSnackbar(it) } },
+            innerPadding = innerPadding,
+            navController = navController,
+            snackFunction = { coroutine.launch { snackbarHostState.showSnackbar(it) } },
+            appGraph = appGraph
         )
     }
 }

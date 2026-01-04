@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomButton
-import com.cr_d.passwordmanagerapp.ui.models.AppConfig
+import com.cr_d.passwordmanagerapp.ui.model.AppConfig
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailViewModel
 
 @Composable

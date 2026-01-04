@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
+import com.cr_d.passwordmanagerapp.ui.model.PasswordDetailUiMode
 
 class UiManagerComponent(
 

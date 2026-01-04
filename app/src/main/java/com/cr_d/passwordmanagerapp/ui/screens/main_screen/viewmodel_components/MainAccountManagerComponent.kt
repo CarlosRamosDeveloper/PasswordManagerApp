@@ -2,8 +2,8 @@ package com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cr_d.passwordmanagerapp.application.interfaces.IAccountRepository
-import com.cr_d.passwordmanagerapp.data.SampleData
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IAccountRepository
+import com.cr_d.passwordmanagerapp.data.seed.SampleData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

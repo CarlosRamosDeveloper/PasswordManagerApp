@@ -35,3 +35,10 @@
 - [9] Migrar a Hilt
 
 ## Actual
+
+- Preparar las capas
+  - ui -> presentación
+  - domain -> Reglas de negocio
+    - Usecases
+    - 
+  - data -> infraestructura

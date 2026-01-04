@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
-import com.cr_d.passwordmanagerapp.ui.models.PasswordDetailUiMode
+import com.cr_d.passwordmanagerapp.ui.model.PasswordDetailUiMode
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.BasicMode
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.ConfirmDialogComponents
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.composable_components.DetailedMode

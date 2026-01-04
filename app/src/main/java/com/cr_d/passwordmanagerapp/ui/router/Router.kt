@@ -13,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
-import com.cr_d.passwordmanagerapp.di.AppGraph
+import com.cr_d.passwordmanagerapp.application.AppGraph
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailScreen
@@ -31,6 +31,7 @@ fun Router(
     innerPadding: PaddingValues,
     navController: NavHostController,
     snackFunction: (String)-> Unit,
+    appGraph: AppGraph
 ){
     val context = LocalContext.current
     val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
@@ -38,14 +39,14 @@ fun Router(
     NavHost(navController = navController, startDestination = "MainScreen") {
         composable("MainScreen") {
             val mainViewModel: MainScreenViewModel = viewModel(
-                factory = remember { AppGraph.mainScreenFactory },
+                factory = remember { appGraph.mainScreenFactory },
                 viewModelStoreOwner = context
             )
             MainScreen(innerPadding, mainViewModel)
         }
         composable("CreatePasswordScreen") {
             val createPasswordViewModel: CreatePasswordViewModel = viewModel(
-                factory = remember { AppGraph.createPasswordFactory },
+                factory = remember { appGraph.createPasswordFactory },
                 viewModelStoreOwner = context,
             )
             CreatePasswordScreen(
@@ -57,7 +58,7 @@ fun Router(
         }
         composable("ShowPasswordScreen") {
             val passwordListViewModel: PasswordListViewModel = viewModel(
-                factory = remember { AppGraph.listPasswordFactory },
+                factory = remember { appGraph.listPasswordFactory },
                 viewModelStoreOwner = context
             )
             PasswordsListScreen(
@@ -71,7 +72,7 @@ fun Router(
         })) { backstackEntry ->
             val passwordId = backstackEntry.arguments?.getLong("passwordId") ?: 1
             val passwordDetailVM:PasswordDetailViewModel = viewModel(
-                factory = AppGraph.detailPasswordFactory(passwordId)
+                factory = appGraph.detailPasswordFactory(passwordId)
             )
             PasswordDetailScreen(
                 innerPadding = innerPadding,
