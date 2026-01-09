@@ -14,31 +14,23 @@
 
 ## Features
 
-- [1] Implementar biometría (deshabilitarla en desarrollo)
-- [6] Mover Settings al TopBar
-- [4] Pantalla de Aplicaciones
-  - [6] Permitir la busqueda por app
-  - [4] Dropdown con apps ya existentes en su campo correspondiente
-  - [5] Autocompletado de urls -> www.<app>.com
-- [3] Pantalla de Cuentas
-  - [4] Al pinchar en el campo de cuenta de usuario, debería de desplegarse un dropdown con las cuentas creadas
-  - [6] Permtir la búsqueda por cuenta de usuario
-- [5] Cambiar el navBar a Aplicaciones -> Contraseñas -> Cuentas
-- [7] Crear los warnings y aplicarlos en el PasswordDetail
-- [x] Main: Agregar campos
-    - [x] Cuentas sin asociar
-    - [x] Aplicaciones sin contraseñas
+- [1] Al pinchar en el campo de cuenta de usuario, debería de desplegarse un dropdown con las cuentas creadas
+- [2] Dropdown con apps ya existentes en su campo correspondiente
+- [3] Crear los warnings y aplicarlos en el PasswordDetail
+- [4] Autocompletado de urls -> www.<app>.com
 
 ## Parking Lot
 
-- [8] Mostrar el logo de la app si coincide con la url
+- [7] Mostrar el logo de la app si coincide con la url
+- [8] Implementar biometría (deshabilitarla en desarrollo)
 - [9] Migrar a Hilt
 
 ## Actual
 
-- Preparar las capas
-  - ui -> presentación
-  - domain -> Reglas de negocio
-    - Usecases
-    - 
-  - data -> infraestructura
+- [1] Agregar pantallas de aplicaciones y cuentas
+  - [1] Mover Settings al TopBar
+  - [2] Pantalla de Cuentas
+      - [1] Permtir la búsqueda por cuenta de usuario
+  - [3] Pantalla de Aplicaciones
+      - [1] Permitir la busqueda por app
+  - [4] Cambiar el navBar a Aplicaciones -> Contraseñas -> Cuentas

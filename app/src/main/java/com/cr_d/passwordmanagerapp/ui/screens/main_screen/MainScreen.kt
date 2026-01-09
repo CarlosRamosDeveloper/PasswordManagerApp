@@ -115,6 +115,7 @@ fun AccountSection(
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
         MainCard("Cuentas",totalStoredAccounts.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
+        MainCard("Sin asignar","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f))
     }
 
     FullWidthButton("Generar cuentas de prueba", viewModel::onEnablePopulateAccountDatabaseDialog)
@@ -130,6 +131,7 @@ fun ApplicationSection(
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
         MainCard("Aplicaciones",totalStoredApps.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
+        MainCard("Sin cuentas","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f))
     }
 
     FullWidthButton("Generar aplicaciones de prueba", viewModel::onEnablePopulateApplicationDatabaseDialog)
