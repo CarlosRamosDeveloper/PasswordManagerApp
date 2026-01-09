@@ -8,7 +8,7 @@ import com.cr_d.passwordmanagerapp.data.daos.AccountDao
 import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.database.AppDatabase
-import com.cr_d.passwordmanagerapp.data.repository.in_memory.InMemoryPasswordRepository
+//import com.cr_d.passwordmanagerapp.data.repository.in_memory.InMemoryPasswordRepository
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IAccountRepository
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IApplicationRepository
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
@@ -21,7 +21,6 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.EncryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.GeneratePasswordUseCase
-import com.cr_d.passwordmanagerapp.domain.use_cases.GetAllPasswordsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.UpdateNotesUseCase
@@ -30,6 +29,7 @@ import com.cr_d.passwordmanagerapp.domain.services.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.use_cases.AnalyzePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.GetAllAccountsUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.GetAllPasswordDetailUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainAccountDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
@@ -64,8 +64,8 @@ class AppGraph(
     val applicationDao: ApplicationDao by lazy { database.appDao() }
 
     // Repositories
-    private val inMemoryPasswordRepository by lazy { InMemoryPasswordRepository(obtainPasswordDetailInfoUseCase) }
-    private val passwordRepository: IPasswordRepository by lazy { RoomPasswordRepository(passwordDao, obtainPasswordDetailInfoUseCase) }
+    //private val inMemoryPasswordRepository by lazy { InMemoryPasswordRepository(obtainPasswordDetailInfoUseCase) }
+    private val passwordRepository: IPasswordRepository by lazy { RoomPasswordRepository(passwordDao) }
     private val accountRepository: IAccountRepository by lazy { RoomAccountRepository(accountDao) }
     private val applicationRepository: IApplicationRepository by lazy { RoomApplicationRepository(applicationDao) }
 
@@ -82,7 +82,7 @@ class AppGraph(
 
     // Password UseCases
     private val analyzePasswordUseCase by lazy { AnalyzePasswordUseCase(passwordAnalyzer) }
-    private val getAllPasswordsUseCase by lazy { GetAllPasswordsUseCase(passwordRepository) }
+    private val getAllPasswordDetailUseCase by lazy { GetAllPasswordDetailUseCase(passwordRepository, obtainPasswordDetailInfoUseCase) }
     private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(generator) }
     private val createPasswordUseCase by lazy {
         SavePasswordUseCase(
@@ -102,8 +102,9 @@ class AppGraph(
     }
     private val updateNotesUseCase by lazy {
         UpdateNotesUseCase(
-            passwordRepository,
-            encryptStringUseCase
+            repository = passwordRepository,
+            encrypt = encryptStringUseCase,
+            obtainData = obtainPasswordDetailInfoUseCase
         )
     }
     private val deletePasswordUseCase by lazy { DeletePasswordUseCase(passwordRepository) }
@@ -130,12 +131,13 @@ class AppGraph(
     private val passwordDialogManagerComponent by lazy { DialogManagerComponent() }
     private val passwordManagerComponent by lazy {
         PasswordManagerComponent(
-            passwordRepository,
-            deletePasswordUseCase,
-            decryptStringUseCase
+            repository = passwordRepository,
+            deletePassword = deletePasswordUseCase,
+            decrypt = decryptStringUseCase,
+            obtainData = obtainPasswordDetailInfoUseCase
         )
     }
-    private val editManagerComponent by lazy { EditPasswordManagerComponent(decryptStringUseCase) }
+    private val editManagerComponent by lazy { EditPasswordManagerComponent(decryptStringUseCase, obtainPasswordDetailInfoUseCase) }
     private val passwordUiManagerComponent by lazy { UiManagerComponent() }
     private val mainDialogManagerComponent by lazy { MainDialogManagerComponent() }
     private val mainPasswordManagerComponent by lazy {
@@ -165,7 +167,7 @@ class AppGraph(
             savePasswordUseCase = createPasswordUseCase
         )
     }
-    val listPasswordFactory by lazy { PasswordListViewModelFactory(getAllPasswordsUseCase) }
+    val listPasswordFactory by lazy { PasswordListViewModelFactory(getAllPasswordDetailUseCase) }
     fun detailPasswordFactory(passwordId: Long) = PasswordDetailViewModelFactory(
         repository = passwordRepository,
         passwordId = passwordId,

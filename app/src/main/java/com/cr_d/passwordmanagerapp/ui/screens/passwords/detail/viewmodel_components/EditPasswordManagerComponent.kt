@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.update
 import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toEditUiState
 import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
-import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
+import com.cr_d.passwordmanagerapp.data.mapper.toDetail
+import com.cr_d.passwordmanagerapp.domain.entities.Password
+import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.model.PasswordEditUiState
@@ -17,6 +19,7 @@ import com.cr_d.passwordmanagerapp.ui.model.PasswordOption
 
 class EditPasswordManagerComponent(
     private val decrypt: DecryptStringUseCase,
+    private val obtainData: ObtainPasswordDetailInfoUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -27,12 +30,16 @@ class EditPasswordManagerComponent(
         val newNotes: String = ""
     )
 
-    fun loadEditPassword(password: PasswordDetail, passwordLength: Int){
+    suspend fun loadEditPassword(password: Password, passwordLength: Int){
+        val extraData = obtainData.invoke(password)
         val newPassword = decrypt(password.cipheredPassword)
         val newNotes = decrypt(password.cipheredNotes)
+
+        val parsedPassword = password.toDetail(extraData).toEditUiState(passwordLength)
+
         _uiState.update {
             it.copy(
-                editInfo = password.toEditUiState(passwordLength),
+                editInfo = parsedPassword,
                 newPassword = PlainPassword(newPassword),
                 newNotes = newNotes
             )

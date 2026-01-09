@@ -6,6 +6,7 @@ import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepositor
 import com.cr_d.passwordmanagerapp.domain.entities.Password
 import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseCase
 
+/*
 class InMemoryPasswordRepository (
     private val obtainInfo: ObtainPasswordDetailInfoUseCase
 ): IPasswordRepository {
@@ -61,3 +62,6 @@ class InMemoryPasswordRepository (
         passwords.clear()
     }
 }
+
+
+ */

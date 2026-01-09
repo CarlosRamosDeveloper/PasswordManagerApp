@@ -10,11 +10,14 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 
 class UpdateNotesUseCase (
     private val repository: IPasswordRepository,
-    private val encrypt: EncryptStringUseCase
+    private val encrypt: EncryptStringUseCase,
+    private val obtainData: ObtainPasswordDetailInfoUseCase
 ) {
     suspend operator fun invoke(id: Long, newNotes: String) : PasswordDetail{
         val existing = repository.findById(id)
             ?: throw IllegalArgumentException("Password not found")
+
+        val extraData = obtainData.invoke(existing)
 
         val dateInfo = DateInfo(
             creationDate = existing.dateInfo.creationDate,
@@ -24,11 +27,11 @@ class UpdateNotesUseCase (
         val updatedPassword = PasswordDetail(
             id = existing.id,
             cipheredPassword = existing.cipheredPassword,
-            appData = existing.appData,
-            accountData = existing.accountData,
+            appData = extraData.appData,
+            accountData = extraData.accountData,
             dateInfo = dateInfo,
-            score = existing.score,
-            metadata = existing.metadata,
+            score = extraData.score,
+            metadata = extraData.metadata,
             cipheredNotes = encryptedNotes
         )
 

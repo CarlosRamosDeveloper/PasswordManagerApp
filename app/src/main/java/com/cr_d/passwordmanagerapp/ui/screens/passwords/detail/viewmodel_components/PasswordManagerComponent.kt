@@ -12,7 +12,9 @@ import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepositor
 import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.DeletePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
-import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
+import com.cr_d.passwordmanagerapp.data.mapper.toDetail
+import com.cr_d.passwordmanagerapp.domain.entities.Password
+import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 
 // TODO: Check and fix
@@ -20,6 +22,7 @@ class PasswordManagerComponent (
     val repository: IPasswordRepository,
     val deletePassword: DeletePasswordUseCase,
     private val decrypt: DecryptStringUseCase,
+    private val obtainData: ObtainPasswordDetailInfoUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -30,12 +33,14 @@ class PasswordManagerComponent (
         val decipheredNotes: String = "",
     )
 
-    fun loadPassword(passwordDetail: PasswordDetail){
-        val decipheredNotes = decrypt(passwordDetail.cipheredNotes)
+    suspend fun loadPassword(password: Password){
+        val extraData = obtainData.invoke(password)
+        val decipheredNotes = decrypt(password.cipheredNotes)
+        val parsedPassword = password.toDetail(extraData).toUiState()
 
         _uiState.update {
             it.copy(
-                password = passwordDetail.toUiState(),
+                password = parsedPassword,
                 decipheredPassword = "",
                 decipheredNotes = decipheredNotes
             )
