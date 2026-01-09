@@ -120,7 +120,6 @@ class AppGraph(
 
     // Account UseCases
     private val getAllAccountsUseCase by lazy { GetAllAccountsUseCase(accountRepository, obtainAccountDetailInfoUseCase) }
-    // TODO: Cambiar el repositorio cuando funcione
     private val obtainAccountDetailInfoUseCase by lazy { ObtainAccountDetailInfoUseCase(passwordRepository) }
 
     // Crypto UseCases
