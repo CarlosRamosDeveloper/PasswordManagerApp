@@ -6,19 +6,23 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.domain.entities.Account
+import com.cr_d.passwordmanagerapp.data.mapper.toUiState
+import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.GetAllAccountsUseCase
+import com.cr_d.passwordmanagerapp.ui.model.AccountUiState
 
 class AccountListViewModel(
-// private val getAllAccountsUseCase -> //TODO: Agregar el UC para obtener cuentas
+    private val getAllAccountsUseCase: GetAllAccountsUseCase,
+    private val decrypt: DecryptStringUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    //TODO: Crear la clase AccountUiState -> Agregar el mapper
     data class UiState(
-        val accounts: List<Account> = emptyList(),
+        val accounts: List<AccountUiState> = emptyList(),
     )
 
     init {
@@ -35,7 +39,14 @@ class AccountListViewModel(
     }
 
     suspend fun loadAccounts(){
-        // parsear las cuentas a UiState
-        // Actualizar el _uiState
+        val parsedAccounts = getAllAccountsUseCase().map{
+            it.toUiState(decrypt(it.cipheredAccount))
+        }
+
+        _uiState.update {
+            it.copy(
+                accounts = parsedAccounts
+            )
+        }
     }
 }

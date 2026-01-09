@@ -26,6 +26,7 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.services.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.use_cases.AnalyzePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.GetAllAccountsUseCase
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
@@ -112,6 +113,9 @@ class AppGraph(
         )
     }
 
+    // Account UseCases
+    private val getAllAccountsUseCase by lazy { GetAllAccountsUseCase(accountRepository) }
+
     // Crypto UseCases
     private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }
     private val decryptStringUseCase by lazy { DecryptStringUseCase(cryptoService) }
@@ -169,5 +173,5 @@ class AppGraph(
         uiManager = passwordUiManagerComponent
     )
 
-    val accountListFactory by lazy { AccountListViewModel() }
+    val accountListFactory by lazy { AccountListViewModel(getAllAccountsUseCase, decryptStringUseCase) }
 }

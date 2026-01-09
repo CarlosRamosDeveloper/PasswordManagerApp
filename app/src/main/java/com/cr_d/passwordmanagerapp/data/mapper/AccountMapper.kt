@@ -12,7 +12,7 @@ fun Account.toEntity(): AccountEntity = AccountEntity (
     notesIv = cipheredNotes.iv
 )
 
-fun Account.toDomain(): AccountDetail = AccountDetail(
+fun Account.toDetail(): AccountDetail = AccountDetail(
     id = id,
     cipheredAccount = cipheredAccount,
     cipheredNotes = cipheredNotes
