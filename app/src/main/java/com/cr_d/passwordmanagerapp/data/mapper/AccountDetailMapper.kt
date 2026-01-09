@@ -14,7 +14,8 @@ fun AccountDetail.toUiState(decipheredAccount: String): AccountUiState {
     return AccountUiState(
         id = id,
         account = decipheredAccount,
-        cipheredNotes = cipheredNotes
+        cipheredNotes = cipheredNotes,
+        totalApplications = totalApplications
     )
 }
 

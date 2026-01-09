@@ -2,6 +2,7 @@ package com.cr_d.passwordmanagerapp.data.repository.room
 
 import com.cr_d.passwordmanagerapp.data.daos.AccountDao
 import com.cr_d.passwordmanagerapp.data.dto.AccountDetail
+import com.cr_d.passwordmanagerapp.data.dto.AccountDetailInfo
 import com.cr_d.passwordmanagerapp.data.mapper.toDetail
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toEntity
@@ -13,7 +14,10 @@ class RoomAccountRepository (
 ): IAccountRepository {
     override suspend fun findAll(): List<AccountDetail> {
         return dao.getAll().map { it.toDomain() }.map {
-            it.toDetail()
+            val extraInfo = AccountDetailInfo(
+                5
+            )
+            it.toDetail(extraInfo)
         }
     }
 

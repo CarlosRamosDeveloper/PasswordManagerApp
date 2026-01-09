@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,8 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.cr_d.passwordmanagerapp.ui.model.AccountUiState
 import kotlinx.coroutines.launch
+
+import com.cr_d.passwordmanagerapp.ui.model.AccountUiState
 
 @Composable
 fun AccountListScreen(innerPadding: PaddingValues, navController: NavController, viewModel: AccountListViewModel){
@@ -51,6 +53,11 @@ fun AccountListScreen(innerPadding: PaddingValues, navController: NavController,
 fun AccountCard(account: AccountUiState, navController: NavController){
     val verticalPadding = 10.dp
     val horizontalPadding = 20.dp
+    val totalMessage: String = when (account.totalApplications) {
+        0 -> "No utilizado en ninguna aplicación"
+        1 -> "Usado en 1 aplicación"
+        else -> "Usado en un total de ${account.totalApplications} aplicaciones"
+    }
 
     Row (modifier = Modifier
         .fillMaxWidth()
@@ -72,6 +79,14 @@ fun AccountCard(account: AccountUiState, navController: NavController){
         Column (Modifier.weight(1f)){
             Text(
                 account.account, fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(
+                    vertical = verticalPadding,
+                    horizontal = horizontalPadding
+                )
+            )
+            Spacer(Modifier.weight(1f))
+            Text(
+                totalMessage,
                 modifier = Modifier.padding(
                     vertical = verticalPadding,
                     horizontal = horizontalPadding
