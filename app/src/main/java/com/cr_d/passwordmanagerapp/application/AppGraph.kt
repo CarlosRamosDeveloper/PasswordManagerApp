@@ -9,6 +9,9 @@ import com.cr_d.passwordmanagerapp.data.daos.ApplicationDao
 import com.cr_d.passwordmanagerapp.data.daos.PasswordDao
 import com.cr_d.passwordmanagerapp.data.database.AppDatabase
 import com.cr_d.passwordmanagerapp.data.repository.in_memory.InMemoryPasswordRepository
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IAccountRepository
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IApplicationRepository
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomAccountRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomApplicationRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomPasswordRepository
@@ -27,7 +30,7 @@ import com.cr_d.passwordmanagerapp.domain.services.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.use_cases.AnalyzePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.GetAllAccountsUseCase
-import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModel
+import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainAccountDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
@@ -62,9 +65,9 @@ class AppGraph(
 
     // Repositories
     private val inMemoryPasswordRepository by lazy { InMemoryPasswordRepository(obtainPasswordDetailInfoUseCase) }
-    private val passwordRepository by lazy { RoomPasswordRepository(passwordDao, obtainPasswordDetailInfoUseCase) }
-    private val accountRepository by lazy { RoomAccountRepository(accountDao) }
-    private val applicationRepository by lazy { RoomApplicationRepository(applicationDao) }
+    private val passwordRepository: IPasswordRepository by lazy { RoomPasswordRepository(passwordDao, obtainPasswordDetailInfoUseCase) }
+    private val accountRepository: IAccountRepository by lazy { RoomAccountRepository(accountDao) }
+    private val applicationRepository: IApplicationRepository by lazy { RoomApplicationRepository(applicationDao) }
 
     // Core
     private val passwordAnalyzer by lazy { PasswordAnalyzer() }
@@ -115,7 +118,9 @@ class AppGraph(
     }
 
     // Account UseCases
-    private val getAllAccountsUseCase by lazy { GetAllAccountsUseCase(accountRepository) }
+    private val getAllAccountsUseCase by lazy { GetAllAccountsUseCase(accountRepository, obtainAccountDetailInfoUseCase) }
+    // TODO: Cambiar el repositorio cuando funcione
+    private val obtainAccountDetailInfoUseCase by lazy { ObtainAccountDetailInfoUseCase(passwordRepository) }
 
     // Crypto UseCases
     private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }

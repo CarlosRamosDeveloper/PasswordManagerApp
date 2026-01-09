@@ -23,6 +23,13 @@ class InMemoryPasswordRepository (
         return findAll().filter { it.appData.appName == account }
     }
 
+    override suspend fun findByAccountId(id: Long): List<PasswordDetail> {
+        //TODO: implementar
+        val list = emptyList<PasswordDetail>()
+
+        return list
+    }
+
     override suspend fun findById(id: Long): PasswordDetail? {
         return findAll().find { it.id == id }
     }

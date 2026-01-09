@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity
 
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 
@@ -18,6 +19,9 @@ interface PasswordDao {
 
     @Query("SELECT * FROM passwords WHERE app_id = :appId AND account_id = :accountId LIMIT 1")
     suspend fun findByAppIdAndAccountId(appId: Long, accountId: Long): PasswordEntity?
+
+    @Query("SELECT * FROM passwords WHERE account_id = :accId")
+    suspend fun findByAccountId(accId: Long): List<PasswordEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPassword(password: PasswordEntity): Long

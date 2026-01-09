@@ -7,6 +7,7 @@ interface IPasswordRepository {
     suspend fun findAll(): List<PasswordDetail>
     suspend fun findByApplication(app: String): List<PasswordDetail>
     suspend fun findByAccount(account: String): List<PasswordDetail>
+    suspend fun findByAccountId(id: Long): List<PasswordDetail>
     suspend fun findById(id: Long): PasswordDetail?
     suspend fun save(password: Password)
     suspend fun massSave(passwords: List<Password>)

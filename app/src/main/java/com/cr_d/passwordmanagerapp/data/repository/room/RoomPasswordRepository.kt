@@ -31,6 +31,15 @@ class RoomPasswordRepository (
         return findAll().filter { it.accountData.account == account }
     }
 
+    override suspend fun findByAccountId(id: Long): List<PasswordDetail> {
+        val list = dao.findByAccountId(id).map { it.toDomain() }.map {
+            val extraData = obtainDetail.invoke(it)
+            it.toDetail(extraData)
+        }
+
+        return list
+    }
+
     override suspend fun findById(id: Long): PasswordDetail {
         val password = dao.getPasswordById(id)?.toDomain()
         val extraData = obtainDetail.invoke(password!!)

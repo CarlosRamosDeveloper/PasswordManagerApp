@@ -39,6 +39,7 @@ class AccountListViewModel(
     }
 
     suspend fun loadAccounts(){
+
         val parsedAccounts = getAllAccountsUseCase().map{
             it.toUiState(decrypt(it.cipheredAccount))
         }
