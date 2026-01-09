@@ -14,6 +14,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.AppGraph
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListScreen
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailScreen
@@ -42,7 +44,7 @@ fun Router(
                 factory = remember { appGraph.mainScreenFactory },
                 viewModelStoreOwner = context
             )
-            MainScreen(innerPadding, mainViewModel)
+            MainScreen(innerPadding, mainViewModel, navController)
         }
         composable("CreatePasswordScreen") {
             val createPasswordViewModel: CreatePasswordViewModel = viewModel(
@@ -85,6 +87,19 @@ fun Router(
         }
         composable("SettingsScreen"){
             SettingsScreen(innerPadding, settingsViewModel)
+        }
+
+        composable("AccountListScreen"){
+            val accountListViewModel: AccountListViewModel = viewModel(
+                factory = remember { appGraph.accountListFactory },
+                viewModelStoreOwner = context
+            )
+
+            AccountListScreen(
+                innerPadding = innerPadding,
+                navController = navController,
+                viewModel = accountListViewModel
+            )
         }
     }
 }

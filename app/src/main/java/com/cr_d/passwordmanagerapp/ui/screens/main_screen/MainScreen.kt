@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.ui.common_components.FullWidthButton
@@ -29,7 +31,7 @@ import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.model.AppConfig
 
 @Composable
-fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
+fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel, navController: NavController){
     val scope = rememberCoroutineScope()
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -47,17 +49,20 @@ fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
         PasswordSection(
             totalStoredPasswords = state.totalPasswords,
             totalWarnings = state.totalWarnings,
-            viewModel = viewModel
+            viewModel = viewModel,
+            navController = navController
         )
 
         AccountSection(
             totalStoredAccounts = state.totalAccounts,
-            viewModel = viewModel
+            viewModel = viewModel,
+            navController = navController
         )
 
         ApplicationSection(
             totalStoredApps = state.totalApps,
-            viewModel = viewModel
+            viewModel = viewModel,
+            navController = navController
         )
 
         MainConfirmDialogs(
@@ -68,8 +73,12 @@ fun MainScreen(innerPadding: PaddingValues, viewModel: MainScreenViewModel){
 }
 
 @Composable
-fun MainCard(title: String, value: String, icon: ImageVector, modifier: Modifier = Modifier){
-    Card (modifier = modifier.padding(10.dp)){
+fun MainCard(title: String, value: String, icon: ImageVector, modifier: Modifier = Modifier, navController: NavController, route: String){
+    Card (modifier = modifier.padding(10.dp).clickable(
+        onClick = {
+            navController.navigate(route)
+        }
+    )){
         Row (modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp),
@@ -93,13 +102,14 @@ fun MainCard(title: String, value: String, icon: ImageVector, modifier: Modifier
 fun PasswordSection(
     totalStoredPasswords: Int,
     totalWarnings: Int,
-    viewModel: MainScreenViewModel
+    viewModel: MainScreenViewModel,
+    navController: NavController
 ){
     Row (Modifier
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-        MainCard("Contraseñas",totalStoredPasswords.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
-        MainCard("Alertas",totalWarnings.toString(), Icons.Default.Warning, modifier = Modifier.weight(0.45f))
+        MainCard("Contraseñas",totalStoredPasswords.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f), navController, "ShowPasswordScreen")
+        MainCard("Avisos",totalWarnings.toString(), Icons.Default.Warning, modifier = Modifier.weight(0.45f), navController, "ShowPasswordScreen")
     }
 
     FullWidthButton("Generar contraseñas de prueba", viewModel::onEnablePopulatePasswordDatabaseDialog)
@@ -109,13 +119,14 @@ fun PasswordSection(
 @Composable
 fun AccountSection(
     totalStoredAccounts: Int,
-    viewModel: MainScreenViewModel
+    viewModel: MainScreenViewModel,
+    navController: NavController
 ) {
     Row (Modifier
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-        MainCard("Cuentas",totalStoredAccounts.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
-        MainCard("Sin asignar","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f))
+        MainCard("Cuentas",totalStoredAccounts.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f), navController, "AccountListScreen")
+        MainCard("Avisos","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f), navController, "AccountListScreen")
     }
 
     FullWidthButton("Generar cuentas de prueba", viewModel::onEnablePopulateAccountDatabaseDialog)
@@ -125,13 +136,14 @@ fun AccountSection(
 @Composable
 fun ApplicationSection(
     totalStoredApps: Int,
-    viewModel: MainScreenViewModel
+    viewModel: MainScreenViewModel,
+    navController: NavController
 ){
     Row (Modifier
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-        MainCard("Aplicaciones",totalStoredApps.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f))
-        MainCard("Sin cuentas","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f))
+        MainCard("Aplicaciones",totalStoredApps.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f), navController, "SettingsScreen")
+        MainCard("Avisos","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f), navController, "SettingsScreen")
     }
 
     FullWidthButton("Generar aplicaciones de prueba", viewModel::onEnablePopulateApplicationDatabaseDialog)
