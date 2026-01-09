@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
-import com.cr_d.passwordmanagerapp.domain.use_cases.GetAllPasswordDetailUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GetAllPasswordDetailUseCase
 import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 
 class PasswordListViewModel(

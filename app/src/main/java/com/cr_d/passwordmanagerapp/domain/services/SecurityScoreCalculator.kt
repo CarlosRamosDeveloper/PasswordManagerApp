@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.domain.services
 import kotlin.math.log2
 
 import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
-import com.cr_d.passwordmanagerapp.domain.use_cases.AnalyzePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.AnalyzePasswordUseCase
 
 class SecurityScoreCalculator(
     val analyzer: AnalyzePasswordUseCase

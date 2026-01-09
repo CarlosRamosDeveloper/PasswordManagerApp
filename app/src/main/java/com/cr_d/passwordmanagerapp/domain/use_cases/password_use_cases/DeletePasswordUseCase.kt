@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.domain.use_cases
+package com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases
 
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
 

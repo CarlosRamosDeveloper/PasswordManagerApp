@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.domain.use_cases
+package com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases
 
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload

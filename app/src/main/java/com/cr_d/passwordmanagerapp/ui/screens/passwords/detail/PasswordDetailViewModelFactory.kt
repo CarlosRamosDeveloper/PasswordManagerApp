@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.domain.use_cases.CalculateSecurityScoreUseCase
-import com.cr_d.passwordmanagerapp.domain.use_cases.GeneratePasswordUseCase
-import com.cr_d.passwordmanagerapp.domain.use_cases.UpdateNotesUseCase
-import com.cr_d.passwordmanagerapp.domain.use_cases.UpdatePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.CalculateSecurityScoreUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.UpdateNotesUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.DialogManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.EditPasswordManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.viewmodel_components.PasswordManagerComponent

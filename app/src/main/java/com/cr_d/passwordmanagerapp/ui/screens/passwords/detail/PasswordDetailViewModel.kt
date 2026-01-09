@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
-import com.cr_d.passwordmanagerapp.domain.use_cases.CalculateSecurityScoreUseCase
-import com.cr_d.passwordmanagerapp.domain.use_cases.GeneratePasswordUseCase
-import com.cr_d.passwordmanagerapp.domain.use_cases.UpdateNotesUseCase
-import com.cr_d.passwordmanagerapp.domain.use_cases.UpdatePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.CalculateSecurityScoreUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.UpdateNotesUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toUiState
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.model.PasswordConfirmDialogData

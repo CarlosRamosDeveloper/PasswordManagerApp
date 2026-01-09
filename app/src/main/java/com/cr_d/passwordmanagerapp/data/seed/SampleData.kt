@@ -7,7 +7,7 @@ import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
-import com.cr_d.passwordmanagerapp.domain.use_cases.EncryptStringUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.EncryptStringUseCase
 
 val encrypt = EncryptStringUseCase(CryptoService())
 

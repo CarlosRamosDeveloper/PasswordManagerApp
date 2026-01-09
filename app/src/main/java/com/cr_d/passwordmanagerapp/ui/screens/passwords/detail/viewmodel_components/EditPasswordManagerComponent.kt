@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-import com.cr_d.passwordmanagerapp.domain.use_cases.DecryptStringUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.data.mapper.toEditUiState
 import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
 import com.cr_d.passwordmanagerapp.data.mapper.toDetail
 import com.cr_d.passwordmanagerapp.domain.entities.Password
-import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.value_objects.PlainPassword
 import com.cr_d.passwordmanagerapp.ui.model.PasswordEditUiState

@@ -5,7 +5,7 @@ import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.mapper.toEntity
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IAccountRepository
 import com.cr_d.passwordmanagerapp.domain.entities.Account
-import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainAccountDetailInfoUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.ObtainAccountDetailInfoUseCase
 
 class RoomAccountRepository (
     private val dao: AccountDao,

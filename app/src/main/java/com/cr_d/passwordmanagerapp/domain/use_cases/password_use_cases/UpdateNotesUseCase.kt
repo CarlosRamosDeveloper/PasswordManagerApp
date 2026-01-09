@@ -1,4 +1,4 @@
-package com.cr_d.passwordmanagerapp.domain.use_cases
+package com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases
 
 import android.util.Log
 import java.time.LocalDate
@@ -6,6 +6,7 @@ import java.time.LocalDate
 import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
+import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.EncryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 
 class UpdateNotesUseCase (

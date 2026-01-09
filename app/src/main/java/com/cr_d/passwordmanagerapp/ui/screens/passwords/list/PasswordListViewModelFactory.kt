@@ -3,7 +3,7 @@ package com.cr_d.passwordmanagerapp.ui.screens.passwords.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-import com.cr_d.passwordmanagerapp.domain.use_cases.GetAllPasswordDetailUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GetAllPasswordDetailUseCase
 
 class PasswordListViewModelFactory (
     private val getAllPasswordsUseCase: GetAllPasswordDetailUseCase

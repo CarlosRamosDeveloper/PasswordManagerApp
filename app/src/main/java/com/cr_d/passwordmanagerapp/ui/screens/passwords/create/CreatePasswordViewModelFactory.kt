@@ -3,9 +3,9 @@ package com.cr_d.passwordmanagerapp.ui.screens.passwords.create
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-import com.cr_d.passwordmanagerapp.domain.use_cases.CalculateSecurityScoreUseCase
-import com.cr_d.passwordmanagerapp.domain.use_cases.GeneratePasswordUseCase
-import com.cr_d.passwordmanagerapp.domain.use_cases.SavePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.CalculateSecurityScoreUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.SavePasswordUseCase
 
 class CreatePasswordViewModelFactory(
     val generatePasswordUseCase: GeneratePasswordUseCase,
