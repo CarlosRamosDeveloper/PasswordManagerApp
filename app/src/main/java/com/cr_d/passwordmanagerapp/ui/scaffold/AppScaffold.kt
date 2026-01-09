@@ -1,7 +1,9 @@
 package com.cr_d.passwordmanagerapp.ui.scaffold
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
@@ -26,12 +28,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.cr_d.passwordmanagerapp.application.AppGraph
 import kotlinx.coroutines.launch
 
+import com.cr_d.passwordmanagerapp.application.AppGraph
 import com.cr_d.passwordmanagerapp.ui.model.CustomNavigationItem
 import com.cr_d.passwordmanagerapp.ui.router.Router
 
@@ -75,6 +78,17 @@ fun CustomAppBar(navController: NavHostController){
                     )}
             }
         },
+        actions = {
+                Icon(
+                    Icons.Filled.Settings,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .clickable(
+                            onClick = { navController.navigate("SettingsScreen") }
+                        )
+                )
+        }
     )
 }
 
