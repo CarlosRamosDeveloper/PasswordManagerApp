@@ -29,6 +29,7 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.UpdatePas
 import com.cr_d.passwordmanagerapp.domain.services.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.AccountParseToUiUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.DeleteAccountUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.AnalyzePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.GetAllAccountsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GetAllPasswordDetailUseCase
@@ -145,6 +146,7 @@ class AppGraph(
         )
     }
     private val saveAccountUseCase by lazy { SaveAccountUseCase(accountRepository, encryptStringUseCase) }
+    private val deleteAccountUseCase by lazy { DeleteAccountUseCase(accountRepository) }
 
     // Application UseCases
     private val applicationParseToUiUseCase by lazy { ApplicationParseToUiUseCase(applicationRepository,obtainApplicationDetailInfoUseCase) }
@@ -223,7 +225,8 @@ class AppGraph(
     val accountListFactory by lazy { AccountListViewModelFactory(getAllAccountsUseCase) }
     fun accountDetailFactory (accountId: Long) = AccountDetailViewModelFactory(
         accountId = accountId,
-        accountParseToUiUseCase = accountParseToUiUseCase
+        accountParseToUiUseCase = accountParseToUiUseCase,
+        delete = deleteAccountUseCase
     )
     val createApplicationFactory by lazy { CreateApplicationViewModelFactory(saveApplicationUseCase) }
     val applicationListFactory by lazy { ApplicationListViewModelFactory(getAllApplicationsUseCase) }

@@ -166,10 +166,14 @@ fun Router(
             val accountDetailVM: AccountDetailViewModel = viewModel(
                 factory = remember { appGraph.accountDetailFactory(accountId) }
             )
-            setFabState(null)
+            val fabState = FabState(
+                icon = Icons.Default.Delete,
+                color = null,
+                onclick = accountDetailVM::onEnableDeleteDialog
+            )
+            setFabState(fabState)
             AccountDetailScreen(
                 innerPadding = innerPadding,
-                context = context,
                 snackFunction = snackFunction,
                 viewModel = accountDetailVM,
                 navController = navController

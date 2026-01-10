@@ -1,6 +1,5 @@
 package com.cr_d.passwordmanagerapp.ui.screens.accounts.detail
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -14,6 +13,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
+import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
@@ -21,14 +21,12 @@ import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 @Composable
 fun AccountDetailScreen(
     innerPadding: PaddingValues,
-    context: Context,
     snackFunction: (String)-> Unit,
     viewModel: AccountDetailViewModel,
     navController: NavController
 ){
     Column(modifier = Modifier.padding(innerPadding)) {
         AccountDetailCard(
-            context = context,
             snackFunction = snackFunction,
             viewModel = viewModel,
             navController = navController
@@ -38,7 +36,6 @@ fun AccountDetailScreen(
 
 @Composable
 fun AccountDetailCard(
-    context: Context,
     snackFunction: (String)-> Unit,
     viewModel: AccountDetailViewModel,
     navController: NavController
@@ -51,6 +48,19 @@ fun AccountDetailCard(
         }
         NotesSection(state.account.notes)
         PasswordSection(state.account.passwords)
+
+        if(state.isDeleteDialogShown) ConfirmDialog(
+            title = "Eliminar cuenta",
+            message = "Esto eliminará la cuenta de forma permanente",
+            confirmButtonText = "Eliminar cuenta",
+            onConfirm = {
+                viewModel.onDeleteAccount()
+                snackFunction("Cuenta eliminada satisfactoriamente")
+                navController.navigate("AccountListScreen")
+            },
+            onDisable = viewModel::onDisableDeleteDialog,
+            onDismiss = viewModel::onDisableDeleteDialog
+        )
     } else {
         CircularProgressIndicator()
     }
