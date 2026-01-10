@@ -18,6 +18,8 @@ import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailScree
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListScreen
+import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailScreen
@@ -116,6 +118,17 @@ fun Router(
                 snackFunction = snackFunction,
                 viewModel = accountDetailVM,
                 navController = navController
+            )
+        }
+        composable("ApplicationsListScreen"){
+            val appListViewModel: ApplicationListViewModel = viewModel(
+                factory = remember { appGraph.applicationListFactory },
+                viewModelStoreOwner = context
+            )
+            ApplicationListScreen(
+                innerPadding = innerPadding,
+                navController = navController,
+                viewModel = appListViewModel
             )
         }
     }

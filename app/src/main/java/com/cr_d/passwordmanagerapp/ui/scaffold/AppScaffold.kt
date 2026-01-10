@@ -97,9 +97,9 @@ fun CustomNavBar(navController: NavHostController){
     var selectedDestination by rememberSaveable { mutableIntStateOf(0) }
 
     val destinations = listOf(
-        CustomNavigationItem(Icons.Filled.Done, "Ver Contraseñas", "ShowPasswordScreen"),
-        CustomNavigationItem(Icons.Filled.Info, "Crear contraseña", "CreatePasswordScreen"),
-        CustomNavigationItem(Icons.Filled.Settings, "Opciones", "SettingsScreen"),
+        CustomNavigationItem(Icons.Filled.Done, "Contraseñas", "ShowPasswordScreen"),
+        CustomNavigationItem(Icons.Filled.Info, "Cuentas", "AccountListScreen"),
+        CustomNavigationItem(Icons.Filled.Settings, "Aplicaciones", "ApplicationsListScreen"),
     )
 
     Column {

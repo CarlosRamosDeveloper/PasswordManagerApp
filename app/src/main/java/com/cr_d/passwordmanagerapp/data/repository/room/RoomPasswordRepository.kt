@@ -16,9 +16,9 @@ class RoomPasswordRepository (
         return dao.getAll().map { it.toDomain() }
     }
 
-//    override suspend fun findByApplication(app: String): List<Password> {
-//        return findAll().filter { it.appData.appName == app }
-//    }
+    override suspend fun findByApplicationId(appId: Long): List<Password> {
+        return findAll().filter { it.accountId == appId }
+    }
 
 //    override suspend fun findByAccount(account: String): List<PasswordDetail> {
 //        return findAll().filter { it.accountData.account == account }

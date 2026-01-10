@@ -142,8 +142,8 @@ fun ApplicationSection(
     Row (Modifier
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-        MainCard("Aplicaciones",totalStoredApps.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f), navController, "SettingsScreen")
-        MainCard("Avisos","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f), navController, "SettingsScreen")
+        MainCard("Aplicaciones",totalStoredApps.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f), navController, "ApplicationsListScreen")
+        MainCard("Avisos","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f), navController, "ApplicationsListScreen")
     }
 
     FullWidthButton("Generar aplicaciones de prueba", viewModel::onEnablePopulateApplicationDatabaseDialog)

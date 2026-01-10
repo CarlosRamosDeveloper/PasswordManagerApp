@@ -2,6 +2,7 @@ package com.cr_d.passwordmanagerapp.application
 
 import android.content.Context
 import androidx.room.Room
+import kotlin.getValue
 
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.daos.AccountDao
@@ -32,8 +33,11 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.AnalyzePa
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.GetAllAccountsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GetAllPasswordDetailUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.ObtainAccountDetailInfoUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.GetAllApplicationsUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.ObtainApplicationDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainApplicationManagerComponent
@@ -121,7 +125,12 @@ class AppGraph(
     }
 
     // Account UseCases
-    private val getAllAccountsUseCase by lazy { GetAllAccountsUseCase(accountRepository, obtainAccountDetailInfoUseCase) }
+    private val getAllAccountsUseCase by lazy {
+        GetAllAccountsUseCase(
+            repository = accountRepository,
+            getInfo = obtainAccountDetailInfoUseCase
+        )
+    }
     private val obtainAccountDetailInfoUseCase by lazy { ObtainAccountDetailInfoUseCase(passwordRepository, decryptStringUseCase, obtainPasswordDetailInfoUseCase) }
     private val accountParseToUiUseCase by lazy {
         AccountParseToUiUseCase(
@@ -129,6 +138,19 @@ class AppGraph(
             obtainData = obtainAccountDetailInfoUseCase,
         )
     }
+
+    // Application UseCases
+    private val getAllApplicationsUseCase by lazy {
+        GetAllApplicationsUseCase(
+            repository = applicationRepository,
+            obtainData = obtainApplicationDetailInfoUseCase
+        )
+    }
+    private val obtainApplicationDetailInfoUseCase by lazy { ObtainApplicationDetailInfoUseCase(
+        decrypt = decryptStringUseCase,
+        repository = passwordRepository,
+        obtainInfo = obtainPasswordDetailInfoUseCase
+    ) }
 
     // Crypto UseCases
     private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }
@@ -191,4 +213,5 @@ class AppGraph(
         accountId = accountId,
         accountParseToUiUseCase = accountParseToUiUseCase
     )
+    val applicationListFactory by lazy { ApplicationListViewModelFactory(getAllApplicationsUseCase) }
 }
