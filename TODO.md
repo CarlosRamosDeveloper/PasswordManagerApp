@@ -12,12 +12,14 @@
 
 ## Architecture / debt tech
 
+- [4] Mover las partes pesadas de los Viewmodel a UC propios
+- [5] Revisar TODOs del código
+
 ## Features
 
 - [1] Al pinchar en el campo de cuenta de usuario, debería de desplegarse un dropdown con las cuentas creadas
 - [2] Dropdown con apps ya existentes en su campo correspondiente
-- [3] Crear los warnings y aplicarlos en el PasswordDetail
-- [4] Autocompletado de urls -> www.<app>.com
+- [3] Crear los warnings
 
 ## Parking Lot
 
@@ -27,10 +29,5 @@
 
 ## Actual
 
-- [1] Agregar pantallas de aplicaciones y cuentas
-  - [1] Mover Settings al TopBar
-  - [2] Pantalla de Cuentas
-      - [1] Permtir la búsqueda por cuenta de usuario
-  - [3] Pantalla de Aplicaciones
-      - [1] Permitir la busqueda por app
-  - [4] Cambiar el navBar a Aplicaciones -> Contraseñas -> Cuentas
+- [1] Agregar pantallas de aplicaciones 
+- [2] Cambiar el navBar a Aplicaciones -> Contraseñas -> Cuentas
