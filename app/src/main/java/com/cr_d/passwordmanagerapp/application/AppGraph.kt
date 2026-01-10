@@ -31,6 +31,7 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.AnalyzePa
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.GetAllAccountsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GetAllPasswordDetailUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.ObtainAccountDetailInfoUseCase
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
@@ -181,4 +182,8 @@ class AppGraph(
     )
 
     val accountListFactory by lazy { AccountListViewModelFactory(getAllAccountsUseCase, decryptStringUseCase) }
+    fun accountDetailFactory (accountId: Long) = AccountDetailViewModelFactory(
+        accountId = accountId,
+        repository = accountRepository,
+    )
 }
