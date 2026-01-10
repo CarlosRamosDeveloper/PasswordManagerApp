@@ -1,11 +1,12 @@
-package com.cr_d.passwordmanagerapp.domain.use_cases
+package com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases
 
-import com.cr_d.passwordmanagerapp.data.dto.PasswordDetailInfo
 import com.cr_d.passwordmanagerapp.data.dto.PasswordAccountInfoDto
 import com.cr_d.passwordmanagerapp.data.dto.PasswordAppInfoDto
+import com.cr_d.passwordmanagerapp.data.dto.PasswordDetailInfo
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IAccountRepository
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IApplicationRepository
 import com.cr_d.passwordmanagerapp.domain.entities.Password
+import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.DecryptStringUseCase
 
 class ObtainPasswordDetailInfoUseCase (
     private val appRepository: IApplicationRepository,

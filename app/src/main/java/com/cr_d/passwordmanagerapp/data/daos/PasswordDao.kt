@@ -19,6 +19,9 @@ interface PasswordDao {
     @Query("SELECT * FROM passwords WHERE app_id = :appId AND account_id = :accountId LIMIT 1")
     suspend fun findByAppIdAndAccountId(appId: Long, accountId: Long): PasswordEntity?
 
+    @Query("SELECT * FROM passwords WHERE account_id = :accId")
+    suspend fun findByAccountId(accId: Long): List<PasswordEntity>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPassword(password: PasswordEntity): Long
 

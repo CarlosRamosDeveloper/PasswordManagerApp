@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.domain.services.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.services.PasswordGenerator
-import com.cr_d.passwordmanagerapp.domain.use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GeneratePasswordUseCase
 
 class GeneratePasswordUseCaseTest {
     @Test

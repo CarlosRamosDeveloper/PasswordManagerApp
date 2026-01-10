@@ -4,8 +4,9 @@ import com.cr_d.passwordmanagerapp.data.dto.PasswordDetail
 import com.cr_d.passwordmanagerapp.data.mapper.toDetail
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepository
 import com.cr_d.passwordmanagerapp.domain.entities.Password
-import com.cr_d.passwordmanagerapp.domain.use_cases.ObtainPasswordDetailInfoUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.ObtainPasswordDetailInfoUseCase
 
+/*
 class InMemoryPasswordRepository (
     private val obtainInfo: ObtainPasswordDetailInfoUseCase
 ): IPasswordRepository {
@@ -21,6 +22,13 @@ class InMemoryPasswordRepository (
 
     override suspend fun findByAccount(account: String): List<PasswordDetail> {
         return findAll().filter { it.appData.appName == account }
+    }
+
+    override suspend fun findByAccountId(id: Long): List<PasswordDetail> {
+        //TODO: implementar
+        val list = emptyList<PasswordDetail>()
+
+        return list
     }
 
     override suspend fun findById(id: Long): PasswordDetail? {
@@ -54,3 +62,6 @@ class InMemoryPasswordRepository (
         passwords.clear()
     }
 }
+
+
+ */

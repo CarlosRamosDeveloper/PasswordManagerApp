@@ -14,6 +14,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.AppGraph
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailScreen
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListScreen
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailScreen
@@ -42,7 +46,7 @@ fun Router(
                 factory = remember { appGraph.mainScreenFactory },
                 viewModelStoreOwner = context
             )
-            MainScreen(innerPadding, mainViewModel)
+            MainScreen(innerPadding, mainViewModel, navController)
         }
         composable("CreatePasswordScreen") {
             val createPasswordViewModel: CreatePasswordViewModel = viewModel(
@@ -85,6 +89,34 @@ fun Router(
         }
         composable("SettingsScreen"){
             SettingsScreen(innerPadding, settingsViewModel)
+        }
+
+        composable("AccountListScreen"){
+            val accountListViewModel: AccountListViewModel = viewModel(
+                factory = remember { appGraph.accountListFactory },
+                viewModelStoreOwner = context
+            )
+
+            AccountListScreen(
+                innerPadding = innerPadding,
+                navController = navController,
+                viewModel = accountListViewModel
+            )
+        }
+        composable("AccountDetailScreen/{accountId}", arguments = listOf(navArgument("accountId") {
+            type = NavType.LongType
+        })) { backstackEntry ->
+            val accountId = backstackEntry.arguments?.getLong("accountId") ?: 1
+            val accountDetailVM: AccountDetailViewModel = viewModel(
+                factory = remember { appGraph.accountDetailFactory(accountId) }
+            )
+            AccountDetailScreen(
+                innerPadding = innerPadding,
+                context = context,
+                snackFunction = snackFunction,
+                viewModel = accountDetailVM,
+                navController = navController
+            )
         }
     }
 }

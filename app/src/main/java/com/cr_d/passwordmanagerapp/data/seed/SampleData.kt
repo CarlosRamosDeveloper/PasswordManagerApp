@@ -7,7 +7,7 @@ import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
-import com.cr_d.passwordmanagerapp.domain.use_cases.EncryptStringUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.EncryptStringUseCase
 
 val encrypt = EncryptStringUseCase(CryptoService())
 
@@ -85,7 +85,7 @@ object SampleData {
         fakePassword(
             plainPassword = "onlylowercase",
             appId = 2,
-            accountId = 3,
+            accountId = 5,
             creationDate = LocalDate.of(2020, 2, 20).toString(),
             lastUpdate = LocalDate.of(2022, 2, 20).toString(),
         ).toDomain(),
@@ -164,7 +164,7 @@ object SampleData {
             account = "Jav4De5"
         ).toDomain(),
         fakeAccount(
-            account = "mario_racing"
+            account = "mario_Testing"
         ).toDomain(),
         fakeAccount(
             account = "mario_racing"
