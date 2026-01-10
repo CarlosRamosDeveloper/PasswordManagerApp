@@ -31,6 +31,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -57,9 +59,15 @@ fun AppScaffold(appGraph: AppGraph){
         floatingActionButton = {
             fabState?.let {
                 FloatingActionButton(
-                    onClick = it.onclick,
+                    onClick = if(fabState!!.isEnabled) it.onclick else {{}},
                     containerColor = it.color ?: MaterialTheme.colorScheme.primary,
-
+                    modifier = Modifier
+                        .alpha(if (fabState!!.isEnabled) 1f else 0.3f)
+                        .pointerInput(fabState!!.isEnabled) {
+                            awaitPointerEventScope {
+                                while(true) awaitPointerEvent()
+                            }
+                        }
                 ) {
                     Icon(
                         it.icon, contentDescription = ""
