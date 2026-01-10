@@ -8,8 +8,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -152,10 +154,13 @@ fun Router(
             val createAppVM: CreateApplicationViewModel = viewModel(
                 factory = remember { appGraph.createApplicationFactory }
             )
+            val isSaveEnabled by createAppVM.isSaveEnabled.collectAsStateWithLifecycle()
+
             val fabState = FabState(
                 icon = Icons.Default.Save,
                 color = null,
-                onclick = createAppVM::onSaveApplication
+                isEnabled = isSaveEnabled,
+                onclick = createAppVM::onEnableSaveDialog
             )
             setFabState(fabState)
             CreateApplicationScreen(

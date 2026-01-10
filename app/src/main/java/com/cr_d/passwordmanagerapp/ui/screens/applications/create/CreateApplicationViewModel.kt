@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.SaveApplicationUseCase
 import com.cr_d.passwordmanagerapp.ui.model.ApplicationUiState
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class CreateApplicationViewModel (
@@ -16,9 +19,17 @@ class CreateApplicationViewModel (
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    val isSaveEnabled: StateFlow<Boolean> = _uiState.map {
+        it.application.applicationName.isNotBlank()
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(1_000),
+        false
+    )
 
     data class UiState(
         val application: ApplicationUiState = ApplicationUiState(),
+        val isSaveDialogShown: Boolean = false,
     )
 
     fun onAppNameChange(value: String){
@@ -51,6 +62,22 @@ class CreateApplicationViewModel (
         }
     }
 
+    fun onEnableSaveDialog(){
+        _uiState.update {
+            it.copy(
+                isSaveDialogShown = true
+            )
+        }
+    }
+
+    fun onDisableSaveDialog(){
+        _uiState.update {
+            it.copy(
+                isSaveDialogShown = false
+            )
+        }
+    }
+
     fun onSaveApplication(){
         viewModelScope.launch {
             val app = _uiState.value.application
@@ -60,6 +87,7 @@ class CreateApplicationViewModel (
                 notes = app.notes
             )
             save(application)
+            onDisableSaveDialog()
             resetStatus()
         }
     }

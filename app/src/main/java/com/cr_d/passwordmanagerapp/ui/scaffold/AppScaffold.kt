@@ -58,7 +58,8 @@ fun AppScaffold(appGraph: AppGraph){
             fabState?.let {
                 FloatingActionButton(
                     onClick = it.onclick,
-                    containerColor = it.color ?: MaterialTheme.colorScheme.primary
+                    containerColor = it.color ?: MaterialTheme.colorScheme.primary,
+
                 ) {
                     Icon(
                         it.icon, contentDescription = ""

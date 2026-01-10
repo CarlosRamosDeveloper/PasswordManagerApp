@@ -14,6 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
+import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.common_components.CustomOutlinedTextField
 
 @Composable
@@ -50,4 +51,16 @@ fun CreateApplicationScreen (
             isSingleLine = false
         )
     }
+
+    if (state.isSaveDialogShown) ConfirmDialog(
+        title = "Guardar aplicación",
+        message = "¿Guardar aplicación en la base de datos?",
+        confirmButtonText = "Guardar aplicación",
+        onConfirm = {
+            viewModel.onSaveApplication()
+            snackFunction("Aplicación almacenada con éxito")
+        },
+        onDisable = viewModel::onDisableSaveDialog,
+        onDismiss = viewModel::onDisableSaveDialog
+    )
 }
