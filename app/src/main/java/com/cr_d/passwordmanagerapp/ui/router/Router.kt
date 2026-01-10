@@ -226,12 +226,11 @@ fun Router(
             val fabState = FabState(
                 icon = Icons.Default.Delete,
                 color = null,
-                onclick = {} // TODO: Implementar delete
+                onclick = appDetailVM::onEnableDeleteDialog
             )
             setFabState(fabState)
             ApplicationDetailScreen(
                 innerPadding = innerPadding,
-                context = context,
                 snackFunction = snackFunction,
                 viewModel = appDetailVM,
                 navController = navController

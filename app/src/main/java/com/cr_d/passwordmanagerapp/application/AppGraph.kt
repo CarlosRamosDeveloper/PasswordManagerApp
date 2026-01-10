@@ -36,6 +36,7 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GetAllPas
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.ObtainAccountDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.SaveAccountUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.ApplicationParseToUiUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.DeleteApplicationUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.GetAllApplicationsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.ObtainApplicationDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.SaveApplicationUseCase
@@ -165,6 +166,7 @@ class AppGraph(
         repository = applicationRepository,
         encrypt = encryptStringUseCase
     ) }
+    private val deleteApplicationUseCase by lazy { DeleteApplicationUseCase(applicationRepository)}
 
     // Crypto UseCases
     private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }
@@ -232,7 +234,8 @@ class AppGraph(
     val applicationListFactory by lazy { ApplicationListViewModelFactory(getAllApplicationsUseCase) }
     fun applicationDetailFactory (appId: Long) = ApplicationDetailViewModelFactory(
         appId = appId,
-        parser = applicationParseToUiUseCase
+        parser = applicationParseToUiUseCase,
+        delete = deleteApplicationUseCase
     )
     val createAccountFactory by lazy { CreateAccountViewModelFactory(saveAccountUseCase) }
 }

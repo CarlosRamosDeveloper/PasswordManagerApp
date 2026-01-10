@@ -29,6 +29,6 @@
 
 ## Actual
 
-- [5] Agregar el borrado de cuentas
-- [6] Integrar la creación de contraseñas completa
-- [7] Implementar el borrado en cascada
+- [1] Implementar el borrado en cascada
+- [2] Integrar la creación de contraseñas completa
+
