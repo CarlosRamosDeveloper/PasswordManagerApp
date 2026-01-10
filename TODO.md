@@ -29,5 +29,8 @@
 
 ## Actual
 
-- [1] Agregar pantallas de aplicaciones 
-- [2] Cambiar el navBar a Aplicaciones -> Contraseñas -> Cuentas
+- [1] Fix error -> 
+  - La pantalla de detalle de aplicación muestra datos incorrectos cuando una cuenta tiene más de una contraseña asociada
+- [2] Agregar el FAB de App list -> Crear Aplicación
+- [3] Agregar el FAB de Acc list -> Crear Cuenta
+- [4] Agregar el FAB de Pwd list -> Crear contraseña
