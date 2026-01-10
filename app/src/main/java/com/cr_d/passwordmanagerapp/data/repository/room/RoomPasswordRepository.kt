@@ -17,7 +17,7 @@ class RoomPasswordRepository (
     }
 
     override suspend fun findByApplicationId(appId: Long): List<Password> {
-        return findAll().filter { it.accountId == appId }
+        return findAll().filter { it.appId == appId }
     }
 
 //    override suspend fun findByAccount(account: String): List<PasswordDetail> {
