@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -22,6 +23,8 @@ import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailScree
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.applications.create.CreateApplicationScreen
+import com.cr_d.passwordmanagerapp.ui.screens.applications.create.CreateApplicationViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.applications.detail.ApplicationDetailScreen
 import com.cr_d.passwordmanagerapp.ui.screens.applications.detail.ApplicationDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListScreen
@@ -145,12 +148,35 @@ fun Router(
                 navController = navController
             )
         }
+        composable("CreateApplicationScreen") {
+            val createAppVM: CreateApplicationViewModel = viewModel(
+                factory = remember { appGraph.createApplicationFactory }
+            )
+            val fabState = FabState(
+                icon = Icons.Default.Save,
+                color = null,
+                onclick = createAppVM::onSaveApplication
+            )
+            setFabState(fabState)
+            CreateApplicationScreen(
+                innerPadding = innerPadding,
+                viewModel = createAppVM,
+                navController = navController,
+                context = context,
+                snackFunction = snackFunction
+            )
+        }
         composable("ApplicationsListScreen"){
             val appListViewModel: ApplicationListViewModel = viewModel(
                 factory = remember { appGraph.applicationListFactory },
                 viewModelStoreOwner = context
             )
-            setFabState(null)
+            val fabState = FabState(
+                icon = Icons.Default.Add,
+                color = null,
+                onclick = { navController.navigate("CreateApplicationScreen")}
+            )
+            setFabState(fabState)
             ApplicationListScreen(
                 innerPadding = innerPadding,
                 navController = navController,
@@ -164,7 +190,12 @@ fun Router(
             val appDetailVM: ApplicationDetailViewModel = viewModel(
                 factory = remember { appGraph.applicationDetailFactory(appId)}
             )
-            setFabState(null)
+            val fabState = FabState(
+                icon = Icons.Default.Delete,
+                color = null,
+                onclick = {} // TODO: Implementar delete
+            )
+            setFabState(fabState)
             ApplicationDetailScreen(
                 innerPadding = innerPadding,
                 context = context,
