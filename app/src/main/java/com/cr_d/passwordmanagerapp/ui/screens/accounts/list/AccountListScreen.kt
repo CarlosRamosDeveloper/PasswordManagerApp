@@ -99,7 +99,7 @@ fun AccountCard(account: AccountUiState, navController: NavController){
                 contentDescription = "",
                 modifier = Modifier
                     .clickable(
-                        onClick = { /*navController.navigate("PasswordDataScreen/${password.id}")*/ }
+                        onClick = { navController.navigate("AccountDetailScreen/${account.id}") }
                     )
                     .size(50.dp)
             )

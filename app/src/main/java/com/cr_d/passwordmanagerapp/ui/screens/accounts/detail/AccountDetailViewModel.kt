@@ -1,5 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.accounts.detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,24 +29,33 @@ class AccountDetailViewModel (
         val account: AccountUiState? = null
     )
 
+    init {
+        Log.d("AccountDetail", "onInit ${_uiState.value.account}")
+        onRefresh()
+    }
+
     fun onRefresh(){
         viewModelScope.launch {
+            Log.d("AccountDetail", "onRefresh ${_uiState.value.account}")
             loadAccount(accountId)
         }
     }
 
     suspend fun loadAccount(accountId: Long) {
+        val state = _uiState.value
+
+        Log.d("AccountDetail", "load step 1 ${state.account}")
         val account = repository.findById(accountId) ?: return
         val extraData = obtainAccountDetail.invoke(account)
         val decipheredAccount = decrypt(account.cipheredAccount)
         val decipheredNotes = decrypt(account.cipheredNotes)
-
+        Log.d("AccountDetail", "load step 2 ${state.account}")
         val parsedData = account.toDetail(extraData).toUiState(decipheredAccount)
         _uiState.update {
             it.copy(
                 account = parsedData
             )
         }
-
+        Log.d("AccountDetail", "load step 3 ${state.account}")
     }
 }

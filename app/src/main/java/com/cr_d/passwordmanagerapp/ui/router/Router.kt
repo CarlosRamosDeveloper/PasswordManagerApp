@@ -14,7 +14,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.AppGraph
-import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailCard
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailScreen
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListScreen
@@ -107,7 +106,7 @@ fun Router(
         composable("AccountDetailScreen/{accountId}", arguments = listOf(navArgument("accountId") {
             type = NavType.LongType
         })) { backstackEntry ->
-            val accountId = backstackEntry.arguments?.getLong("AccountId") ?: 1
+            val accountId = backstackEntry.arguments?.getLong("accountId") ?: 1
             val accountDetailVM: AccountDetailViewModel = viewModel(
                 factory = remember { appGraph.accountDetailFactory(accountId) }
             )
