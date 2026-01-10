@@ -33,10 +33,12 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.AnalyzePa
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.GetAllAccountsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GetAllPasswordDetailUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.ObtainAccountDetailInfoUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.SaveAccountUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.ApplicationParseToUiUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.GetAllApplicationsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.ObtainApplicationDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.SaveApplicationUseCase
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.create.CreateAccountViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.applications.create.CreateApplicationViewModelFactory
@@ -142,6 +144,7 @@ class AppGraph(
             obtainData = obtainAccountDetailInfoUseCase,
         )
     }
+    private val saveAccountUseCase by lazy { SaveAccountUseCase(accountRepository, encryptStringUseCase) }
 
     // Application UseCases
     private val applicationParseToUiUseCase by lazy { ApplicationParseToUiUseCase(applicationRepository,obtainApplicationDetailInfoUseCase) }
@@ -228,4 +231,5 @@ class AppGraph(
         appId = appId,
         parser = applicationParseToUiUseCase
     )
+    val createAccountFactory by lazy { CreateAccountViewModelFactory(saveAccountUseCase) }
 }

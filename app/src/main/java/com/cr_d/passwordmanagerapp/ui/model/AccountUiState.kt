@@ -4,5 +4,5 @@ data class AccountUiState (
     val id: Long = 0L,
     val account : String = "",
     val notes : String = "",
-    val passwords: List<PasswordUiState>
+    val passwords: List<PasswordUiState> = emptyList()
 )

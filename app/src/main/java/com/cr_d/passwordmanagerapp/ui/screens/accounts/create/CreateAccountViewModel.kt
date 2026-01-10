@@ -1,26 +1,27 @@
-package com.cr_d.passwordmanagerapp.ui.screens.applications.create
+package com.cr_d.passwordmanagerapp.ui.screens.accounts.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.SaveApplicationUseCase
-import com.cr_d.passwordmanagerapp.ui.model.ApplicationUiState
+import com.cr_d.passwordmanagerapp.data.dto.AccountCreationData
+import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.SaveAccountUseCase
+import com.cr_d.passwordmanagerapp.ui.model.AccountUiState
 
-class CreateApplicationViewModel (
-    private val save: SaveApplicationUseCase
+class CreateAccountViewModel (
+    private val save: SaveAccountUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
     val isSaveEnabled: StateFlow<Boolean> = _uiState.map {
-        it.application.applicationName.isNotBlank()
+        it.account.account.isNotBlank()
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(1_000),
@@ -28,34 +29,24 @@ class CreateApplicationViewModel (
     )
 
     data class UiState(
-        val application: ApplicationUiState = ApplicationUiState(),
+        val account: AccountUiState = AccountUiState(),
         val isSaveDialogShown: Boolean = false,
     )
 
-    fun onAppNameChange(value: String){
+    fun onAccountNameChange(value: String){
         _uiState.update {
             it.copy(
-                application = it.application.copy(
-                    applicationName = value
+                account = it.account.copy(
+                    account = value
                 )
             )
         }
     }
 
-    fun onUrlChange(value: String){
+    fun onAccountNotesChange(value: String){
         _uiState.update {
             it.copy(
-                application = it.application.copy(
-                    applicationUrl = value
-                )
-            )
-        }
-    }
-
-    fun onNotesChange(value: String) {
-        _uiState.update {
-            it.copy(
-                application = it.application.copy(
+                account = it.account.copy(
                     notes = value
                 )
             )
@@ -78,15 +69,14 @@ class CreateApplicationViewModel (
         }
     }
 
-    fun onSaveApplication(){
+    fun onSaveAccount(){
         viewModelScope.launch {
-            val app = _uiState.value.application
-            val application = ApplicationUiState(
-                applicationName = app.applicationName,
-                applicationUrl = app.applicationUrl,
-                notes = app.notes
+            val acc = _uiState.value.account
+            val data = AccountCreationData(
+                account = acc.account,
+                notes = acc.notes
             )
-            save(application)
+            save(data)
             onDisableSaveDialog()
             resetStatus()
         }
@@ -95,7 +85,7 @@ class CreateApplicationViewModel (
     fun resetStatus(){
         _uiState.update {
             it.copy(
-                application = ApplicationUiState()
+                account = AccountUiState()
             )
         }
     }

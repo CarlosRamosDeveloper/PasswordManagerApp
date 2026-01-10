@@ -29,9 +29,6 @@
 
 ## Actual
 
-- [2] Agregar la creación de aplicaciones
-- [3] Agregar el borrado de aplicaciones
-- [4] Agregar la creación de cuentas
 - [5] Agregar el borrado de cuentas
 - [6] Integrar la creación de contraseñas completa
 - [7] Implementar el borrado en cascada

@@ -21,6 +21,8 @@ import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.AppGraph
 import com.cr_d.passwordmanagerapp.ui.model.FabState
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.create.CreateAccountScreen
+import com.cr_d.passwordmanagerapp.ui.screens.accounts.create.CreateAccountViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailScreen
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListScreen
@@ -121,13 +123,36 @@ fun Router(
             setFabState(null)
             SettingsScreen(innerPadding, settingsViewModel)
         }
-
+        composable("CreateAccountScreen") {
+            val createAccVM: CreateAccountViewModel = viewModel(
+                factory = remember { appGraph.createAccountFactory }
+            )
+            val isSaveEnabled by createAccVM.isSaveEnabled.collectAsStateWithLifecycle()
+            val fabState = FabState(
+                icon = Icons.Default.Save,
+                color = null,
+                isEnabled = isSaveEnabled,
+                onclick = createAccVM::onEnableSaveDialog
+            )
+            setFabState(fabState)
+            CreateAccountScreen(
+                innerPadding = innerPadding,
+                viewModel = createAccVM,
+                navController = navController,
+                snackFunction = snackFunction
+            )
+        }
         composable("AccountListScreen"){
             val accountListViewModel: AccountListViewModel = viewModel(
                 factory = remember { appGraph.accountListFactory },
                 viewModelStoreOwner = context
             )
-            setFabState(null)
+            val fabState = FabState(
+                icon = Icons.Default.Add,
+                color = null,
+                onclick = { navController.navigate("CreateAccountScreen")}
+            )
+            setFabState(fabState)
             AccountListScreen(
                 innerPadding = innerPadding,
                 navController = navController,
