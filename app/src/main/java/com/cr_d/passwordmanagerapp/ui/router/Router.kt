@@ -18,6 +18,8 @@ import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailScree
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.applications.detail.ApplicationDetailScreen
+import com.cr_d.passwordmanagerapp.ui.screens.applications.detail.ApplicationDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordScreen
@@ -129,6 +131,21 @@ fun Router(
                 innerPadding = innerPadding,
                 navController = navController,
                 viewModel = appListViewModel
+            )
+        }
+        composable("ApplicationDetailScreen/{appId}", arguments = listOf(navArgument("appId") {
+            type = NavType.LongType
+        })) { backstackEntry ->
+            val appId = backstackEntry.arguments?.getLong("appId") ?: 1
+            val appDetailVM: ApplicationDetailViewModel = viewModel(
+                factory = remember { appGraph.applicationDetailFactory(appId)}
+            )
+            ApplicationDetailScreen(
+                innerPadding = innerPadding,
+                context = context,
+                snackFunction = snackFunction,
+                viewModel = appDetailVM,
+                navController = navController
             )
         }
     }

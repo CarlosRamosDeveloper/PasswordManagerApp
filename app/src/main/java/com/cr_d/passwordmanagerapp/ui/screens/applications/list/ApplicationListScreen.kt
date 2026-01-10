@@ -93,7 +93,7 @@ fun ApplicationCard(application: ApplicationUiState, navController: NavControlle
                 contentDescription = "",
                 modifier = Modifier
                     .clickable(
-                        onClick = { /*navController.navigate("PasswordDataScreen/${password.id}")*/ }
+                        onClick = { navController.navigate("ApplicationDetailScreen/${application.id}") }
                     )
                     .size(50.dp)
             )

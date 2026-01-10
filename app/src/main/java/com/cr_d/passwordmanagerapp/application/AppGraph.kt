@@ -33,10 +33,12 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.AnalyzePa
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.GetAllAccountsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GetAllPasswordDetailUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.ObtainAccountDetailInfoUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.ApplicationParseToUiUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.GetAllApplicationsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.ObtainApplicationDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.applications.detail.ApplicationDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
@@ -140,6 +142,7 @@ class AppGraph(
     }
 
     // Application UseCases
+    private val applicationParseToUiUseCase by lazy { ApplicationParseToUiUseCase(applicationRepository,obtainApplicationDetailInfoUseCase) }
     private val getAllApplicationsUseCase by lazy {
         GetAllApplicationsUseCase(
             repository = applicationRepository,
@@ -214,4 +217,8 @@ class AppGraph(
         accountParseToUiUseCase = accountParseToUiUseCase
     )
     val applicationListFactory by lazy { ApplicationListViewModelFactory(getAllApplicationsUseCase) }
+    fun applicationDetailFactory (appId: Long) = ApplicationDetailViewModelFactory(
+        appId = appId,
+        parser = applicationParseToUiUseCase
+    )
 }
