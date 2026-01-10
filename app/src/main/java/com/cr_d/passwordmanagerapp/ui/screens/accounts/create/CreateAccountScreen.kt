@@ -1,6 +1,5 @@
 package com.cr_d.passwordmanagerapp.ui.screens.accounts.create
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize

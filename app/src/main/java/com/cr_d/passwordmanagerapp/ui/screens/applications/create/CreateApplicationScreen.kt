@@ -1,6 +1,5 @@
 package com.cr_d.passwordmanagerapp.ui.screens.applications.create
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,6 @@ fun CreateApplicationScreen (
     innerPadding: PaddingValues,
     viewModel: CreateApplicationViewModel,
     navController: NavController,
-    context: Context,
     snackFunction: (String)-> Unit
 ){
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
