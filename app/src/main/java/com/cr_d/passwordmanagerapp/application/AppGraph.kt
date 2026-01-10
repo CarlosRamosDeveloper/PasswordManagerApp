@@ -2,6 +2,8 @@ package com.cr_d.passwordmanagerapp.application
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlin.getValue
 
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
@@ -68,6 +70,12 @@ class AppGraph(
             AppDatabase::class.java,
             "password-database"
         )
+            .addCallback(object: RoomDatabase.Callback(){
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    super.onOpen(db)
+                    db.execSQL("PRAGMA foreign_keys=ON;")
+                }
+            })
             .fallbackToDestructiveMigration(true)
             .build()
     }
