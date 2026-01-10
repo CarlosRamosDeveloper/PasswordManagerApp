@@ -29,5 +29,4 @@
 
 ## Actual
 
-- [1] Agregar pantallas de aplicaciones 
-- [2] Cambiar el navBar a Aplicaciones -> Contraseñas -> Cuentas
+- [1] Agregar pantalla de detalle de aplicación
