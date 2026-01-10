@@ -17,6 +17,6 @@ class AccountParseToUiUseCase (
         val decipheredAccount = decrypt(account.cipheredAccount)
         val decipheredNotes = decrypt(account.cipheredNotes)
 
-        return account.toDetail(extraData).toUiState(decipheredAccount)
+        return account.toDetail(extraData).toUiState(decipheredAccount, decipheredNotes)
     }
 }

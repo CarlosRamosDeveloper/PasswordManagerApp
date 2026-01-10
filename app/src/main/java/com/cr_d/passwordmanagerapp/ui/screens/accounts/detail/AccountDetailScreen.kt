@@ -43,12 +43,11 @@ fun AccountDetailCard(
 ){
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
 
-    Log.d("AccountDetail", "Card ${state.account}")
     if (state.account != null) {
         InfoCard {
             CardTitle(state.account.account)
         }
-        NotesSection("asd")
+        NotesSection(state.account.notes)
         PasswordSection(state.account.totalApplications)
     } else {
         CircularProgressIndicator()

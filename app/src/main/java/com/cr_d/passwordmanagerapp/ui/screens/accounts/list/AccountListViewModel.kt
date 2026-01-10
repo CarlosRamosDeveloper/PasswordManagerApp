@@ -39,9 +39,9 @@ class AccountListViewModel(
     }
 
     suspend fun loadAccounts(){
-
+        //TODO: Implementar UC
         val parsedAccounts = getAllAccountsUseCase().map{
-            it.toUiState(decrypt(it.cipheredAccount))
+            it.toUiState(decrypt(it.cipheredAccount), decrypt(it.cipheredNotes))
         }
 
         _uiState.update {

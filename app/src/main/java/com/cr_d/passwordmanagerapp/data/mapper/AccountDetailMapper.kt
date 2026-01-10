@@ -10,11 +10,11 @@ fun AccountDetail.toDomain(): Account = Account(
     cipheredNotes = cipheredNotes
 )
 
-fun AccountDetail.toUiState(decipheredAccount: String): AccountUiState {
+fun AccountDetail.toUiState(decipheredAccount: String, decipheredNotes: String): AccountUiState {
     return AccountUiState(
         id = id,
         account = decipheredAccount,
-        cipheredNotes = cipheredNotes,
+        notes = decipheredNotes,
         totalApplications = totalApplications
     )
 }
