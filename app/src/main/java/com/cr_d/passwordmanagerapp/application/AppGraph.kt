@@ -185,5 +185,7 @@ class AppGraph(
     fun accountDetailFactory (accountId: Long) = AccountDetailViewModelFactory(
         accountId = accountId,
         repository = accountRepository,
+        obtainAccountDetailUseCase = obtainAccountDetailInfoUseCase,
+        decryptStringUseCase = decryptStringUseCase
     )
 }
