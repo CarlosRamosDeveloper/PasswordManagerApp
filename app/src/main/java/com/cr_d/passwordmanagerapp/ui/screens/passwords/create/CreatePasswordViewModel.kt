@@ -3,6 +3,7 @@ package com.cr_d.passwordmanagerapp.ui.screens.passwords.create
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cr_d.passwordmanagerapp.data.dto.PasswordCreationData
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.CalculateSecurityScoreUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +14,6 @@ import kotlinx.coroutines.launch
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
-import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.ui.model.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
@@ -23,7 +23,6 @@ class CreatePasswordViewModel(
     val scoreCalculator: CalculateSecurityScoreUseCase,
     val savePasswordUseCase: SavePasswordUseCase
 ): ViewModel() {
-
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
@@ -179,14 +178,15 @@ class CreatePasswordViewModel(
 
     fun savePassword(password: String){
         viewModelScope.launch {
-            val passwordData = _uiState.value.password
-            val appInfo = ApplicationInfo(
-                passwordData.appInfo.appName,
-                passwordData.appInfo.appUrl,
-                passwordData.appInfo.appAccount
+            //TODO: Fix
+            val data = PasswordCreationData(
+                password = password,
+                appId = 1,
+                accId = 1,
+                notes = ""
             )
             try {
-                savePasswordUseCase.invoke(password, appInfo, passwordData.score, passwordData.notes)
+                savePasswordUseCase.invoke(data)
                 resetStatus()
             } catch (e: Exception){
                 _uiState.update {

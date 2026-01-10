@@ -110,8 +110,6 @@ class AppGraph(
         SavePasswordUseCase(
             repository = passwordRepository,
             encrypt = encryptStringUseCase,
-            analyzer = analyzePasswordUseCase,
-            scoreCalculator = calculateSecurityScoreUseCase
         )
     }
     private val updatePasswordUseCase by lazy {
