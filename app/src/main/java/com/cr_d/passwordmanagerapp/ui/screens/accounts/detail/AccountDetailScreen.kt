@@ -1,10 +1,11 @@
 package com.cr_d.passwordmanagerapp.ui.screens.accounts.detail
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import androidx.navigation.NavController
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
 import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
+import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 
 @Composable
 fun AccountDetailScreen(
@@ -48,7 +50,7 @@ fun AccountDetailCard(
             CardTitle(state.account.account)
         }
         NotesSection(state.account.notes)
-        PasswordSection(state.account.totalApplications)
+        PasswordSection(state.account.passwords)
     } else {
         CircularProgressIndicator()
     }
@@ -63,13 +65,22 @@ fun NotesSection(notes: String){
 }
 
 @Composable
-fun PasswordSection(totalPasswords: Int){
+fun PasswordSection(passwords: List<PasswordUiState>){
     InfoCard {
         SectionTitle("Passwords")
-        if(totalPasswords==0){
+        if(passwords.count()==0){
             Text("Esta cuenta no tiene contraseñas asociadas")
         } else {
-            Text("Esta cuenta tiene $totalPasswords contraseñas asociadas")
+            LazyColumn {
+                items(passwords) { pwd ->
+                    PasswordCard(pwd)
+                }
+            }
         }
     }
+}
+
+@Composable
+fun PasswordCard(password: PasswordUiState){
+    Text("Aplicación: ${password.appInfo.appName}")
 }

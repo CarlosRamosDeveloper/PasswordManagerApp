@@ -53,10 +53,10 @@ fun AccountListScreen(innerPadding: PaddingValues, navController: NavController,
 fun AccountCard(account: AccountUiState, navController: NavController){
     val verticalPadding = 10.dp
     val horizontalPadding = 20.dp
-    val totalMessage: String = when (account.totalApplications) {
+    val totalMessage: String = when (account.passwords.count()) {
         0 -> "No utilizado en ninguna aplicación"
         1 -> "Usado en 1 aplicación"
-        else -> "Usado en un total de ${account.totalApplications} aplicaciones"
+        else -> "Usado en un total de ${account.passwords.count()} aplicaciones"
     }
 
     Row (modifier = Modifier

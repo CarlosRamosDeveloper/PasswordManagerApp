@@ -122,12 +122,11 @@ class AppGraph(
 
     // Account UseCases
     private val getAllAccountsUseCase by lazy { GetAllAccountsUseCase(accountRepository, obtainAccountDetailInfoUseCase) }
-    private val obtainAccountDetailInfoUseCase by lazy { ObtainAccountDetailInfoUseCase(passwordRepository) }
+    private val obtainAccountDetailInfoUseCase by lazy { ObtainAccountDetailInfoUseCase(passwordRepository, decryptStringUseCase, obtainPasswordDetailInfoUseCase) }
     private val accountParseToUiUseCase by lazy {
         AccountParseToUiUseCase(
             repository = accountRepository,
             obtainData = obtainAccountDetailInfoUseCase,
-            decrypt = decryptStringUseCase
         )
     }
 
@@ -159,7 +158,6 @@ class AppGraph(
             applicationRepository
         )
     }
-
     val mainScreenFactory by lazy {
         MainScreenViewModelFactory(
             dialogManager = mainDialogManagerComponent,
@@ -188,8 +186,7 @@ class AppGraph(
         editManager = editManagerComponent,
         uiManager = passwordUiManagerComponent
     )
-
-    val accountListFactory by lazy { AccountListViewModelFactory(getAllAccountsUseCase, decryptStringUseCase) }
+    val accountListFactory by lazy { AccountListViewModelFactory(getAllAccountsUseCase) }
     fun accountDetailFactory (accountId: Long) = AccountDetailViewModelFactory(
         accountId = accountId,
         accountParseToUiUseCase = accountParseToUiUseCase

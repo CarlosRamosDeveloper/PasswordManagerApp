@@ -9,14 +9,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import com.cr_d.passwordmanagerapp.data.mapper.toUiState
-import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.DecryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.GetAllAccountsUseCase
 import com.cr_d.passwordmanagerapp.ui.model.AccountUiState
 
 class AccountListViewModel(
     private val getAllAccountsUseCase: GetAllAccountsUseCase,
-    private val decrypt: DecryptStringUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -39,10 +36,7 @@ class AccountListViewModel(
     }
 
     suspend fun loadAccounts(){
-        //TODO: Implementar UC
-        val parsedAccounts = getAllAccountsUseCase().map{
-            it.toUiState(decrypt(it.cipheredAccount), decrypt(it.cipheredNotes))
-        }
+        val parsedAccounts = getAllAccountsUseCase()
 
         _uiState.update {
             it.copy(

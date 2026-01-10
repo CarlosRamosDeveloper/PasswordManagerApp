@@ -1,6 +1,7 @@
 package com.cr_d.passwordmanagerapp.data.mapper
 
 import com.cr_d.passwordmanagerapp.data.dto.AccountDetail
+import com.cr_d.passwordmanagerapp.data.dto.AccountDetailInfo
 import com.cr_d.passwordmanagerapp.domain.entities.Account
 import com.cr_d.passwordmanagerapp.ui.model.AccountUiState
 
@@ -10,12 +11,12 @@ fun AccountDetail.toDomain(): Account = Account(
     cipheredNotes = cipheredNotes
 )
 
-fun AccountDetail.toUiState(decipheredAccount: String, decipheredNotes: String): AccountUiState {
+fun AccountDetail.toUiState(extraInfo: AccountDetailInfo): AccountUiState {
     return AccountUiState(
         id = id,
-        account = decipheredAccount,
-        notes = decipheredNotes,
-        totalApplications = totalApplications
+        account = extraInfo.decipheredAccount,
+        notes = extraInfo.decipheredNotes,
+        passwords = extraInfo.passwords
     )
 }
 

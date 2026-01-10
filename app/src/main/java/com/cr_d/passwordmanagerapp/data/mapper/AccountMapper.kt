@@ -17,5 +17,5 @@ fun Account.toDetail(extraInfo: AccountDetailInfo): AccountDetail = AccountDetai
     id = id,
     cipheredAccount = cipheredAccount,
     cipheredNotes = cipheredNotes,
-    totalApplications = extraInfo.totalApplications
+    passwords = extraInfo.passwords
 )
