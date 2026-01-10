@@ -192,7 +192,6 @@ fun Router(
                 innerPadding = innerPadding,
                 viewModel = createAppVM,
                 navController = navController,
-                context = context,
                 snackFunction = snackFunction
             )
         }
