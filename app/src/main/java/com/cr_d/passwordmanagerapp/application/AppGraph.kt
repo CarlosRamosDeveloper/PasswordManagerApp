@@ -27,6 +27,7 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.UpdateNot
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.UpdatePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.services.PasswordGenerator
 import com.cr_d.passwordmanagerapp.domain.services.SecurityScoreCalculator
+import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.AccountParseToUiUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.AnalyzePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.GetAllAccountsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GetAllPasswordDetailUseCase
@@ -122,6 +123,13 @@ class AppGraph(
     // Account UseCases
     private val getAllAccountsUseCase by lazy { GetAllAccountsUseCase(accountRepository, obtainAccountDetailInfoUseCase) }
     private val obtainAccountDetailInfoUseCase by lazy { ObtainAccountDetailInfoUseCase(passwordRepository) }
+    private val accountParseToUiUseCase by lazy {
+        AccountParseToUiUseCase(
+            repository = accountRepository,
+            obtainData = obtainAccountDetailInfoUseCase,
+            decrypt = decryptStringUseCase
+        )
+    }
 
     // Crypto UseCases
     private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }
@@ -184,8 +192,6 @@ class AppGraph(
     val accountListFactory by lazy { AccountListViewModelFactory(getAllAccountsUseCase, decryptStringUseCase) }
     fun accountDetailFactory (accountId: Long) = AccountDetailViewModelFactory(
         accountId = accountId,
-        repository = accountRepository,
-        obtainAccountDetailUseCase = obtainAccountDetailInfoUseCase,
-        decryptStringUseCase = decryptStringUseCase
+        accountParseToUiUseCase = accountParseToUiUseCase
     )
 }
