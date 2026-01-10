@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
+import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.NotesSection
 
@@ -58,9 +59,12 @@ fun ApplicationDetailCard(
 
 @Composable
 fun AccountsSection(passwords: List<PasswordUiState>){
-    LazyColumn {
-        items(passwords) { pwd ->
-            AccountItem(pwd)
+    InfoCard {
+        SectionTitle("Cuentas asociadas")
+        LazyColumn {
+            items(passwords) { pwd ->
+                AccountItem(pwd)
+            }
         }
     }
 }
@@ -68,6 +72,6 @@ fun AccountsSection(passwords: List<PasswordUiState>){
 @Composable
 fun AccountItem(password: PasswordUiState){
     InfoCard {
-        Text("Cuenta: ${password.appInfo.appAccount}")
+        Text(password.appInfo.appAccount)
     }
 }

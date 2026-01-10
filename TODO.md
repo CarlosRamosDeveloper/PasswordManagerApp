@@ -29,8 +29,9 @@
 
 ## Actual
 
-- [1] Fix error -> 
-  - La pantalla de detalle de aplicación muestra datos incorrectos cuando una cuenta tiene más de una contraseña asociada
-- [2] Agregar el FAB de App list -> Crear Aplicación
-- [3] Agregar el FAB de Acc list -> Crear Cuenta
-- [4] Agregar el FAB de Pwd list -> Crear contraseña
+- [2] Agregar la creación de aplicaciones
+- [3] Agregar el borrado de aplicaciones
+- [4] Agregar la creación de cuentas
+- [5] Agregar el borrado de cuentas
+- [6] Integrar la creación de contraseñas completa
+- [7] Implementar el borrado en cascada

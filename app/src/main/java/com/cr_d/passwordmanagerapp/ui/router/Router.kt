@@ -3,6 +3,9 @@ package com.cr_d.passwordmanagerapp.ui.router
 import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -14,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 import com.cr_d.passwordmanagerapp.application.AppGraph
+import com.cr_d.passwordmanagerapp.ui.model.FabState
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailScreen
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListScreen
@@ -39,7 +43,8 @@ fun Router(
     innerPadding: PaddingValues,
     navController: NavHostController,
     snackFunction: (String)-> Unit,
-    appGraph: AppGraph
+    appGraph: AppGraph,
+    setFabState: (FabState?) -> Unit
 ){
     val context = LocalContext.current
     val settingsViewModel: SettingsViewModel = viewModel(context as ComponentActivity )
@@ -50,6 +55,7 @@ fun Router(
                 factory = remember { appGraph.mainScreenFactory },
                 viewModelStoreOwner = context
             )
+            setFabState(null)
             MainScreen(innerPadding, mainViewModel, navController)
         }
         composable("CreatePasswordScreen") {
@@ -57,6 +63,7 @@ fun Router(
                 factory = remember { appGraph.createPasswordFactory },
                 viewModelStoreOwner = context,
             )
+            setFabState(null)
             CreatePasswordScreen(
                 innerPadding = innerPadding,
                 viewModel = createPasswordViewModel,
@@ -69,6 +76,13 @@ fun Router(
                 factory = remember { appGraph.listPasswordFactory },
                 viewModelStoreOwner = context
             )
+            val fabState = FabState(
+                icon = Icons.Default.Add,
+                color = null,
+                onclick = { navController.navigate("CreatePasswordScreen") }
+            )
+            setFabState(fabState)
+
             PasswordsListScreen(
                 innerPadding = innerPadding,
                 navController = navController,
@@ -82,6 +96,13 @@ fun Router(
             val passwordDetailVM:PasswordDetailViewModel = viewModel(
                 factory = appGraph.detailPasswordFactory(passwordId)
             )
+            val fabState = FabState(
+                icon = Icons.Default.Delete,
+                color = null,
+                onclick = passwordDetailVM::onEnableDeletePasswordDialog
+            )
+            setFabState(fabState)
+
             PasswordDetailScreen(
                 innerPadding = innerPadding,
                 context = context,
@@ -92,6 +113,7 @@ fun Router(
             )
         }
         composable("SettingsScreen"){
+            setFabState(null)
             SettingsScreen(innerPadding, settingsViewModel)
         }
 
@@ -100,7 +122,7 @@ fun Router(
                 factory = remember { appGraph.accountListFactory },
                 viewModelStoreOwner = context
             )
-
+            setFabState(null)
             AccountListScreen(
                 innerPadding = innerPadding,
                 navController = navController,
@@ -114,6 +136,7 @@ fun Router(
             val accountDetailVM: AccountDetailViewModel = viewModel(
                 factory = remember { appGraph.accountDetailFactory(accountId) }
             )
+            setFabState(null)
             AccountDetailScreen(
                 innerPadding = innerPadding,
                 context = context,
@@ -127,6 +150,7 @@ fun Router(
                 factory = remember { appGraph.applicationListFactory },
                 viewModelStoreOwner = context
             )
+            setFabState(null)
             ApplicationListScreen(
                 innerPadding = innerPadding,
                 navController = navController,
@@ -140,6 +164,7 @@ fun Router(
             val appDetailVM: ApplicationDetailViewModel = viewModel(
                 factory = remember { appGraph.applicationDetailFactory(appId)}
             )
+            setFabState(null)
             ApplicationDetailScreen(
                 innerPadding = innerPadding,
                 context = context,
