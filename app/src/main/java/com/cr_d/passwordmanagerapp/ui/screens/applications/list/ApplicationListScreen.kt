@@ -64,7 +64,7 @@ fun ApplicationCard(application: ApplicationUiState, navController: NavControlle
             contentAlignment = Alignment.Center
         ) {
             Text(
-                application.applicationName.first().uppercaseChar().toString(),
+                application.passwords.count().toString(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 45.sp,
                 color = Color.Black,
