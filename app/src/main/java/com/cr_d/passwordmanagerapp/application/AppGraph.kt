@@ -18,6 +18,7 @@ import com.cr_d.passwordmanagerapp.data.repository.interfaces.IPasswordRepositor
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomAccountRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomApplicationRepository
 import com.cr_d.passwordmanagerapp.data.repository.room.RoomPasswordRepository
+import com.cr_d.passwordmanagerapp.domain.services.HashService
 import com.cr_d.passwordmanagerapp.domain.services.PasswordAnalyzer
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.DecryptStringUseCase
@@ -88,7 +89,7 @@ class AppGraph(
     // Repositories
     //private val inMemoryPasswordRepository by lazy { InMemoryPasswordRepository(obtainPasswordDetailInfoUseCase) }
     private val passwordRepository: IPasswordRepository by lazy { RoomPasswordRepository(passwordDao) }
-    private val accountRepository: IAccountRepository by lazy { RoomAccountRepository(accountDao) }
+    private val accountRepository: IAccountRepository by lazy { RoomAccountRepository(accountDao, hashService, decryptStringUseCase) }
     private val applicationRepository: IApplicationRepository by lazy { RoomApplicationRepository(applicationDao) }
 
     // Core
@@ -101,6 +102,7 @@ class AppGraph(
         )
     }
     private val cryptoService by lazy { CryptoService() }
+    private val hashService by lazy { HashService() }
 
     // Password UseCases
     private val analyzePasswordUseCase by lazy { AnalyzePasswordUseCase(passwordAnalyzer) }
@@ -145,14 +147,25 @@ class AppGraph(
             getInfo = obtainAccountDetailInfoUseCase
         )
     }
-    private val obtainAccountDetailInfoUseCase by lazy { ObtainAccountDetailInfoUseCase(passwordRepository, decryptStringUseCase, obtainPasswordDetailInfoUseCase) }
+    private val obtainAccountDetailInfoUseCase by lazy {
+        ObtainAccountDetailInfoUseCase(
+            passwordRepository = passwordRepository,
+            decrypt = decryptStringUseCase,
+            obtainData = obtainPasswordDetailInfoUseCase
+        )
+    }
     private val accountParseToUiUseCase by lazy {
         AccountParseToUiUseCase(
             repository = accountRepository,
             obtainData = obtainAccountDetailInfoUseCase,
         )
     }
-    private val saveAccountUseCase by lazy { SaveAccountUseCase(accountRepository, encryptStringUseCase) }
+    private val saveAccountUseCase by lazy {
+        SaveAccountUseCase(
+            repository = accountRepository,
+            encrypt = encryptStringUseCase,
+        )
+    }
     private val deleteAccountUseCase by lazy { DeleteAccountUseCase(accountRepository) }
 
     // Application UseCases
@@ -174,7 +187,7 @@ class AppGraph(
     ) }
     private val deleteApplicationUseCase by lazy { DeleteApplicationUseCase(applicationRepository)}
 
-    // Crypto UseCases
+    // Securitu UseCases
     private val encryptStringUseCase by lazy { EncryptStringUseCase(cryptoService) }
     private val decryptStringUseCase by lazy { DecryptStringUseCase(cryptoService) }
 
@@ -216,7 +229,10 @@ class AppGraph(
             scoreCalculator = calculateSecurityScoreUseCase,
             savePasswordUseCase = createPasswordUseCase,
             saveApplicationUseCase = saveApplicationUseCase,
-            appRepository = applicationRepository
+            applicationRepository = applicationRepository,
+            accountRepository = accountRepository,
+            saveAccountUseCase = saveAccountUseCase,
+            hashService = hashService
         )
     }
     val listPasswordFactory by lazy { PasswordListViewModelFactory(getAllPasswordDetailUseCase) }

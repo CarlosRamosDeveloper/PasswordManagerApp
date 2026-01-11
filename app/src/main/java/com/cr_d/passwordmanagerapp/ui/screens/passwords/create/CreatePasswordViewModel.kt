@@ -12,12 +12,16 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
+import com.cr_d.passwordmanagerapp.data.dto.AccountCreationData
 import com.cr_d.passwordmanagerapp.data.dto.PasswordCreationData
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IAccountRepository
 import com.cr_d.passwordmanagerapp.data.repository.interfaces.IApplicationRepository
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GeneratePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
+import com.cr_d.passwordmanagerapp.domain.services.HashService
+import com.cr_d.passwordmanagerapp.domain.use_cases.account_use_cases.SaveAccountUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.SaveApplicationUseCase
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.ui.model.ApplicationUiState
@@ -29,7 +33,10 @@ class CreatePasswordViewModel(
     val scoreCalculator: CalculateSecurityScoreUseCase,
     val savePasswordUseCase: SavePasswordUseCase,
     val saveApplicationUseCase: SaveApplicationUseCase,
-    val appRepository: IApplicationRepository
+    val appRepository: IApplicationRepository,
+    val accRepository: IAccountRepository,
+    val saveAccountUseCase: SaveAccountUseCase,
+    val hash: HashService
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -244,17 +251,6 @@ class CreatePasswordViewModel(
             )
         }
     }
-    fun onAppNameChanged(value: String){
-        _uiState.update {
-            it.copy(
-                password = it.password.copy(
-                    appInfo = it.password.appInfo.copy(
-                        appName = value
-                    )
-                )
-            )
-        }
-    }
 
     fun onAccountNameChanged(value: String){
         _uiState.update {
@@ -318,16 +314,17 @@ class CreatePasswordViewModel(
         }
     }
 
-    fun clearPassword(){
-        resetStatus()
-    }
-
     fun savePassword(){
         viewModelScope.launch {
-            //TODO: Fix
-
-            //TODO: Buscar cuenta por nombre, si no, guardar cuenta
-            //TODO: Buscar aplicación por nombre, si no, guardar aplicación
+            val hash = hash.convertToSha256(_uiState.value.accountName)
+            var acc = accRepository.findByHash(hash)
+            if (acc==null) {
+                val data = AccountCreationData(
+                    account = _uiState.value.accountName,
+                    notes = _uiState.value.accountNotes
+                )
+                acc = saveAccountUseCase(data)
+            }
             var app = appRepository.findByName(_uiState.value.appName)
             if (app==null) {
                 val data = ApplicationUiState(
@@ -340,7 +337,7 @@ class CreatePasswordViewModel(
             val data = PasswordCreationData(
                 password = _uiState.value.plainPassword,
                 appId = app.id,
-                accId = 1,
+                accId = acc.id,
                 notes = _uiState.value.passwordNotes
             )
             try {

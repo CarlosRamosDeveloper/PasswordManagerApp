@@ -5,12 +5,13 @@ import com.cr_d.passwordmanagerapp.data.dto.AccountDetailInfo
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.domain.entities.Account
 
-fun Account.toEntity(): AccountEntity = AccountEntity (
+fun Account.toEntity(hash: String): AccountEntity = AccountEntity (
     id = id,
     cipheredAccount = cipheredAccount.encryptedText,
     accountIv = cipheredAccount.iv,
     cipheredNotes = cipheredNotes.encryptedText,
-    notesIv = cipheredNotes.iv
+    notesIv = cipheredNotes.iv,
+    accountHash = hash
 )
 
 fun Account.toDetail(extraInfo: AccountDetailInfo): AccountDetail = AccountDetail(

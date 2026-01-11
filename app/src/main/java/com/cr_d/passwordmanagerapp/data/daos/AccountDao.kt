@@ -17,8 +17,8 @@ interface AccountDao {
     suspend fun getAccountById(accountId: Long): AccountEntity?
 
     //TODO: Revisar
-    @Query("SELECT * FROM accounts where ciphered_account in (:accountName)")
-    suspend fun getAccountByName(accountName: String): AccountEntity?
+    @Query("SELECT * FROM accounts where account_hash in (:hash)")
+    suspend fun findByHash(hash: String): AccountEntity?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAccount(account: AccountEntity): Long

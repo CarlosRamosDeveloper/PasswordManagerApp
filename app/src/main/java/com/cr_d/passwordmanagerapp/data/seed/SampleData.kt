@@ -7,9 +7,11 @@ import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
+import com.cr_d.passwordmanagerapp.domain.services.HashService
 import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.EncryptStringUseCase
 
 val encrypt = EncryptStringUseCase(CryptoService())
+val hash = HashService()
 
 //TODO: FIX
 private fun fakePassword(
@@ -39,6 +41,7 @@ private fun fakeAccount(
     account: String,
     notes: String = ""
 ) : AccountEntity {
+    val accountHash = hash.convertToSha256(account)
     val account = encrypt(account)
     val notes = encrypt(notes)
 
@@ -46,7 +49,8 @@ private fun fakeAccount(
         cipheredAccount = account.encryptedText,
         accountIv = account.iv,
         cipheredNotes = notes.encryptedText,
-        notesIv = notes.iv
+        notesIv = notes.iv,
+        accountHash = accountHash
     )
 }
 

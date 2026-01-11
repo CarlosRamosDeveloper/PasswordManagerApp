@@ -7,17 +7,19 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.EncryptSt
 
 class SaveAccountUseCase (
     private val repository: IAccountRepository,
-    private val encrypt: EncryptStringUseCase
+    private val encrypt: EncryptStringUseCase,
 ) {
-    suspend operator fun invoke(data: AccountCreationData){
+    suspend operator fun invoke(data: AccountCreationData) : Account {
         val encryptedAccount = encrypt(data.account)
         val encryptedNotes = encrypt(data.notes)
         val account = Account(
             id = 0,
             cipheredAccount = encryptedAccount,
-            cipheredNotes = encryptedNotes
+            cipheredNotes = encryptedNotes,
         )
 
         repository.save(account)
+
+        return account
     }
 }
