@@ -15,6 +15,6 @@ fun AccountEntity.toDomain(): Account {
     return Account(
         id = id,
         cipheredAccount = cipheredAccount,
-        cipheredNotes = cipheredNotes
+        cipheredNotes = cipheredNotes,
     )
 }

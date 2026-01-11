@@ -8,7 +8,7 @@ import com.cr_d.passwordmanagerapp.ui.model.AccountUiState
 fun AccountDetail.toDomain(): Account = Account(
     id = id,
     cipheredAccount = cipheredAccount,
-    cipheredNotes = cipheredNotes
+    cipheredNotes = cipheredNotes,
 )
 
 fun AccountDetail.toUiState(extraInfo: AccountDetailInfo): AccountUiState {

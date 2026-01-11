@@ -16,6 +16,9 @@ interface AccountDao {
     @Query("SELECT * FROM accounts where id in (:accountId)")
     suspend fun getAccountById(accountId: Long): AccountEntity?
 
+    @Query("SELECT * FROM accounts where account_hash in (:hash)")
+    suspend fun findByHash(hash: String): AccountEntity?
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAccount(account: AccountEntity): Long
 

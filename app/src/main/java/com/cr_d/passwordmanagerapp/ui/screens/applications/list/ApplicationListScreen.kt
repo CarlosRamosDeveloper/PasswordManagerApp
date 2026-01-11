@@ -20,6 +20,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,11 +31,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.ui.model.ApplicationUiState
 
 @Composable
 fun ApplicationListScreen(innerPadding: PaddingValues, navController: NavController, viewModel: ApplicationListViewModel){
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        scope.launch {
+            viewModel.onRefresh()
+        }
+    }
+
     ApplicationCardList(innerPadding, navController, viewModel)
 }
 
@@ -64,7 +75,7 @@ fun ApplicationCard(application: ApplicationUiState, navController: NavControlle
             contentAlignment = Alignment.Center
         ) {
             Text(
-                application.applicationName.first().uppercaseChar().toString(),
+                application.passwords.count().toString(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 45.sp,
                 color = Color.Black,

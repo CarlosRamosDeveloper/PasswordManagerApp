@@ -1,8 +1,8 @@
 package com.cr_d.passwordmanagerapp.domain.value_objects
 
 data class PasswordMetadata(
-    val hasLowerCase: Boolean,
-    val hasUpperCase: Boolean,
-    val hasNumbers: Boolean,
-    val hasSpecials: Boolean,
+    val hasLowerCase: Boolean = false,
+    val hasUpperCase: Boolean = false,
+    val hasNumbers: Boolean = false,
+    val hasSpecials: Boolean = false,
 )

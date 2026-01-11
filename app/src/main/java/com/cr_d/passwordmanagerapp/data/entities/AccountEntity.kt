@@ -16,6 +16,8 @@ data class AccountEntity(
     val cipheredAccount: ByteArray,
     @ColumnInfo(name = "account_iv")
     val accountIv: ByteArray,
+    @ColumnInfo(name = "account_hash")
+    val accountHash: String,
     @ColumnInfo(name = "ciphered_notes")
     val cipheredNotes: ByteArray,
     @ColumnInfo(name = "notes_iv")

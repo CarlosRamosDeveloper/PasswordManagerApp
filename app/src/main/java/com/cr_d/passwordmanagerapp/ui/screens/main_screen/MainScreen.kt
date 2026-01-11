@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -108,7 +111,7 @@ fun PasswordSection(
     Row (Modifier
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-        MainCard("Contraseñas",totalStoredPasswords.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f), navController, "ShowPasswordScreen")
+        MainCard("Contraseñas",totalStoredPasswords.toString(), Icons.Filled.Password, modifier = Modifier.weight(0.45f), navController, "ShowPasswordScreen")
         MainCard("Avisos",totalWarnings.toString(), Icons.Default.Warning, modifier = Modifier.weight(0.45f), navController, "ShowPasswordScreen")
     }
 
@@ -125,7 +128,7 @@ fun AccountSection(
     Row (Modifier
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-        MainCard("Cuentas",totalStoredAccounts.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f), navController, "AccountListScreen")
+        MainCard("Cuentas",totalStoredAccounts.toString(), Icons.Filled.AccountCircle, modifier = Modifier.weight(0.45f), navController, "AccountListScreen")
         MainCard("Avisos","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f), navController, "AccountListScreen")
     }
 
@@ -142,7 +145,7 @@ fun ApplicationSection(
     Row (Modifier
         .fillMaxWidth()
         .padding(AppConfig.HORIZONTAL_FRAME_PADDING), horizontalArrangement = Arrangement.SpaceBetween){
-        MainCard("Aplicaciones",totalStoredApps.toString(), Icons.Default.Key, modifier = Modifier.weight(0.45f), navController, "ApplicationsListScreen")
+        MainCard("Aplicaciones",totalStoredApps.toString(), Icons.Filled.Apps, modifier = Modifier.weight(0.45f), navController, "ApplicationsListScreen")
         MainCard("Avisos","0", Icons.Default.Warning, modifier = Modifier.weight(0.45f), navController, "ApplicationsListScreen")
     }
 

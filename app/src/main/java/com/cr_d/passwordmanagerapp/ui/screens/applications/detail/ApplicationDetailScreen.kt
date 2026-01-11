@@ -1,7 +1,6 @@
 package com.cr_d.passwordmanagerapp.ui.screens.applications.detail
 
 import android.content.Context
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -15,21 +14,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
 import com.cr_d.passwordmanagerapp.ui.common_components.CardTitle
+import com.cr_d.passwordmanagerapp.ui.common_components.ConfirmDialog
 import com.cr_d.passwordmanagerapp.ui.common_components.InfoCard
+import com.cr_d.passwordmanagerapp.ui.common_components.SectionTitle
 import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.NotesSection
 
 @Composable
 fun ApplicationDetailScreen(
     innerPadding: PaddingValues,
-    context: Context,
     snackFunction: (String)-> Unit,
     viewModel: ApplicationDetailViewModel,
     navController: NavController
 ){
     Column (modifier = Modifier.padding(innerPadding)){
         ApplicationDetailCard(
-            context = context,
             snackFunction = snackFunction,
             viewModel = viewModel,
             navController = navController
@@ -39,7 +38,6 @@ fun ApplicationDetailScreen(
 
 @Composable
 fun ApplicationDetailCard(
-    context: Context,
     snackFunction: (String)-> Unit,
     viewModel: ApplicationDetailViewModel,
     navController: NavController
@@ -52,6 +50,19 @@ fun ApplicationDetailCard(
         }
         NotesSection(state.application.notes)
         AccountsSection(state.application.passwords)
+
+        if(state.isDeleteDialogShown) ConfirmDialog(
+            title = "Eliminar aplicación",
+            message = "Esto eliminará la aplicación de forma permanente",
+            confirmButtonText = "Eliminar aplicación",
+            onConfirm = {
+                viewModel.onDeleteApplication()
+                snackFunction("Aplicación eliminada satisfactoriamente")
+                navController.navigate("ApplicationsListScreen")
+            },
+            onDisable = viewModel::onDisableDeleteDialog,
+            onDismiss = viewModel::onDisableDeleteDialog
+        )
     } else {
         CircularProgressIndicator()
     }
@@ -59,9 +70,12 @@ fun ApplicationDetailCard(
 
 @Composable
 fun AccountsSection(passwords: List<PasswordUiState>){
-    LazyColumn {
-        items(passwords) { pwd ->
-            AccountItem(pwd)
+    InfoCard {
+        SectionTitle("Cuentas asociadas")
+        LazyColumn {
+            items(passwords) { pwd ->
+                AccountItem(pwd)
+            }
         }
     }
 }
@@ -69,6 +83,6 @@ fun AccountsSection(passwords: List<PasswordUiState>){
 @Composable
 fun AccountItem(password: PasswordUiState){
     InfoCard {
-        Text("Cuenta: ${password.appInfo.appAccount}")
+        Text(password.appInfo.appAccount)
     }
 }
