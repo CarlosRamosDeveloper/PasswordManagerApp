@@ -32,12 +32,14 @@ class RoomPasswordRepository (
         return dao.getPasswordById(id)?.toDomain()
     }
 
-    override suspend fun save(password: Password) {
+    override suspend fun save(password: Password) : Long {
         val existing = dao.findByAppIdAndAccountId(password.appId, password.accountId)
 
         if (existing == null) {
-            dao.insertPassword(password.toEntity())
+            return dao.insertPassword(password.toEntity())
         }
+
+        return dao.insertPassword(existing)
     }
 
     override suspend fun massSave(passwords: List<Password>) {

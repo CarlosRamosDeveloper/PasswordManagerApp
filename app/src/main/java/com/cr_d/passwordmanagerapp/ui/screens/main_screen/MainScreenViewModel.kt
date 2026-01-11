@@ -3,6 +3,7 @@ package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.MassSavePasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,7 +20,7 @@ class MainScreenViewModel (
     private val dialogManager: MainDialogManagerComponent,
     private val passwordManager: MainPasswordManagerComponent,
     private val accountManager: MainAccountManagerComponent,
-    private val appManager: MainApplicationManagerComponent
+    private val appManager: MainApplicationManagerComponent,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
 

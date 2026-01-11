@@ -19,8 +19,8 @@ class RoomApplicationRepository (private val dao: ApplicationDao): IApplicationR
         return dao.getApplicationByName(appName)?.toDomain()
     }
 
-    override suspend fun save(appData: Application) {
-        dao.insertApplication(appData.toEntity())
+    override suspend fun save(appData: Application): Long {
+        return dao.insertApplication(appData.toEntity())
     }
 
     override suspend fun massSave(applications: List<Application>) {
