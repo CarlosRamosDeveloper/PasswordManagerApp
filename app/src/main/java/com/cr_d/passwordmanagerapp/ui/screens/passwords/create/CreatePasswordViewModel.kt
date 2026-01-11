@@ -28,10 +28,17 @@ class CreatePasswordViewModel(
 
     data class UiState(
         val password: PasswordUiState = PasswordUiState(),
+        val plainPassword: String = "",
         val passwordLength: Int = PasswordPolicy.MIN_GENERATED_LENGTH,
         val passwordError: String = "",
         val generatedPassword: String = "",
-        val isCopyToDialogShown: Boolean = false
+        val isCopyToDialogShown: Boolean = false,
+        val isPasswordGenerationEnabled: Boolean = false,
+        val isAccountSectionEnabled: Boolean = false,
+        val isApplicationSectionEnabled: Boolean = false,
+        val passwordScore: Double = 0.0,
+        val accountName: String = "",
+        val accountNotes: String = ""
     )
 
     init{
@@ -81,28 +88,84 @@ class CreatePasswordViewModel(
         }
     }
 
+    fun onPlainPasswordChange(value: String) {
+        _uiState.update {
+            it.copy(
+                plainPassword = value,
+                passwordScore = scoreCalculator(_uiState.value.plainPassword)
+            )
+        }
+        if (_uiState.value.plainPassword.length >= PasswordPolicy.MIN_LENGTH) {
+            onEnableAccountSection()
+        } else {
+            onDisableAccountSection()
+        }
+    }
+
+    fun onPlainPasswordClear(){
+        _uiState.update {
+            it.copy(
+                plainPassword = "",
+                passwordScore = 0.0
+            )
+        }
+        onDisableAccountSection()
+        onDisableApplicationSection()
+    }
+
+    fun onEnablePasswordGeneration(){
+        _uiState.update {
+            it.copy(
+                isPasswordGenerationEnabled = true
+            )
+        }
+    }
+
+    fun onDisablePasswordGeneration(){
+        _uiState.update {
+            it.copy(
+                isPasswordGenerationEnabled = false
+            )
+        }
+    }
+
     fun onPasswordLengthChanged(value: Int) {
         _uiState.update {
             it.copy(passwordLength = value)
         }
     }
 
-    fun onEnableCopyToDialog(){
+    fun onEnableAccountSection(){
         _uiState.update {
             it.copy(
-                isCopyToDialogShown = true
+                isAccountSectionEnabled = true
             )
         }
     }
 
-    fun onDisableCopyToDialog(){
+    fun onDisableAccountSection(){
         _uiState.update {
             it.copy(
-                isCopyToDialogShown = false
+                isAccountSectionEnabled = false
             )
         }
     }
 
+    fun onEnableApplicationSection(){
+        _uiState.update {
+            it.copy(
+                isApplicationSectionEnabled = true
+            )
+        }
+    }
+
+    fun onDisableApplicationSection(){
+        _uiState.update {
+            it.copy(
+                isApplicationSectionEnabled = false
+            )
+        }
+    }
     fun onAppNameChanged(value: String){
         _uiState.update {
             it.copy(
@@ -139,6 +202,33 @@ class CreatePasswordViewModel(
         }
     }
 
+    fun onAccountNameChanged(value: String){
+        _uiState.update {
+            it.copy(
+                accountName = value
+            )
+        }
+        if (_uiState.value.accountName.length >= 3 ) onEnableApplicationSection()
+    }
+
+    fun onAccountNotesChanged(value: String){
+        _uiState.update {
+            it.copy(
+                accountNotes = value
+            )
+        }
+    }
+
+    fun onResetAccountData(){
+        _uiState.update {
+            it.copy(
+                accountName = "",
+                accountNotes = ""
+            )
+        }
+        onDisableApplicationSection()
+    }
+
     fun generatePassword() {
         val passwordDataGeneration = PasswordDataGeneration(
             _uiState.value.password.metadata.hasLowerCase,
@@ -154,6 +244,7 @@ class CreatePasswordViewModel(
                 it.copy(
                     generatedPassword = password,
                     passwordError = "",
+                    plainPassword = password,
                     password = it.password.copy(
                         score = scoreCalculator(password)
                     )
@@ -204,6 +295,7 @@ class CreatePasswordViewModel(
                 password = PasswordUiState(),
                 passwordLength = PasswordPolicy.MIN_GENERATED_LENGTH,
                 generatedPassword = "",
+                plainPassword = "",
                 passwordError = "",
             )
         }
