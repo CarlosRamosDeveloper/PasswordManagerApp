@@ -15,6 +15,7 @@ import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.M
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainApplicationManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainPasswordManagerComponent
+import kotlinx.coroutines.launch
 
 class MainScreenViewModel (
     private val dialogManager: MainDialogManagerComponent,
@@ -64,9 +65,37 @@ class MainScreenViewModel (
         onTotalAppsChange()
     }
 
+    fun onPopulatePasswordOrchestra(){
+        viewModelScope.launch {
+            onPopulatePasswords()
+            onRefresh()
+        }
+    }
+
+    fun onMassDeletePasswordOrchestra(){
+        viewModelScope.launch {
+            onMassDeletePasswords()
+            onRefresh()
+        }
+    }
+
+    fun onMassDeleteAccountOrchestra(){
+        viewModelScope.launch {
+            onMassDeleteAccounts()
+            onRefresh()
+        }
+    }
+
+    fun onMassDeleteApplicationOrchestra(){
+        viewModelScope.launch {
+            onMassDeleteApps()
+            onRefresh()
+        }
+    }
+
     // Passwords
     fun onTotalPasswordsChange() = passwordManager.onTotalPasswordsChange()
-    fun onPopulatePasswords() = passwordManager.onPopulatePasswords()
+    suspend fun onPopulatePasswords() = passwordManager.onPopulatePasswords()
     fun onMassDeletePasswords() = passwordManager.onMassDeletePasswords()
 
     // Accounts

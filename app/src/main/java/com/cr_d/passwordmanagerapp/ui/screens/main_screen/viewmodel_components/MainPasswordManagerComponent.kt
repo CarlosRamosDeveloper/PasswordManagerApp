@@ -33,11 +33,9 @@ class MainPasswordManagerComponent (
         }
     }
 
-    fun onPopulatePasswords(){
-        viewModelScope.launch {
-            massSave(SampleData.passwords)
-            onTotalPasswordsChange()
-        }
+    suspend fun onPopulatePasswords(){
+        massSave(SampleData.passwords)
+        onTotalPasswordsChange()
     }
 
     fun onMassDeletePasswords(){
