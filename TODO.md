@@ -29,5 +29,5 @@
 
 ## Actual
 
-- [1] Detectar y arreglar el por que en ocasiones hay que pulsar dos veces sobre el botón de guardar contraseñas
-- [2] Arreglar la inyección de sampleData
+- [1] Arreglar la inyección de sampleData
+- [2] Detectar y arreglar el por que en ocasiones hay que pulsar dos veces sobre el botón de guardar contraseñas
