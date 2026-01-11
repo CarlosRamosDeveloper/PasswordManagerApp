@@ -214,7 +214,9 @@ class AppGraph(
         CreatePasswordViewModelFactory(
             generatePasswordUseCase = generatePasswordUseCase,
             scoreCalculator = calculateSecurityScoreUseCase,
-            savePasswordUseCase = createPasswordUseCase
+            savePasswordUseCase = createPasswordUseCase,
+            accountRepository = accountRepository,
+            appRepository = applicationRepository
         )
     }
     val listPasswordFactory by lazy { PasswordListViewModelFactory(getAllPasswordDetailUseCase) }

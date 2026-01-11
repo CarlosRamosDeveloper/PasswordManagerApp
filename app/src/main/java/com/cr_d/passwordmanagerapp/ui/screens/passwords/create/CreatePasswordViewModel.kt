@@ -4,12 +4,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cr_d.passwordmanagerapp.data.dto.PasswordCreationData
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IAccountRepository
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IApplicationRepository
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.CalculateSecurityScoreUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GeneratePasswordUseCase
@@ -18,14 +23,23 @@ import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
 import com.cr_d.passwordmanagerapp.ui.model.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 
+
 class CreatePasswordViewModel(
     val generatePasswordUseCase: GeneratePasswordUseCase,
     val scoreCalculator: CalculateSecurityScoreUseCase,
-    val savePasswordUseCase: SavePasswordUseCase
+    val savePasswordUseCase: SavePasswordUseCase,
+    val accountRepository: IAccountRepository,
+    val appRepository: IApplicationRepository
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
+    val isSaveEnabled: StateFlow<Boolean> = _uiState.map {
+        it.appName.length >= 3
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(1_000),
+        false
+    )
     data class UiState(
         val password: PasswordUiState = PasswordUiState(),
         val plainPassword: String = "",
@@ -36,9 +50,14 @@ class CreatePasswordViewModel(
         val isPasswordGenerationEnabled: Boolean = false,
         val isAccountSectionEnabled: Boolean = false,
         val isApplicationSectionEnabled: Boolean = false,
+        val isSaveDialogEnabled: Boolean = false,
         val passwordScore: Double = 0.0,
         val accountName: String = "",
-        val accountNotes: String = ""
+        val accountNotes: String = "",
+        val passwordNotes: String = "",
+        val appName: String = "",
+        val appUrl: String = "",
+        val appNotes: String = ""
     )
 
     init{
@@ -106,11 +125,20 @@ class CreatePasswordViewModel(
         _uiState.update {
             it.copy(
                 plainPassword = "",
+                passwordNotes = "",
                 passwordScore = 0.0
             )
         }
         onDisableAccountSection()
         onDisableApplicationSection()
+    }
+
+    fun onPasswordNotesChange(value: String){
+        _uiState.update {
+            it.copy(
+                passwordNotes = value
+            )
+        }
     }
 
     fun onEnablePasswordGeneration(){
@@ -147,6 +175,56 @@ class CreatePasswordViewModel(
         _uiState.update {
             it.copy(
                 isAccountSectionEnabled = false
+            )
+        }
+    }
+
+    fun onAppNameChange(value: String) {
+        _uiState.update {
+            it.copy(
+                appName = value
+            )
+        }
+    }
+
+    fun onAppUrlChange(value: String) {
+        _uiState.update {
+            it.copy(
+                appUrl = value
+            )
+        }
+    }
+
+    fun onAppNotesChange(value: String) {
+        _uiState.update {
+            it.copy(
+                appNotes = value
+            )
+        }
+    }
+
+    fun onAppClear(){
+        _uiState.update {
+            it.copy(
+                appName = "",
+                appUrl = "",
+                appNotes = ""
+            )
+        }
+    }
+
+    fun onEnableSaveDialog(){
+        _uiState.update {
+            it.copy(
+                isSaveDialogEnabled = true
+            )
+        }
+    }
+
+    fun onDisableSaveDialog(){
+        _uiState.update {
+            it.copy(
+                isSaveDialogEnabled = false
             )
         }
     }
@@ -250,6 +328,7 @@ class CreatePasswordViewModel(
                     )
                 )
             }
+            onEnableAccountSection()
         } catch (e: Exception){
             _uiState.update {
                 it.copy(
@@ -267,11 +346,14 @@ class CreatePasswordViewModel(
         resetStatus()
     }
 
-    fun savePassword(password: String){
+    fun savePassword(){
         viewModelScope.launch {
             //TODO: Fix
+
+            //TODO: Buscar cuenta por nombre, si no, guardar cuenta
+            //TODO: Buscar aplicación por nombre, si no, guardar aplicación
             val data = PasswordCreationData(
-                password = password,
+                password = _uiState.value.plainPassword,
                 appId = 1,
                 accId = 1,
                 notes = ""
@@ -279,6 +361,7 @@ class CreatePasswordViewModel(
             try {
                 savePasswordUseCase.invoke(data)
                 resetStatus()
+                onDisableSaveDialog()
             } catch (e: Exception){
                 _uiState.update {
                     it.copy(

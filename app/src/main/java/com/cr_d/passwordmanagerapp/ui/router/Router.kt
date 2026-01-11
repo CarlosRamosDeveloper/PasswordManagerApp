@@ -70,7 +70,14 @@ fun Router(
                 factory = remember { appGraph.createPasswordFactory },
                 viewModelStoreOwner = context,
             )
-            setFabState(null)
+            val isSaveEnabled by createPasswordViewModel.isSaveEnabled.collectAsStateWithLifecycle()
+            val fabState = FabState(
+                icon = Icons.Default.Save,
+                color = null,
+                isEnabled = isSaveEnabled,
+                onclick = createPasswordViewModel::onEnableSaveDialog
+            )
+            setFabState(fabState)
             CreatePasswordScreen(
                 innerPadding = innerPadding,
                 viewModel = createPasswordViewModel,
