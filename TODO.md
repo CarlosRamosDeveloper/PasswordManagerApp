@@ -29,6 +29,6 @@
 
 ## Actual
 
-- [1] Habilitar la pantalla de generación de contraseñas -> FAB: MainScreen
-- [2] Detectar y arreglar el por que en ocasiones hay que pulsar dos veces sobre el botón de guardar contraseñas
-- [3] Arreglar la inyección de sampleData
+- [1] Detectar y arreglar el por que en ocasiones hay que pulsar dos veces sobre el botón de guardar contraseñas
+- [2] Arreglar la inyección de sampleData
+- [3] Cambiar los iconos donde sea necesario

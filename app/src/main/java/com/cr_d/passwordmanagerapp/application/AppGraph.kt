@@ -49,6 +49,7 @@ import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.applications.create.CreateApplicationViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.applications.detail.ApplicationDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListViewModelFactory
+import com.cr_d.passwordmanagerapp.ui.screens.generate.GeneratePasswordViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreenViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainApplicationManagerComponent
@@ -94,7 +95,7 @@ class AppGraph(
 
     // Core
     private val passwordAnalyzer by lazy { PasswordAnalyzer() }
-    private val generator by lazy { PasswordGenerator() }
+    private val passwordGenerator by lazy { PasswordGenerator() }
     private val scoreCalculator by lazy { SecurityScoreCalculator(analyzePasswordUseCase) }
     private val calculateSecurityScoreUseCase by lazy {
         CalculateSecurityScoreUseCase(
@@ -107,7 +108,7 @@ class AppGraph(
     // Password UseCases
     private val analyzePasswordUseCase by lazy { AnalyzePasswordUseCase(passwordAnalyzer) }
     private val getAllPasswordDetailUseCase by lazy { GetAllPasswordDetailUseCase(passwordRepository, obtainPasswordDetailInfoUseCase) }
-    private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(generator) }
+    private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(passwordGenerator) }
     private val createPasswordUseCase by lazy {
         SavePasswordUseCase(
             repository = passwordRepository,
@@ -262,4 +263,5 @@ class AppGraph(
         delete = deleteApplicationUseCase
     )
     val createAccountFactory by lazy { CreateAccountViewModelFactory(saveAccountUseCase) }
+    val generatePasswordFactory by lazy { GeneratePasswordViewModelFactory(passwordGenerator, calculateSecurityScoreUseCase) }
 }

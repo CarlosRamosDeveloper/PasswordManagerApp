@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +35,8 @@ import com.cr_d.passwordmanagerapp.ui.screens.applications.detail.ApplicationDet
 import com.cr_d.passwordmanagerapp.ui.screens.applications.detail.ApplicationDetailViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListScreen
 import com.cr_d.passwordmanagerapp.ui.screens.applications.list.ApplicationListViewModel
+import com.cr_d.passwordmanagerapp.ui.screens.generate.GeneratePasswordScreen
+import com.cr_d.passwordmanagerapp.ui.screens.generate.GeneratePasswordViewModel
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.create.CreatePasswordScreen
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.MainScreen
 import com.cr_d.passwordmanagerapp.ui.screens.passwords.detail.PasswordDetailScreen
@@ -62,8 +66,32 @@ fun Router(
                 factory = remember { appGraph.mainScreenFactory },
                 viewModelStoreOwner = context
             )
-            setFabState(null)
+            val fabState = FabState(
+                icon = Icons.Default.Password,
+                color = null,
+                onclick = { navController.navigate("GeneratePasswordScreen")}
+            )
+            setFabState(fabState)
             MainScreen(innerPadding, mainViewModel, navController)
+        }
+        composable("GeneratePasswordScreen"){
+            val generatePasswordVM: GeneratePasswordViewModel = viewModel(
+                factory = remember { appGraph.generatePasswordFactory }
+            )
+            val isGeneratePasswordEnabled by generatePasswordVM.isGeneratePasswordEnabled.collectAsStateWithLifecycle()
+            val fabState = FabState(
+                icon = Icons.Default.Key,
+                color = null,
+                isEnabled = isGeneratePasswordEnabled,
+                onclick = generatePasswordVM::generatePassword
+            )
+            setFabState(fabState)
+            GeneratePasswordScreen(
+                innerPadding = innerPadding,
+                viewModel = generatePasswordVM,
+                context = context,
+                snackFunction = snackFunction
+            )
         }
         composable("CreatePasswordScreen") {
             val createPasswordViewModel: CreatePasswordViewModel = viewModel(
