@@ -29,4 +29,5 @@
 
 ## Actual
 
-- [1] Integrar la creación de contraseñas completa
+- [1] Habilitar la pantalla de generación de contraseñas -> FAB: MainScreen
+- [2] Detectar y arreglar el por que en ocasiones hay que pulsar dos veces sobre el botón de guardar contraseñas
