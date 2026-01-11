@@ -96,7 +96,7 @@ fun AddAccountSection(accountName: String, accountNotes: String, viewModel: Crea
         CardTitle("Información de cuenta")
         CustomOutlinedTextField("Nombre de cuenta", accountName, viewModel::onAccountNameChanged)
         CustomOutlinedTextField("Notas", accountNotes, viewModel::onAccountNotesChanged)
-        CustomButton("Limpiar", viewModel::onResetAccountData)
+        CustomButton("Limpiar", viewModel::onAccountClear)
     }
 }
 

@@ -5,6 +5,7 @@ import com.cr_d.passwordmanagerapp.domain.entities.Application
 interface IApplicationRepository {
     suspend fun findAll(): List<Application>
     suspend fun findById(id: Long): Application?
+    suspend fun findByName(appName: String): Application?
     suspend fun save(appData: Application)
     suspend fun massSave(applications: List<Application>)
     suspend fun update(appData: Application)

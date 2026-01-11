@@ -16,6 +16,9 @@ interface ApplicationDao {
     @Query("SELECT * FROM applications where id in (:appId)")
     suspend fun getApplicationById(appId: Long): ApplicationEntity?
 
+    @Query("SELECT * FROM applications where app_name in (:appName)")
+    suspend fun getApplicationByName(appName: String): ApplicationEntity?
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertApplication(app: ApplicationEntity): Long
 

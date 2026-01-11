@@ -18,6 +18,10 @@ class RoomAccountRepository (
         return dao.getAccountById(id)?.toDomain()
     }
 
+//    override suspend fun findByName(accountName: String): Account? {
+//        return
+//    }
+
     override suspend fun save(account: Account) {
         dao.insertAccount(account.toEntity())
     }

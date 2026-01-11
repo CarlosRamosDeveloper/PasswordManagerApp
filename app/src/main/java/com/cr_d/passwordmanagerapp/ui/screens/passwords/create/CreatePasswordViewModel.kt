@@ -3,10 +3,6 @@ package com.cr_d.passwordmanagerapp.ui.screens.passwords.create
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cr_d.passwordmanagerapp.data.dto.PasswordCreationData
-import com.cr_d.passwordmanagerapp.data.repository.interfaces.IAccountRepository
-import com.cr_d.passwordmanagerapp.data.repository.interfaces.IApplicationRepository
-import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.CalculateSecurityScoreUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,19 +12,23 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.SavePasswordUseCase
+import com.cr_d.passwordmanagerapp.data.dto.PasswordCreationData
+import com.cr_d.passwordmanagerapp.data.repository.interfaces.IApplicationRepository
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.CalculateSecurityScoreUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.GeneratePasswordUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.SavePasswordUseCase
 import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
+import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.SaveApplicationUseCase
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordDataGeneration
+import com.cr_d.passwordmanagerapp.ui.model.ApplicationUiState
 import com.cr_d.passwordmanagerapp.ui.model.PasswordOption
 import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
-
 
 class CreatePasswordViewModel(
     val generatePasswordUseCase: GeneratePasswordUseCase,
     val scoreCalculator: CalculateSecurityScoreUseCase,
     val savePasswordUseCase: SavePasswordUseCase,
-    val accountRepository: IAccountRepository,
+    val saveApplicationUseCase: SaveApplicationUseCase,
     val appRepository: IApplicationRepository
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
@@ -256,30 +256,6 @@ class CreatePasswordViewModel(
         }
     }
 
-    fun onAppUrlChanged(value: String){
-        _uiState.update {
-            it.copy(
-                password = it.password.copy(
-                    appInfo = it.password.appInfo.copy(
-                        appUrl = value
-                    )
-                )
-            )
-        }
-    }
-
-    fun onAccountChanged(value: String){
-        _uiState.update {
-            it.copy(
-                password = it.password.copy(
-                    appInfo = it.password.appInfo.copy(
-                        appAccount = value
-                    )
-                )
-            )
-        }
-    }
-
     fun onAccountNameChanged(value: String){
         _uiState.update {
             it.copy(
@@ -297,7 +273,7 @@ class CreatePasswordViewModel(
         }
     }
 
-    fun onResetAccountData(){
+    fun onAccountClear(){
         _uiState.update {
             it.copy(
                 accountName = "",
@@ -352,11 +328,20 @@ class CreatePasswordViewModel(
 
             //TODO: Buscar cuenta por nombre, si no, guardar cuenta
             //TODO: Buscar aplicación por nombre, si no, guardar aplicación
+            var app = appRepository.findByName(_uiState.value.appName)
+            if (app==null) {
+                val data = ApplicationUiState(
+                    applicationName = _uiState.value.appName,
+                    applicationUrl = _uiState.value.appUrl,
+                    notes = _uiState.value.appNotes
+                )
+                app = saveApplicationUseCase(data)
+            }
             val data = PasswordCreationData(
                 password = _uiState.value.plainPassword,
-                appId = 1,
+                appId = app.id,
                 accId = 1,
-                notes = ""
+                notes = _uiState.value.passwordNotes
             )
             try {
                 savePasswordUseCase.invoke(data)
@@ -382,5 +367,8 @@ class CreatePasswordViewModel(
                 passwordError = "",
             )
         }
+        onPlainPasswordClear()
+        onAccountClear()
+        onAppClear()
     }
 }

@@ -215,7 +215,7 @@ class AppGraph(
             generatePasswordUseCase = generatePasswordUseCase,
             scoreCalculator = calculateSecurityScoreUseCase,
             savePasswordUseCase = createPasswordUseCase,
-            accountRepository = accountRepository,
+            saveApplicationUseCase = saveApplicationUseCase,
             appRepository = applicationRepository
         )
     }

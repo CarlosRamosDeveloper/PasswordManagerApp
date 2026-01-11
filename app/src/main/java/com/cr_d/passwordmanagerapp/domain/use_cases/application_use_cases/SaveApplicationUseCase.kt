@@ -10,7 +10,7 @@ class SaveApplicationUseCase(
     private val encrypt: EncryptStringUseCase
 ) {
     // TODO: Crear dto para la creación de apps
-    suspend operator fun invoke(app: ApplicationUiState){
+    suspend operator fun invoke(app: ApplicationUiState): Application{
         val encryptedNotes = encrypt(app.notes)
         val newApp = Application(
             id = 0,
@@ -20,5 +20,7 @@ class SaveApplicationUseCase(
         )
 
         repository.save(newApp)
+
+        return newApp
     }
 }
