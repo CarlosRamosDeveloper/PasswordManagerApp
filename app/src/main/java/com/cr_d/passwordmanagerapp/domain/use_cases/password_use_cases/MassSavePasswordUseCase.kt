@@ -10,6 +10,7 @@ class MassSavePasswordUseCase(
     private val encrypt: EncryptStringUseCase,
     private val passwordDao: PasswordDao
 ) {
+    // TODO: Refactorizar
     suspend operator fun invoke(passwords: List<PasswordUiState>) {
         passwords.forEach { pwd ->
             val normalizedAccount = pwd.appInfo.appAccount.trim().lowercase()

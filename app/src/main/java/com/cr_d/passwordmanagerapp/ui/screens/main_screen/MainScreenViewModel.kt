@@ -3,19 +3,18 @@ package com.cr_d.passwordmanagerapp.ui.screens.main_screen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.MassSavePasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.ui.model.MainConfirmDialogData
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainApplicationManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainDialogManagerComponent
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainPasswordManagerComponent
-import kotlinx.coroutines.launch
 
 class MainScreenViewModel (
     private val dialogManager: MainDialogManagerComponent,

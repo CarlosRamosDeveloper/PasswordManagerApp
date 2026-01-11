@@ -1,17 +1,12 @@
 package com.cr_d.passwordmanagerapp.data.seed
 
-import android.health.connect.datatypes.AppInfo
 import java.time.LocalDate
 
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity
-import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
-import com.cr_d.passwordmanagerapp.data.mapper.toDetail
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
-import com.cr_d.passwordmanagerapp.data.mapper.toUiState
 import com.cr_d.passwordmanagerapp.domain.services.HashService
-import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.ObtainPasswordDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.EncryptStringUseCase
 import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
 import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
@@ -51,6 +46,7 @@ private fun fakePassword(
     )
 }
 
+//TODO: Pasarlo a uiState
 private fun fakeAccount(
     account: String,
     notes: String = ""
@@ -67,7 +63,7 @@ private fun fakeAccount(
         accountHash = accountHash
     )
 }
-
+//TODO: Pasarlo a uiState
 private fun fakeApplication(
     appName: String,
     appUrl: String = "",
@@ -164,6 +160,8 @@ object SampleData {
     )
     val passwords: MutableList<PasswordUiState>
         get() = _passwords
+
+    // TODO: Pasarlo a lista de UI
     val accounts = mutableListOf(
         fakeAccount(
             account = "juan.perez@gmail.com",
@@ -194,9 +192,9 @@ object SampleData {
         fakeAccount(
             account = "brainwave"
         ).toDomain(),
-
     )
 
+    // Pasarlo a lista de UI
     val applications = mutableListOf(
         fakeApplication(
             appName = "Amazon.es",

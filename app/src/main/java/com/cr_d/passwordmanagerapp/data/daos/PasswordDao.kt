@@ -6,9 +6,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity
-
 import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 
 @Dao
