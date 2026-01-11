@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -126,9 +129,9 @@ fun CustomNavBar(navController: NavHostController){
     var selectedDestination by rememberSaveable { mutableIntStateOf(0) }
 
     val destinations = listOf(
-        CustomNavigationItem(Icons.Filled.Done, "Contraseñas", "ShowPasswordScreen"),
-        CustomNavigationItem(Icons.Filled.Info, "Cuentas", "AccountListScreen"),
-        CustomNavigationItem(Icons.Filled.Settings, "Aplicaciones", "ApplicationsListScreen"),
+        CustomNavigationItem(Icons.Filled.Password, "Contraseñas", "ShowPasswordScreen"),
+        CustomNavigationItem(Icons.Filled.AccountCircle, "Cuentas", "AccountListScreen"),
+        CustomNavigationItem(Icons.Filled.Apps, "Aplicaciones", "ApplicationsListScreen"),
     )
 
     Column {

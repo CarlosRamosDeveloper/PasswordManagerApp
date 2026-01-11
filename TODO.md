@@ -31,4 +31,3 @@
 
 - [1] Detectar y arreglar el por que en ocasiones hay que pulsar dos veces sobre el botón de guardar contraseñas
 - [2] Arreglar la inyección de sampleData
-- [3] Cambiar los iconos donde sea necesario
