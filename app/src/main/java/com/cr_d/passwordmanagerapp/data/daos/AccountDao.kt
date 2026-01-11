@@ -16,7 +16,6 @@ interface AccountDao {
     @Query("SELECT * FROM accounts where id in (:accountId)")
     suspend fun getAccountById(accountId: Long): AccountEntity?
 
-    //TODO: Revisar
     @Query("SELECT * FROM accounts where account_hash in (:hash)")
     suspend fun findByHash(hash: String): AccountEntity?
 
