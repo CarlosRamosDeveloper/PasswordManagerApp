@@ -5,10 +5,13 @@ import java.time.LocalDate
 import com.cr_d.passwordmanagerapp.data.crypto.CryptoService
 import com.cr_d.passwordmanagerapp.data.entities.AccountEntity
 import com.cr_d.passwordmanagerapp.data.entities.ApplicationEntity
-import com.cr_d.passwordmanagerapp.data.entities.PasswordEntity
 import com.cr_d.passwordmanagerapp.data.mapper.toDomain
 import com.cr_d.passwordmanagerapp.domain.services.HashService
 import com.cr_d.passwordmanagerapp.domain.use_cases.security_use_cases.EncryptStringUseCase
+import com.cr_d.passwordmanagerapp.domain.value_objects.DateInfo
+import com.cr_d.passwordmanagerapp.domain.value_objects.PasswordMetadata
+import com.cr_d.passwordmanagerapp.ui.model.ApplicationInfo
+import com.cr_d.passwordmanagerapp.ui.model.PasswordUiState
 
 val encrypt = EncryptStringUseCase(CryptoService())
 val hash = HashService()
@@ -16,27 +19,34 @@ val hash = HashService()
 //TODO: FIX
 private fun fakePassword(
     plainPassword: String,
-    appId: Long,
-    accountId: Long,
+    appName: String,
+    account: String,
     creationDate: String,
     lastUpdate: String,
     notes: String = ""
-): PasswordEntity {
+): PasswordUiState {
     val pwd = encrypt(plainPassword)
     val notes = encrypt(notes)
-
-    return PasswordEntity(
-        cipheredPassword = pwd.encryptedText,
-        passwordIv = pwd.iv,
-        appId = appId,
-        accountId = accountId,
-        creationDate = creationDate,
-        lastUpdate = lastUpdate,
-        cipheredNotes = notes.encryptedText,
-        notesIv = notes.iv
+    val dateInfo = DateInfo(
+        creationDate = LocalDate.parse(creationDate),
+        lastUpdate = LocalDate.parse(lastUpdate)
+    )
+    val appInfo = ApplicationInfo(
+        appName = appName,
+        appUrl = "",
+        appAccount = account
+    )
+    return PasswordUiState (
+        id = 0L,
+        cipheredPassword = pwd,
+        appInfo = appInfo,
+        dateInfo = dateInfo,
+        cipheredNotes = notes,
+        metadata = PasswordMetadata(),
     )
 }
 
+//TODO: Pasarlo a uiState
 private fun fakeAccount(
     account: String,
     notes: String = ""
@@ -53,7 +63,7 @@ private fun fakeAccount(
         accountHash = accountHash
     )
 }
-
+//TODO: Pasarlo a uiState
 private fun fakeApplication(
     appName: String,
     appUrl: String = "",
@@ -70,85 +80,88 @@ private fun fakeApplication(
 }
 
 object SampleData {
-    val passwords = mutableListOf(
+    private val _passwords = mutableListOf(
         fakePassword(
             plainPassword = "Abcdef123!",
-            appId = 1,
-            accountId = 1,
+            appName = "Amazon.es",
+            account = "juan.perez@gmail.com",
             creationDate = LocalDate.of(2023, 1, 10).toString(),
             lastUpdate = LocalDate.of(2023, 12, 1).toString(),
-            notes = "contraseñaSegura!"
-        ).toDomain(),
+        ),
         fakePassword(
             plainPassword = "contraseñaSegura!!",
-            appId = 2,
-            accountId = 2,
+            appName = "ChatGPT",
+            account = "ana@empresa.com",
             creationDate = LocalDate.of(2021, 11, 1).toString(),
             lastUpdate = LocalDate.of(2021, 11, 1).toString(),
-        ).toDomain(),
+        ),
         fakePassword(
             plainPassword = "onlylowercase",
-            appId = 2,
-            accountId = 5,
+            appName = "Google",
+            account = "usuario123",
             creationDate = LocalDate.of(2020, 2, 20).toString(),
             lastUpdate = LocalDate.of(2022, 2, 20).toString(),
-        ).toDomain(),
+        ),
         fakePassword(
             plainPassword = "MARIA2020",
-            appId = 3,
-            accountId = 5,
+            appName = "Spotify",
+            account = "maria98",
             creationDate = LocalDate.of(2021, 8, 8).toString(),
             lastUpdate = LocalDate.of(2024, 1, 10).toString(),
             notes = "La app no acepta símbolos"
-        ).toDomain(),
+        ),
         fakePassword(
             plainPassword = "SuperS4f3AtW0rK!",
-            appId = 4,
-            accountId = 4,
+            appName = "LinkedIn.es",
+            account = "Jav4De5",
             creationDate = LocalDate.of(2023, 3, 30).toString(),
             lastUpdate = LocalDate.of(2023, 9, 5).toString(),
-        ).toDomain(),
+        ),
         fakePassword(
             plainPassword = "JavA_Dev#2024",
-            appId = 5,
-            accountId = 5,
+            appName = "Github",
+            account = "Jav4De5",
             creationDate = LocalDate.of(2024, 1, 15).toString(),
             lastUpdate = LocalDate.of(2024, 2, 2).toString(),
             notes = "Cuenta usada para pruebas internas"
-        ).toDomain(),
+        ),
         fakePassword(
             plainPassword = "PizzaLover99",
-            appId = 4,
-            accountId = 6,
+            appName = "Amazon.es",
+            account = "Jav4De5",
             creationDate = LocalDate.of(2022, 6, 12).toString(),
             lastUpdate = LocalDate.of(2023, 4, 1).toString(),
             notes = "La app no acepta símbolos"
-        ).toDomain(),
+        ),
         fakePassword(
             plainPassword = "F1_RedBull@Max",
-            appId = 5,
-            accountId = 7,
+            appName = "Spotify",
+            account = "mario_racing",
             creationDate = LocalDate.of(2020, 9, 5).toString(),
             lastUpdate = LocalDate.of(2023, 11, 30).toString(),
             notes = "Renovar suscripción en marzo"
-        ).toDomain(),
+        ),
         fakePassword(
             plainPassword = "Sunset*Photo_2023",
-            appId = 6,
-            accountId = 8,
+            appName = "Amazon.es",
+            account = "lucia.photo",
             creationDate = LocalDate.of(2023, 2, 1).toString(),
             lastUpdate = LocalDate.of(2023, 2, 1).toString(),
             notes = "Fotografiar el año al amanecer"
-        ).toDomain(),
+        ),
         fakePassword(
             plainPassword = "NoNumbers!!!",
-            appId = 7,
-            accountId = 9,
+            appName = "brainwave",
+            account = "lucia.photo",
             creationDate = LocalDate.of(2021, 12, 25).toString(),
             lastUpdate = LocalDate.of(2024, 1, 5).toString(),
             notes = "Grupos de meditación"
-        ).toDomain(),
+        ),
     )
+    val passwords: MutableList<PasswordUiState>
+        get() = _passwords
+
+    // TODO: Pasarlo a lista de UI
     val accounts = mutableListOf(
         fakeAccount(
             account = "juan.perez@gmail.com",
@@ -179,9 +192,9 @@ object SampleData {
         fakeAccount(
             account = "brainwave"
         ).toDomain(),
-
     )
 
+    // Pasarlo a lista de UI
     val applications = mutableListOf(
         fakeApplication(
             appName = "Amazon.es",

@@ -6,7 +6,7 @@ interface IAccountRepository {
     suspend fun findAll(): List<Account>
     suspend fun findById(id: Long): Account?
     suspend fun findByHash(hash: String): Account?
-    suspend fun save(account: Account)
+    suspend fun save(account: Account): Long
     suspend fun massSave(accounts: List<Account>)
     suspend fun update(account: Account)
     suspend fun delete(id: Long)

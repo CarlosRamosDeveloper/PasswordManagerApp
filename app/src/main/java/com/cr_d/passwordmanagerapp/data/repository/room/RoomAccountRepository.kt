@@ -25,10 +25,11 @@ class RoomAccountRepository (
         return dao.findByHash(hash)?.toDomain()
     }
 
-    override suspend fun save(account: Account) {
+    override suspend fun save(account: Account) : Long{
         val accountName = decrypt(account.cipheredAccount)
         val hashData = hash.convertToSha256(accountName)
-        dao.insertAccount(account.toEntity(hashData))
+
+        return dao.insertAccount(account.toEntity(hashData))
     }
 
     override suspend fun massSave(accounts: List<Account>) {

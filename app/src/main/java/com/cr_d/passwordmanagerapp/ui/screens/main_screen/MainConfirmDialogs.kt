@@ -15,7 +15,7 @@ fun MainConfirmDialogs(
         message = "¿Inyectar información de prueba en la base de datos?",
         confirmButtonText = "Poblar la base de datos",
         onConfirm = {
-            viewModel.onPopulatePasswords()
+            viewModel.onPopulatePasswordOrchestra()
             viewModel.onDisablePopulatePasswordDatabaseDialog()
         },
         onDisable = viewModel::onDisablePopulatePasswordDatabaseDialog,
@@ -27,7 +27,7 @@ fun MainConfirmDialogs(
         message = "Este paso no se puede deshacer, ¿está seguro?",
         confirmButtonText = "Eliminar",
         onConfirm = {
-            viewModel.onMassDeletePasswords()
+            viewModel.onMassDeletePasswordOrchestra()
             viewModel.onDisableMassDeletePasswordDialog()
         },
         onDisable = viewModel::onDisableMassDeletePasswordDialog,
@@ -50,7 +50,7 @@ fun MainConfirmDialogs(
         message = "Este paso no se puede deshacer, ¿está seguro?",
         confirmButtonText = "Eliminar",
         onConfirm = {
-            viewModel.onMassDeleteAccounts()
+            viewModel.onMassDeleteAccountOrchestra()
             viewModel.onDisableMassDeleteAccountDialog()
         },
         onDisable = viewModel::onDisableMassDeleteAccountDialog,
@@ -72,7 +72,7 @@ fun MainConfirmDialogs(
         message = "Este paso no se puede deshacer, ¿está seguro?",
         confirmButtonText = "Eliminar",
         onConfirm = {
-            viewModel.onMassDeleteApps()
+            viewModel.onMassDeleteApplicationOrchestra()
             viewModel.onDisableMassDeleteApplicationDialog()
         },
         onDisable = viewModel::onDisableMassDeleteApplicationDialog,

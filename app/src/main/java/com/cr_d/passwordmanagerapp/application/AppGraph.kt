@@ -43,6 +43,7 @@ import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.Delete
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.GetAllApplicationsUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.ObtainApplicationDetailInfoUseCase
 import com.cr_d.passwordmanagerapp.domain.use_cases.application_use_cases.SaveApplicationUseCase
+import com.cr_d.passwordmanagerapp.domain.use_cases.password_use_cases.MassSavePasswordUseCase
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.create.CreateAccountViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.detail.AccountDetailViewModelFactory
 import com.cr_d.passwordmanagerapp.ui.screens.accounts.list.AccountListViewModelFactory
@@ -109,7 +110,7 @@ class AppGraph(
     private val analyzePasswordUseCase by lazy { AnalyzePasswordUseCase(passwordAnalyzer) }
     private val getAllPasswordDetailUseCase by lazy { GetAllPasswordDetailUseCase(passwordRepository, obtainPasswordDetailInfoUseCase) }
     private val generatePasswordUseCase by lazy { GeneratePasswordUseCase(passwordGenerator) }
-    private val createPasswordUseCase by lazy {
+    private val savePasswordUseCase by lazy {
         SavePasswordUseCase(
             repository = passwordRepository,
             encrypt = encryptStringUseCase,
@@ -140,6 +141,12 @@ class AppGraph(
             analyzer = analyzePasswordUseCase
         )
     }
+
+    val massSavePasswordUseCase by lazy { MassSavePasswordUseCase(
+        hash = hashService,
+        encrypt = encryptStringUseCase,
+        passwordDao = passwordDao
+    ) }
 
     // Account UseCases
     private val getAllAccountsUseCase by lazy {
@@ -207,7 +214,8 @@ class AppGraph(
     private val mainDialogManagerComponent by lazy { MainDialogManagerComponent() }
     private val mainPasswordManagerComponent by lazy {
         MainPasswordManagerComponent(
-            passwordRepository
+            passwordRepository,
+            massSavePasswordUseCase
         )
     }
     private val mainAccountManagerComponent by lazy { MainAccountManagerComponent(accountRepository) }
@@ -228,7 +236,7 @@ class AppGraph(
         CreatePasswordViewModelFactory(
             generatePasswordUseCase = generatePasswordUseCase,
             scoreCalculator = calculateSecurityScoreUseCase,
-            savePasswordUseCase = createPasswordUseCase,
+            savePasswordUseCase = savePasswordUseCase,
             saveApplicationUseCase = saveApplicationUseCase,
             applicationRepository = applicationRepository,
             accountRepository = accountRepository,

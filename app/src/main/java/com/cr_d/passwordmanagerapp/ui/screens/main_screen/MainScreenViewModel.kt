@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 import com.cr_d.passwordmanagerapp.ui.model.MainConfirmDialogData
 import com.cr_d.passwordmanagerapp.ui.screens.main_screen.viewmodel_components.MainAccountManagerComponent
@@ -19,7 +20,7 @@ class MainScreenViewModel (
     private val dialogManager: MainDialogManagerComponent,
     private val passwordManager: MainPasswordManagerComponent,
     private val accountManager: MainAccountManagerComponent,
-    private val appManager: MainApplicationManagerComponent
+    private val appManager: MainApplicationManagerComponent,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
 
@@ -63,9 +64,37 @@ class MainScreenViewModel (
         onTotalAppsChange()
     }
 
+    fun onPopulatePasswordOrchestra(){
+        viewModelScope.launch {
+            onPopulatePasswords()
+            onRefresh()
+        }
+    }
+
+    fun onMassDeletePasswordOrchestra(){
+        viewModelScope.launch {
+            onMassDeletePasswords()
+            onRefresh()
+        }
+    }
+
+    fun onMassDeleteAccountOrchestra(){
+        viewModelScope.launch {
+            onMassDeleteAccounts()
+            onRefresh()
+        }
+    }
+
+    fun onMassDeleteApplicationOrchestra(){
+        viewModelScope.launch {
+            onMassDeleteApps()
+            onRefresh()
+        }
+    }
+
     // Passwords
     fun onTotalPasswordsChange() = passwordManager.onTotalPasswordsChange()
-    fun onPopulatePasswords() = passwordManager.onPopulatePasswords()
+    suspend fun onPopulatePasswords() = passwordManager.onPopulatePasswords()
     fun onMassDeletePasswords() = passwordManager.onMassDeletePasswords()
 
     // Accounts
