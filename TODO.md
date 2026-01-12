@@ -31,3 +31,6 @@
 
 - [1] Detectar y arreglar el por que en ocasiones hay que pulsar dos veces sobre el botón de guardar contraseñas
 - [2] Pasar el sample data a UIState para mejor inserción
+- [3] MainScreen -> 
+    - Modificar el padding de las cajas
+    - Agregar scroll
