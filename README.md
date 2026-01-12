@@ -8,9 +8,9 @@ Las contraseñas se almacenan cifradas y solo se descifran al mostrarse.
 
 **MVP Funcional**
 
-- ✔ Crear, editar, eliminar y ver contraseñas y sus notas asociadas
-- Room como almacenamiento cifrado
-- Arquitectura por capas con UseCases y DI manual
+- [x] Crear, editar, eliminar y ver contraseñas y sus notas asociadas
+- [x] Room como almacenamiento cifrado
+- [x] Arquitectura por capas con UseCases y DI manual
 - [ ] Biometría pendiente
 - [ ] Migración a Hilt pendiente
 

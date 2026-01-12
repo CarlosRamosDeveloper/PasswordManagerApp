@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
-import com.cr_d.passwordmanagerapp.domain.entities.PasswordPolicy
+import com.cr_d.passwordmanagerapp.domain.policy.PasswordPolicy
 
 @Composable
 fun CustomOutlinedTextField(label: String, param: String, onValueChange: (String) -> Unit, isSingleLine: Boolean = true){

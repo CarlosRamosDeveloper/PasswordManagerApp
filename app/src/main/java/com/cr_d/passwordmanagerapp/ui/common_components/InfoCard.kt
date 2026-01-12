@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-import com.cr_d.passwordmanagerapp.ui.models.AppConfig
+import com.cr_d.passwordmanagerapp.ui.model.AppConfig
 
 @Composable
 fun InfoCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit){

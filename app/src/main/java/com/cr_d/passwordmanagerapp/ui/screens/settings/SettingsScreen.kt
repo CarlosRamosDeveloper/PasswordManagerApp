@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.time.LocalDate
 
-import com.cr_d.passwordmanagerapp.ui.models.DateFormatOption
-import com.cr_d.passwordmanagerapp.ui.models.formatAs
+import com.cr_d.passwordmanagerapp.ui.model.DateFormatOption
+import com.cr_d.passwordmanagerapp.ui.model.formatAs
 
 @Composable
 fun SettingsScreen(innerPadding: PaddingValues, viewModel: SettingsViewModel){

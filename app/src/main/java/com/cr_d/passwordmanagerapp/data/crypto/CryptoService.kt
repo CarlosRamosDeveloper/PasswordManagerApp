@@ -4,6 +4,8 @@ import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
+import com.cr_d.passwordmanagerapp.domain.value_objects.EncryptedPayload
+
 class CryptoService (
     private val keyProvider: KeyStoreProvider = KeyStoreProvider()
 ) {

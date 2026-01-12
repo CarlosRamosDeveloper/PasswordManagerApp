@@ -8,24 +8,29 @@
 ## Bugs / Fixes
 
 - [7] Improve Edit mode UI
+- [6] Actualizar el algoritmo de seguridad de contraseñas
 
 ## Architecture / debt tech
 
-- [2] Integrar AppEntity
-- [1] Integrar AccountEntity
+- [4] Mover las partes pesadas de los Viewmodel a UC propios
+- [5] Revisar TODOs del código
 
 ## Features
 
-- [3] Implementar biometría (deshabilitarla en desarrollo)
-- [4] Dropdown con apps ya existentes en su campo correspondiente
-- [4] Al pinchar en el campo de cuenta de usuario, debería de desplegarse un dropdown con las cuentas creadas
-- [5] Autocompletado de urls -> www.<app>.com
-- [6] Permitir la busqueda por app
-- [6] Permtir la búsqueda por cuenta de usuario
+- [1] Al pinchar en el campo de cuenta de usuario, debería de desplegarse un dropdown con las cuentas creadas
+- [2] Dropdown con apps ya existentes en su campo correspondiente
+- [3] Crear los warnings
 
 ## Parking Lot
 
-- [8] Mostrar el logo de la app si coincide con la url
+- [7] Mostrar el logo de la app si coincide con la url
+- [8] Implementar biometría (deshabilitarla en desarrollo)
 - [9] Migrar a Hilt
 
 ## Actual
+
+- [1] Detectar y arreglar el por que en ocasiones hay que pulsar dos veces sobre el botón de guardar contraseñas
+- [2] Pasar el sample data a UIState para mejor inserción
+- [3] MainScreen -> 
+    - Modificar el padding de las cajas
+    - Agregar scroll

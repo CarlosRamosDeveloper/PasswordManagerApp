@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 
+import com.cr_d.passwordmanagerapp.application.PasswordManagerApp
 import com.cr_d.passwordmanagerapp.ui.scaffold.AppScaffold
 import com.cr_d.passwordmanagerapp.ui.theme.PasswordManagerAppTheme
 
@@ -13,8 +14,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val appGraph = (application as PasswordManagerApp).appGraph
+
             PasswordManagerAppTheme {
-                AppScaffold()
+                AppScaffold(appGraph)
             }
         }
     }
